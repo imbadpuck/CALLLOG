@@ -1,0 +1,2 @@
+class TicketAssignment < ApplicationRecord
+end
