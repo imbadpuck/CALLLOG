@@ -1,0 +1,24 @@
+code:
+  success: 1
+  failure: 0
+
+error_codes:
+  common:
+    bad_request: 400
+    connection_refused: 400
+    not_found: 404
+    server_error: 500
+    unauthorized: 401
+
+per_page: 15
+
+response_headers:
+  result_code: "result_code"
+
+result_codes:
+  failure: "Error"
+  success: "Success"
+
+http_code:
+  code_400: 400
+  code_200: 200
