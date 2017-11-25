@@ -1,0 +1,2 @@
+class SubComment < ApplicationRecord
+end

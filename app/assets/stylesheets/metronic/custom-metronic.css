@@ -1,0 +1,25 @@
+.form-group .required {
+  color: #333;
+  font-size: inherit;
+  padding-left: 0;
+}
+.page-header.navbar.navbar-fixed-top, .page-header.navbar.navbar-static-top {
+  z-index: 1036;
+}
+@media (min-width: 992px) {
+  .page-content {
+    min-height: calc(100vh - 50px)!important;
+  }
+}
+.font-custom {
+  color: #3c66a0 !important;
+}
+table.table-custom thead tr th{
+  background-color: #3c66a0;
+}
+table.table-custom thead tr th {
+  color: #fff !important;
+}
+table tr td a {
+  color: #3c66a0 !important;
+}

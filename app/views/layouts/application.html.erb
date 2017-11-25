@@ -1,14 +1,22 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Calllog</title>
-    <%= csrf_meta_tags %>
-
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-  </head>
-
-  <body>
-    <%= yield %>
-  </body>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>CALLLOG</title>
+  <script type="text/javascript">
+    var currentDate  = <%= Date.today.day%>;
+    var currentMonth = <%= Date.today.month%>;
+    var currentYear  = <%= Date.today.year%>;
+  </script>
+  <script src="/tinymce/tinymce.min.js"></script>
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
+  <base href="/">
+</head>
+<body
+  ng-app="CalllogApp"
+  class="page-header-fixed page-sidebar-closed-hide-logo
+    page-container-bg-solid">
+  <div ui-view></div>
+</body>
 </html>

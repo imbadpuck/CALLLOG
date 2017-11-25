@@ -10,6 +10,7 @@
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal
+config/database.yml
 
 # Ignore all logfiles and tempfiles.
 /log/*
@@ -21,3 +22,11 @@
 /yarn-error.log
 
 .byebug_history
+Gemfile.lock
+config/settings.local.yml
+config/settings/*.local.yml
+config/environments/*.local.yml
+Gemfile.lock
+/test/*
+/store/*
+config/initializers/env.rb
