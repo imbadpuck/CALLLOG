@@ -1,0 +1,53 @@
+<div class="page-header-inner">
+  <div class="page-logo">
+    <a ui-sref="{{home_state[currentUser.type]}}">
+      <img
+        src="banner-image-ithelp-894x.png"
+        height="35px"
+        alt="logo"
+        class="logo-default logo-land" />
+    </a>
+    <div class="menu-toggler sidebar-toggler">
+      <span></span>
+    </div>
+  </div>
+  <a
+    href="javascript:;"
+    class="menu-toggler responsive-toggler"
+    data-toggle="collapse"
+    data-target=".navbar-collapse">
+    <span></span>
+  </a>
+  <div class="top-menu">
+    <ul class="nav navbar-nav pull-right">
+      <li class="dropdown dropdown-user">
+        <a
+          href="#"
+          class="dropdown-toggle"
+          dropdown-menu-hover
+          data-toggle="dropdown"
+          data-close-others="true">
+          <img
+            alt=""
+            class="img-circle"
+            src="/images/avatar.png" />
+          <span class="username username-hide-on-mobile"> {{currentUser.name}} </span>
+          <i class="fa fa-angle-down"></i>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-default">
+          <li>
+            <a href="#" ng-click="changePassword()">
+              <i class="icon-lock"></i> Đổi mật khẩu
+            </a>
+          </li>
+          <li class="divider"> </li>
+          <li>
+            <a href="#" ng-click="signOut()">
+              <i class="icon-logout"></i> Đăng xuất
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>

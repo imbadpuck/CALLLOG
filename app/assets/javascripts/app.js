@@ -39,17 +39,72 @@ var app = angular.module("CalllogApp",
   .state('main', {
     url: "/main",
     templateUrl: "/templates/main.html",
-    resolve: {
-      notifications: ['BuildingManager_API', '$stateParams', function(BuildingManager_API, $stateParams) {
-        return BuildingManager_API.getNotificationsUsers($stateParams.page).then(function(response) {
-          return response.data;
-        });
-      }]
-    },
     controller: 'MainController',
     requireSignIn: true
   });
   $urlRouterProvider.otherwise('/main');
+}])
+.run(['$state', '$window', '$http', '$rootScope', '$timeout', 'Auth',
+  function ($state, $window, $http, $rootScope, $timeout, Auth) {
+  Layout.init();
+  App.init();
+  NProgress.configure({
+    template: '<div class="bar" role="bar"><div class="peg"></div></div>\
+              <div class="page-spinner-bar">\
+                  <div class="bounce1"></div>\
+                  <div class="bounce2"></div>\
+                  <div class="bounce3"></div>\
+              </div>'
+  });
+
+  NProgress.start();
+  if($window.localStorage.token) {
+    $rootScope.currentUser = JSON.parse($window.localStorage.user);
+    if ($window.localStorage.menu) {
+      $rootScope.menu = JSON.parse($window.localStorage.menu);
+    } else {
+      $rootScope.menu = null;
+    }
+    $http.defaults.headers.common["Authorization"] = 'Bearer ' + $window.localStorage.token;
+    $state.go("main");
+  } else {
+    $state.go("signin");
+  }
+
+  $rootScope.currentYear  = currentYear;
+  $rootScope.currentMonth = currentMonth;
+  $rootScope.currentDate  = currentDate;
+  $rootScope.common_text  = {
+    validate: {
+      username: "Tên đăng nhập chỉ được chứa ký tự a-z, 0-9 và dấu gạch dưới.",
+      require: "Trường này không được để trống.",
+      email: "Email không đúng định dạng.",
+      phone: "Số điện thoại không đúng định dạng.",
+      password: "Mật khẩu dài ít nhất 8 kí tự.",
+      password_confirm: "Mật khẩu xác nhận không đúng."
+    }
+  }
+
+
+  $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+    NProgress.start();
+    if (toState.requireSignIn && !Auth.isSignedIn()) {
+      event.preventDefault();
+      $state.go("signin");
+    }
+    if (toState.requireRoles) {
+      event.preventDefault();
+      $state.go("main");
+    }
+  });
+  $timeout(function() {
+    Layout.setAngularJsSidebarMenuActiveLink('match', null, $state);
+  }, 500);
+  $rootScope.$on('$stateChangeSuccess', function () {
+    NProgress.done();
+    Layout.setAngularJsSidebarMenuActiveLink('match', null, $state);
+  });
+
 }])
 .run(['$rootScope', function($rootScope) {
   $rootScope.safeApply = function(fn) {

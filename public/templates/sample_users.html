@@ -1,0 +1,23 @@
+<div class="modal-header">
+  Tài khoản thử nghiệm
+</div>
+<div class="modal-body">
+  <table class="table table-bordered">
+    <tr>
+      <th>Tài khoản</th>
+      <th>Quyền</th>
+      <th></th>
+    </tr>
+    <tr ng-repeat="user in users">
+      <td>{{user.username}}</td>
+      <td>{{user.type}}</td>
+      <td>
+        <input
+          value="Chọn"
+          type="button"
+          class="btn btn-sm btn-default"
+          ng-click="select(user)"/>
+      </td>
+    </tr>
+  </table>
+</div>
