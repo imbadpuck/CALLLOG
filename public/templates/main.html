@@ -1,0 +1,16 @@
+<div
+  class="page-header navbar navbar-fixed-top"
+  ng-include="'/templates/_header.html'">
+</div>
+<div class="clearfix ng-scope"></div>
+<div class="page-container">
+  <div
+    ng-include="'/templates/_sidebar.html'"
+    class="page-sidebar-wrapper">
+  </div>
+  <div class="page-content-wrapper">
+    <div class="page-content">
+      <div ui-view></div>
+    </div>
+  </div>
+</div>

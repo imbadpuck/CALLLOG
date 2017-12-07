@@ -1,0 +1,50 @@
+app.controller('MainController', ['$scope', 'CODE_STATUS', '$rootScope', '$state',
+  '$uibModal', 'Auth', '$compile',
+  function ($scope, CODE_STATUS, $rootScope, $state, $uibModal, Auth, $compile) {
+
+  $scope.state           = $state;
+  $rootScope.CODE_STATUS = CODE_STATUS;
+
+  if($state.current.name == 'main') {
+    if($rootScope.currentUser.type == 'Admin') {
+      // $state.go('main.admin_users');
+    } else if($rootScope.currentUser.type == 'Employee') {
+      // $state.go('main.customer_feedback');
+    }
+  }
+
+  $scope.changePassword = function() {
+    NProgress.start();
+    var modalInstance = $uibModal.open({
+      templateUrl: '/templates/change_password.html',
+      controller: ['$scope', '$uibModalInstance', 'toastr', function ($scope, $uibModalInstance, toastr) {
+        NProgress.done();
+        $scope.changePassword = function () {
+          NProgress.start();
+          Auth.changePassword($scope.oldPassword, $scope.newPassword).success(function (response) {
+            NProgress.done();
+            if(response.code == $rootScope.CODE_STATUS.success) {
+              $uibModalInstance.dismiss();
+              toastr.success(response.message);
+            } else {
+              toastr.error(response.message);
+            }
+          });
+        }
+        $scope.close = function () {
+          $uibModalInstance.dismiss();
+        }
+      }]
+    });
+  }
+
+  $scope.signOut = function() {
+    Auth.signOut();
+    $state.go('signin');
+  }
+
+  $scope.cloneObject = function(json) {
+    return JSON.parse(JSON.stringify(json));
+  }
+
+}]);
