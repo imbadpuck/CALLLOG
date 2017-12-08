@@ -1,0 +1,62 @@
+<div class="portlet light">
+  <div class="portlet-title">
+    <div class="caption uppercase">Danh sách tài khoản</div>
+    <div class="inputs">
+      <div class="portlet-input input-inline">
+        <div class="portlet-input input-inline input-small">
+          <form ng-submit="search()">
+            <div class="input-icon right">
+              <i class="icon-magnifier"></i>
+              <input ng-model="keyword" class="form-control" placeholder="Tìm kiếm">
+            </div>
+          </form>
+        </div>
+        <!-- <a class="btn green btn-sm" ng-click='showCreateUserModal()'>Thêm mới</a> -->
+      </div>
+    </div>
+  </div>
+  <div class="portlet-body">
+    <table class="table table-striped table-hover">
+      <tr>
+        <th>STT</th>
+        <th>Tên đăng nhập</th>
+        <th>Họ tên</th>
+        <th>SĐT/Email</th>
+        <th>Quyền</th>
+        <th>Trạng thái</th>
+      </tr>
+      <tr ng-repeat="user in users.user_list">
+        <td>{{10 * users.page + $index - 9}}</td>
+        <td>
+          <a href="#">
+            {{user.username}}
+          </a>
+        </td>
+        <td>{{user.name}}</td>
+        <td>
+            {{user.phone}}  <br ng-show='user.phone'/>
+            {{user.email}}
+        </td>
+        <td>{{user.type}}</td>
+        </td>
+        <td>{{user.status ? 'Hoạt động' : 'Không hoạt động'}}</td>
+      </tr>
+    </table>
+    <div>
+      <ul
+        uib-pagination
+        ng-change="pageChanged()"
+        boundary-links="true"
+        total-items="users.total_entries"
+        ng-model="currentPage"
+        class="pagination-sm"
+        max-size="10"
+        items-per-page="users.per_page"
+        previous-text="&lsaquo;"
+        next-text="&rsaquo;"
+        first-text="&laquo;"
+        last-text="&raquo;"></ul>
+      <div class="pull-right">Tổng số bản ghi: {{users.total_entries}}</div>
+    </div>
+  </div>
+</div>

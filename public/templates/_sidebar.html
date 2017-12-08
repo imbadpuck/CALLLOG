@@ -1,0 +1,15 @@
+<div class="page-sidebar navbar-collapse collapse">
+  <ul class="page-sidebar-menu" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+
+    <!-- Employee -->
+
+    <!-- Admin -->
+
+    <li class="nav-item" ng-show="currentUser.type == 'Admin'">
+      <a ui-sref="main.admin_users" ui-sref-opts="{reload: 'main.admin_users', inherit: false}">
+        <i class="icon-users"></i>
+        <span class="title">Quản lý tài khoản</span>
+      </a>
+    </li>
+  </ul>
+</div>

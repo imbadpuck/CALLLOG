@@ -41,11 +41,23 @@ var app = angular.module("CalllogApp",
     templateUrl: "/templates/main.html",
     controller: 'MainController',
     requireSignIn: true
+  })
+  .state('main.admin_users', {
+    url: "/admin/users?page&keyword",
+    templateUrl: "/templates/admin/users/index.html",
+    resolve: {
+      user_list: ['Admin_API', '$stateParams', function(Admin_API, $stateParams) {
+        return Admin_API.getUsers({page: $stateParams.page, keyword: $stateParams.keyword}).then(function(response) {
+          return response.data;
+        });
+      }]
+    },
+    controller: 'AdminManageUserController',
   });
   $urlRouterProvider.otherwise('/main');
 }])
-.run(['$state', '$window', '$http', '$rootScope', '$timeout', 'Auth',
-  function ($state, $window, $http, $rootScope, $timeout, Auth) {
+.run(['$state', '$window', '$http', '$rootScope', '$timeout', 'Auth', 'CODE_STATUS',
+  function ($state, $window, $http, $rootScope, $timeout, Auth, CODE_STATUS) {
   Layout.init();
   App.init();
   NProgress.configure({
@@ -71,6 +83,7 @@ var app = angular.module("CalllogApp",
     $state.go("signin");
   }
 
+  $rootScope.CODE_STATUS  = CODE_STATUS;
   $rootScope.currentYear  = currentYear;
   $rootScope.currentMonth = currentMonth;
   $rootScope.currentDate  = currentDate;

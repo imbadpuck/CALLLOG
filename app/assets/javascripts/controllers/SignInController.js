@@ -1,5 +1,5 @@
-app.controller('SignInController', ['$scope', '$rootScope', '$state', '$http', '$window', 'toastr', 'Auth', '$uibModal',
-  function ($scope, $rootScope, $state, $http, $window, toastr, Auth, $uibModal) {
+app.controller('SignInController', ['$scope', '$rootScope', '$state', '$http', '$window', 'toastr', 'Auth', '$uibModal', 'CODE_STATUS',
+  function ($scope, $rootScope, $state, $http, $window, toastr, Auth, $uibModal, CODE_STATUS) {
 
   $scope.signIn = function () {
     NProgress.start();
@@ -11,6 +11,7 @@ app.controller('SignInController', ['$scope', '$rootScope', '$state', '$http', '
         $window.localStorage.user  = JSON.stringify(response.data.data.user);
         $window.localStorage.token = response.data.data.token;
         $state.go("main");
+        console.log($rootScope.currentUser)
       } else {
         toastr.error(response.data.message)
       }

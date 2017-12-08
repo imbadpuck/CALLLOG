@@ -28,6 +28,7 @@ gem "jwt", "1.5.6"
 gem "will_paginate"
 gem "awesome_nested_set"
 gem "mysql2", "~> 0.3.20"
+gem "ransack"
 #========>
 
 group :development, :test do

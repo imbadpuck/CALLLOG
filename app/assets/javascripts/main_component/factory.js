@@ -6,10 +6,8 @@ angular.module("app.factory", [])
     },
     signOut: function() {
       $rootScope.currentUser = null;
-      $rootScope.menu = null;
       $window.localStorage.removeItem("user");
       $window.localStorage.removeItem("token");
-      $window.localStorage.removeItem("menu");
     },
     isSignedIn: function() {
       return $rootScope.currentUser ? true : false;
@@ -18,6 +16,17 @@ angular.module("app.factory", [])
       return $http.post("/api/v1/users/change_password", {
         old_password: oldPassword,
         new_password: newPassword,
+      });
+    }
+  }
+}])
+.factory('Admin_API', ['$http', function($http){
+  return {
+    getUsers: function(params) {
+      return $http({
+        method: "GET",
+        url: "/api/v1/users/",
+        params: params
       });
     }
   }
