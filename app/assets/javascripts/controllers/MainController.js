@@ -2,8 +2,7 @@ app.controller('MainController', ['$scope', 'CODE_STATUS', '$rootScope', '$state
   '$uibModal', 'Auth', '$compile',
   function ($scope, CODE_STATUS, $rootScope, $state, $uibModal, Auth, $compile) {
 
-  $scope.state           = $state;
-  $rootScope.CODE_STATUS = CODE_STATUS;
+  $scope.state = $state;
 
   if($state.current.name == 'main') {
     if($rootScope.currentUser.type == 'Admin') {
@@ -12,6 +11,11 @@ app.controller('MainController', ['$scope', 'CODE_STATUS', '$rootScope', '$state
       // $state.go('main.customer_feedback');
     }
   }
+
+  $scope.home_state = {
+    Admin: 'main.admin_users',
+    Employee: 'main.admin_users'
+  };
 
   $scope.changePassword = function() {
     NProgress.start();

@@ -21,7 +21,14 @@
 .box_login .forgetpass{display:block; overflow:hidden; padding:10px 0 0; font-size:16px; color:#333; text-align:center}
 .box_login .forgetpass:hover{text-decoration:underline}
 
-.bgdashboard{display:block; overflow:hidden; position:absolute; left:0; right:0; bottom:0; height:260px; background:url(../images/background-large.png) no-repeat center 30px; background-size:1366px 260px;}
+.bgdashboard{
+  display:block;
+  overflow:hidden;
+  position:absolute;
+  left:0; right:0; bottom:0; height:260px;
+  // background:url(../images/background-large.png) no-repeat center 30px;
+  // background-size:1366px 260px;
+}
 
 .box_login form em{display:block; padding:10px 0; font-size:16px; color:#444; line-height:20px}
 .box_login h4{display:block; padding:10px 0; margin:45px 0 15px; text-align:center; font-size:18px; color:#333; text-align:center}

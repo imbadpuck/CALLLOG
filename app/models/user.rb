@@ -12,6 +12,12 @@ class User < ApplicationRecord
   end
 
   class << self
+    def get_user_list(params)
+      return User.search(username_or_name_or_email_or_phone_cont: params[:keyword])
+                 .result.order(:type)
+                 .paginate :page => params[:page], :per_page => Settings.per_page
+    end
+
     def get_user_with_group(query)
       return User.find_by query
                  # .joins(:groups)
