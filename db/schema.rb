@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171205091249) do
+ActiveRecord::Schema.define(version: 20171209041936) do
 
   create_table "attachment_files", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.datetime "created_at", null: false
@@ -31,6 +31,14 @@ ActiveRecord::Schema.define(version: 20171205091249) do
     t.string "label"
     t.string "name"
     t.json "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "function_systems", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "name"
+    t.string "label"
+    t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -116,6 +124,15 @@ ActiveRecord::Schema.define(version: 20171205091249) do
     t.index ["rgt"], name: "index_tickets_on_rgt"
   end
 
+  create_table "user_functions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "user_id"
+    t.bigint "function_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["function_id"], name: "index_user_functions_on_function_id"
+    t.index ["user_id"], name: "index_user_functions_on_user_id"
+  end
+
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "username"
     t.string "avatar"
@@ -143,4 +160,6 @@ ActiveRecord::Schema.define(version: 20171205091249) do
   add_foreign_key "ticket_assignments", "groups"
   add_foreign_key "ticket_assignments", "users"
   add_foreign_key "tickets", "users", column: "creator_id"
+  add_foreign_key "user_functions", "function_systems", column: "function_id"
+  add_foreign_key "user_functions", "users"
 end

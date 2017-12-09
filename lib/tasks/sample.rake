@@ -29,4 +29,16 @@ namespace :sample do
       )
     end
   end
+
+  task create_functions: :environment do
+    puts "Create Function"
+
+    FunctionSystem.bulk_insert do |worker|
+      worker.add(
+        :label       => 'users/index',
+        :name        => 'Xem danh sách người dùng',
+        :description => 'Xem danh sách người dùng',
+      )
+    end
+  end
 end

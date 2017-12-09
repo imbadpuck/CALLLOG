@@ -1,0 +1,2 @@
+class UserFunction < ApplicationRecord
+end
