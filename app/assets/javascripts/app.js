@@ -47,7 +47,7 @@ var app = angular.module("CalllogApp",
     templateUrl: "/templates/admin/users/index.html",
     resolve: {
       user_list: ['Admin_API', '$stateParams', function(Admin_API, $stateParams) {
-        return Admin_API.getUsers({page: $stateParams.page, keyword: $stateParams.keyword}).then(function(response) {
+        return Admin_API.getUsers({page: $stateParams.page || 1, keyword: $stateParams.keyword}).then(function(response) {
           return response.data;
         });
       }]
