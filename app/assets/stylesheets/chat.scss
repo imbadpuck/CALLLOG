@@ -1,0 +1,403 @@
+.chatarea {
+  z-index: 1000;
+  position:fixed;
+  bottom:100px;
+  right:0px;
+  margin:0px;
+  padding:0px;
+}
+.chat {
+  margin: 0px;
+  padding: 0px;
+  width: 400px;
+  padding: 0;
+  background-color: #fff;
+  float: right;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-topright: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  overflow: hidden;
+  margin-right: 30px;
+  -webkit-box-shadow: 0px 1px 7px 1px rgba(50, 50, 50, 0.75);
+  -moz-box-shadow: 0px 1px 7px 1px rgba(50, 50, 50, 0.75);
+  box-shadow: 0px 1px 7px 1px rgba(50, 50, 50, 0.75);
+  border-radius: 5px !important;
+}
+.chathead {
+  width:100%;
+  background-color:#0071b2;
+  height:50px;
+  color:#ffffff;
+  cursor:pointer;
+}
+.chat-button-back {
+  width: 40px;
+  margin: 5px;
+  padding: 10px 13px;
+  border-radius: 5px !important;
+}
+.chat-button-back:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+.chat-button-back > .fa {
+  vertical-align: top;
+}
+.chat-title {
+  font-size: 16px;
+  margin: 13px 15px;
+}
+.chathead img {
+  width:20px;
+  vertical-align:middle;
+  padding-right:10px;
+}
+.chat-conversation-container {
+  padding:10px;
+  background-color:#f2f2f2;
+  height:400px;
+  overflow-y:scroll;
+  overflow-x:hidden;
+}
+.chat-new-conversation {
+  padding:10px;
+  background-color:#fff;
+  height:400px;
+  overflow-y:scroll;
+  overflow-x:hidden;
+}
+.chat-profile img {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ddd;
+  border-radius: 100% !important;
+}
+.chat-other, .chat-me {
+  position:relative;
+  margin-top:10px;
+  
+}
+.chat-me {
+  -webkit-animation:chat-intro 1s;
+  animation:chat-intro 1s;
+}
+.chat-other {
+  -webkit-animation:chat-intro2 1s;
+  animation:chat-intro2 1s;
+  position:relative;
+}
+.chat-other .chat-profile {
+  position:absolute;
+  top:0px;
+  left:0px;
+}
+.chat-other .chat-message {
+  min-height: 30px;
+  margin-left: 50px;
+  background-color: #ffffff;
+  padding: 10px;
+  color: #1a1a1a;
+  border-radius: 5px !important;
+  word-wrap: break-word;
+}
+
+.chat-other .chat-message:before {
+  content:"";
+  width: 0; 
+  height: 0;
+  position:absolute;
+  top:0px;
+  left:42px;
+  width: 0; 
+  height: 0; 
+  border-bottom: 10px solid transparent;
+  border-right:10px solid #ffffff; 
+}
+.chat-me .chat-profile {
+  position:absolute;
+  bottom:0px;
+  right:0px;
+}
+.chat-me .chat-message {
+  min-height: 30px;
+  max-width: 161px;
+  background-color: #cfd8dc;
+  padding: 10px;
+  color: #1a1a1a;
+  margin-left: auto;
+  margin-right: 7px;
+  border-radius: 5px !important;
+  word-wrap: break-word;
+}
+.chat-me > .chat-message::before {
+  content: "";
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 0;
+  height: 0;
+  border-bottom: 10px solid transparent;
+  border-left: 10px solid #cfd8dc;
+}
+.chat-meta {
+  padding-top:5px;
+  font-size:12px;
+  color:#808080;
+}
+.chat-messagebox {
+  height: 44px;
+  width: 100%;
+  border-top:1px solid #e0e0e0;
+  background-color:#ffffff;
+  position: relative;
+}
+.chat-messagebox textarea {
+  box-sizing:border-box;
+  height:100%;
+  border:0px;
+  font-family:Arial;
+  padding-left:10px;
+}
+.chat-add-photo {
+  position: absolute;
+  right: 15px;
+  top: 12px;
+}
+.chat-preview-photo-container {
+  position: absolute;
+  bottom: 44px;
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+  height: 80px;
+  text-align: center;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+}
+.chat-preview-photo {
+  margin-top: 10px;
+  position: relative;
+}
+.chat-preview-photo img {
+  max-width: 80%;
+  max-height: 70px;
+}
+.chat-preview-send-photo {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  background: rgba(0, 0, 0, 0.42);
+  top: -5px;
+  left: 165px;
+  border-radius: 100% !important;
+}
+.chat-preview-send-photo:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+.chat-preview-send-photo-icon {
+  margin: 25px 0px;
+  color: rgba(255, 255, 255, 0.42);
+}
+.chat-preview-send-photo-close {
+  position: absolute;
+  top: 0;
+  right: 10px;
+}
+.chat-attach-photo img {
+  max-width: 100%;
+  max-height: 200px;
+}
+@-webkit-keyframes chat-intro {
+  0% { opacity:0; left:25px;}
+  100% { opacity:1; left:0px;}
+}
+@-webkit-keyframes chat-intro2 {
+  0% { opacity:0; left:-25px;}
+  100% { opacity:1; left:0px;}
+}
+@keyframes chat-intro {
+  0% { opacity:0; left:25px;}
+  100% { opacity:1; left:0px;}
+}
+@keyframes chat-intro2 {
+  0% { opacity:0; left:-25px;}
+  100% { opacity:1; left:0px;}
+}
+
+.chat-list-user {
+  list-style: none;
+  padding-left: 0px;
+}
+.chat-list-user:hover {
+  cursor: pointer;
+}
+
+.intercom-conversation-container {
+  height: 400px;
+  overflow: scroll;
+}
+.intercom-conversation-summary {
+  padding: 32px 30px;
+  border-top: 1px solid #f3f4f5;
+  position: relative;
+  background-color: #fff;
+}
+.intercom-conversation-summary.unread {
+  background-color: #f0f4f7;
+}
+.intercom-conversation-summary-avatar {
+  position: absolute;
+  left: 30px;
+  top: calc(50% - 17.5px);
+  border-radius: 100% !important;
+  overflow: hidden;
+}
+.intercom-conversation-summary-avatar .intercom-avatar {
+  width: 35px;
+  height: 35px;
+  line-height: 35px;
+  font-size: 17.5px;
+}
+.intercom-conversation-summary-avatar .intercom-avatar img {
+  width: 35px;
+  height: 35px;
+}
+.intercom-conversation-summary-body {
+  position: relative;
+  margin-left: 50px;
+}
+.intercom-conversation-summary-body.unread {
+  font-weight: 900;
+}
+.intercom-conversation-summary-meta {
+  height: 18px;
+  margin-bottom: 2px; /**/
+}
+.intercom-conversation-summary-content {
+  position: relative;
+}
+.intercom-conversation-summary-content-container {
+  margin-right: 25px;
+  color: #3a3c4c;
+  font-size: 13px;
+  line-height: 19px;
+}
+.intercom-conversation-summary-content-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.intercom-conversation-summary-body-author {
+  float: left;
+  color: rgba(73,76,93,.7);
+  font-size: 13px;
+}
+.intercom-conversation-summary-timestamp {
+  float: right;
+  text-align: right;
+  color: rgba(73,76,93,.7);
+  font-size: 13px;
+}
+.intercom-conversation-summary:hover {
+  background-color: #f7f8fa;
+  border-top: 1px solid #ebedf1;
+  cursor: pointer;
+}
+.intercom-conversations-footer {
+  z-index: 2147483001;
+  text-align: center;
+  border-radius: 0 0 6px 6px;
+  height: 60px;
+  pointer-events: none;
+  background: -webkit-gradient(linear, left bottom, left top, from(#fff), to(rgba(255, 255, 255, 0)));
+  background: linear-gradient(0deg, #fff, rgba(255, 255, 255, 0));
+}
+.intercom-conversations-new-conversation-button {
+  position: absolute;
+  display: inline-block;
+  height: 45px;
+  padding-left: 20px;
+  padding-right: 20px;
+  color: #fff;
+  font-size: 13px;
+  line-height: 45px;
+  pointer-events: auto;
+  cursor: pointer;
+  -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 40px !important;
+  background-color: #7e93af;
+  text-align: center;
+  -webkit-transition: all .12s;
+  transition: all .12s;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+.intercom-conversations-new-conversation-button:hover {
+  -webkit-box-shadow: 0 8px 24px rgba(0,0,0,.2);
+  box-shadow: 0 8px 24px rgba(0,0,0,.2);
+}
+.intercom-conversations-new-conversation-button span {
+  background-image: url(https://js.intercomcdn.com/images/new-conversation.40b12105.png);
+  background-repeat: no-repeat;
+  background-position: 0;
+  background-size: 15px 14px;
+  padding-left: 24px;
+  white-space: nowrap;
+}
+
+.intercom-conversation-body-parts {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: scroll;
+}
+.intercom-conversation-body-parts-wrapper {
+  overflow: hidden;
+}
+.intercom-conversation .intercom-conversation-parts {
+  opacity: 1;
+  -webkit-transform: translateX(0);
+  -ms-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-animation-name: intercom-messenger-view-slide-left-in;
+  animation-name: intercom-messenger-view-slide-left-in;
+  -webkit-animation-duration: .32s;
+  animation-duration: .32s;
+  -webkit-animation-timing-function: cubic-bezier(.23,1,.32,1);
+  animation-timing-function: cubic-bezier(.23,1,.32,1);
+  -webkit-animation-delay: .23s;
+  animation-delay: .23s;
+  -webkit-animation-fill-mode: backwards;
+  animation-fill-mode: backwards;
+}
+.intercom-conversation-parts {
+  -webkit-transition: -webkit-transform .2s;
+  transition: -webkit-transform .2s;
+  transition: transform .2s;
+  transition: transform .2s,-webkit-transform .2s;
+}
+.intercom-comment-container-admin,  .intercom-comment-container-chat-other-user {
+  float: left;
+  padding-left: 45px;
+}
+.intercom-comment-container,  .intercom-comment-container-borderless-single {
+  position: relative;
+  max-width: 75%;
+}
+.intercom-comment {
+  padding: 17px 20px;
+  border-radius: 6px;
+  position: relative;
+}
+
+.quick-message {
+  margin: 20px 16px;
+  color: #fff;
+}

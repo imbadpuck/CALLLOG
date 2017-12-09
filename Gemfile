@@ -23,10 +23,12 @@ gem "devise", "~> 4.2"
 gem "faker", github: "stympy/faker"
 gem "font-awesome-rails"
 gem "jquery-rails"
+gem "jquery-ui-rails"
 gem "jwt", "1.5.6"
 gem "will_paginate"
 gem "awesome_nested_set"
 gem "mysql2", "~> 0.3.20"
+gem "ransack"
 #========>
 
 group :development, :test do

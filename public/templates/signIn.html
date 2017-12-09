@@ -1,0 +1,57 @@
+<div class="login-background text-align-center">
+  <section class="wrap_login">
+    <div class="box_login width-40-percent">
+      <div class="text-center">
+        <a
+          href="javascript:void(0)"
+          class="logo">
+          <img
+            width="240"
+            height="75"
+            src="/images/banner-image-ithelp-894x.png">
+        </a>
+        <h3>Hệ thống quản lý công việc</h3>
+      </div>
+
+    <form
+      ng-submit="signInForm.$valid && signIn()"
+      name="signInForm"
+      novalidate>
+      <div class="box_info">
+        <i class="icon-userlog"></i>
+        <input
+          ng-model="username"
+          type="text"
+          autocomplete="off"
+          placeholder="Tên đăng nhập"
+          name="username"
+          required/>
+      </div>
+      <div class="box_info">
+        <i class="icon-passlog"></i>
+        <input
+          ng-model="password"
+          type="password"
+          autocomplete="off"
+          placeholder="Mật khẩu"
+          name="password"
+          required/>
+      </div>
+      <button
+        type="submit"
+        name="fsubmit">
+          Đăng nhập
+      </button>
+      <div class="clr"></div>
+    </form>
+    <a
+      href="#"
+      class="forgetpass"
+      ng-click="showSampleUser()">
+        Tài khoản thử nghiệm
+    </a>
+    <div class="clr"></div>
+    </div>
+    <div class="bgdashboard"></div>
+  </section>
+</div>
