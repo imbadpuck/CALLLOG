@@ -7,6 +7,4 @@ app.controller('AdminManageUserController', ['$scope', '$state', 'user_list',
   $scope.pageChanged = function() {
     $state.go($state.current, {page: $scope.currentPage});
   }
-
-
 }])

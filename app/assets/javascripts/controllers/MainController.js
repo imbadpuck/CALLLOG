@@ -1,14 +1,13 @@
-app.controller('MainController', ['$scope', 'CODE_STATUS', '$rootScope', '$state',
-  '$uibModal', 'Auth', '$compile',
-  function ($scope, CODE_STATUS, $rootScope, $state, $uibModal, Auth, $compile) {
+app.controller('MainController', ['$scope', '$rootScope', '$state', '$uibModal', 'Auth', '$compile',
+  function ($scope, $rootScope, $state, $uibModal, Auth, $compile) {
 
   $scope.state = $state;
 
   if($state.current.name == 'main') {
     if($rootScope.currentUser.type == 'Admin') {
-      // $state.go('main.admin_users');
+      $state.go('main.admin_users');
     } else if($rootScope.currentUser.type == 'Employee') {
-      // $state.go('main.customer_feedback');
+
     }
   }
 
