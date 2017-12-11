@@ -39,8 +39,17 @@ ActiveRecord::Schema.define(version: 20171209041936) do
     t.string "name"
     t.string "label"
     t.string "description"
+    t.integer "status", default: 0
+    t.integer "parent_id"
+    t.integer "lft", null: false
+    t.integer "rgt", null: false
+    t.integer "depth", default: 0, null: false
+    t.integer "children_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["lft"], name: "index_function_systems_on_lft"
+    t.index ["parent_id"], name: "index_function_systems_on_parent_id"
+    t.index ["rgt"], name: "index_function_systems_on_rgt"
   end
 
   create_table "group_users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -126,10 +135,12 @@ ActiveRecord::Schema.define(version: 20171209041936) do
 
   create_table "user_functions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "user_id"
+    t.bigint "group_id"
     t.bigint "function_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["function_id"], name: "index_user_functions_on_function_id"
+    t.index ["group_id"], name: "index_user_functions_on_group_id"
     t.index ["user_id"], name: "index_user_functions_on_user_id"
   end
 
@@ -161,5 +172,6 @@ ActiveRecord::Schema.define(version: 20171209041936) do
   add_foreign_key "ticket_assignments", "users"
   add_foreign_key "tickets", "users", column: "creator_id"
   add_foreign_key "user_functions", "function_systems", column: "function_id"
+  add_foreign_key "user_functions", "groups"
   add_foreign_key "user_functions", "users"
 end

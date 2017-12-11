@@ -1,6 +1,15 @@
 class User < ApplicationRecord
   has_many :group_users
   has_many :groups, :through => :group_users
+  has_many :ticket_assignments
+  has_many :ticket, :through => :ticket_assignments
+  has_many :user_functions
+  has_many :function_systems, :through => :user_functions
+  has_many :comments
+  has_many :sub_comments
+  has_many :notification_users
+  has_many :notifications, :through => :notification_users
+
   enum status: [:active, :inactive]
 
   attr_accessor :group_id
