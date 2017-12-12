@@ -1,0 +1,203 @@
+<div class="row row-flex padding-top-30px">
+  <div class="col-xs-10 caption-subject font-size-20px
+    padding-15px-0px-15px-30px inline">
+    Công việc &nbsp;
+    <span class="label uppercase ticket-background-{{tickets_data.status}} ticket-label
+      font-size-22px border-radius-4px-important padding-5px-15px-5px-15px">
+      {{stat_box[current_stat_box].name}}
+    </span>
+  </div>
+  <!-- <div class="col-xs-2 text-center">
+    <div
+      class="btn blue btn-sm padding-7px-20px-7px-20px-important
+        border-radius-4px-important"
+      ng-click="toggleCreationTicketTemplate()">
+      <i class="fa fa-plus"></i>
+      <span>Thêm mới</span>
+    </div>
+  </div> -->
+</div>
+
+<!-- <div
+  id="building-manager-create-ticket"
+  class="collapse padding-30px"
+  aria-expanded="false"
+  ng-include="'templates/building_manager/tickets/new_without_modal'">
+</div> -->
+
+<div class="row row-flex">
+  <div class="col-xs-12 scrollable margin-top-15px">
+    <div
+      class="text-center padding-top-15px padding-bottom-15px"
+      ng-show="loading">
+      <i class="fa fa-spinner fa-spin fa-lg fa-fw"></i>
+    </div>
+
+    <div
+      class="text-center"
+      ng-show="!loading && !tickets_data.tickets.length">
+      Không có công việc nào
+    </div>
+    <div
+      ng-show="!loading && selects.count_ids > 0"
+      class="padding-left-10px padding-bottom-15px">
+      <div class="inline-block uppercase font-size-13px">
+        Đã chọn {{selects.count_ids}} công việc
+      </div>
+      <div class="inline-block padding-sides-15px ticket-update-multiple font-size-13px">
+        <div class="dropdown open uppercase">
+          <div
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            aria-expanded="true">
+            Cập nhật trạng thái
+            <i class="fa fa-angle-down"></i>
+          </div>
+          <ul class="dropdown-menu pull-right" role="menu">
+            <li>
+              <a href="javascript:;" ng-click="updateTicketStatus('new')"> Mới </a>
+            </li>
+            <li>
+              <a href="javascript:;" ng-click="updateTicketStatus('mine')"> Của tôi </a>
+            </li>
+            <li>
+              <a href="javascript:;" ng-click="updateTicketStatus('closed')"> Đóng </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <table
+      class="table table-hover table-custom"
+      ng-show="!loading && tickets_data.tickets.length">
+      <thead>
+        <tr>
+          <td class="width-sm-90px">
+            <label class="mt-checkbox mt-checkbox-outline">
+              <input
+                type="checkbox"
+                value="1"
+                name="select"
+                ng-model="selects.all"
+                ng-change="applySelects('all')">
+              <span></span>
+            </label>
+          </td>
+          <td class="caption uppercase">Tiêu đề</td>
+          <td></td>
+          <td></td>
+          <td class="caption uppercase width-sm-130px">Hoạt động</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="ticket in tickets_data.tickets track by $index">
+          <td class="width-sm-90px">
+            <div>
+              <label class="mt-checkbox mt-checkbox-outline ticket-checkbox">
+                <input
+                  type="checkbox"
+                  value="1"
+                  ng-model="selects[ticket.id]"
+                  ng-change="applySelects(ticket.id)">
+                <span></span>
+              </label>
+              <span class="user-thumbnail pull-right hidden-xs">
+                <a href="#" ng-click="showUserInfo(ticket.user_id)">
+                  <img
+                    class="profile img-circle border-gray"
+                    title="{{ticket.user_name}}"
+                    width="40px"
+                    height="40px"
+                    src="{{ticket.user_avatar || '/images/avatar.png'}}">
+                </a>
+              </span>
+            </div>
+          </td>
+          <td>
+            <div class="bold ticket-name">
+              <a ui-sref="main.building_manager_tickets.show({ticket_id: ticket.id})">
+                #{{ticket.id}}- {{ticket.title}}
+              </a>
+            </div>
+            <!-- <div class="m-grid-col-xs-12">
+              <span class="font-size-13px">
+                Bắt đầu bởi {{ticket.user.name || ticket.user.email}}&nbsp;-&nbsp;
+              </span>
+              <span class="ticket-assigned-user">
+                {{showAssignName(ticket)}}
+              </span>
+            </div> -->
+          </td>
+          <td class="ticket-ticket-status vertical-align-middle-important">
+            <div
+              class="m-grid-col-xs-8 hidden-xs status-label label
+                ticket-background-{{ticket.status}}
+                padding-4px-7px-4px-7px-important">
+              {{stat_box[ticket.status].name}}
+            </div>
+          </td>
+          <td class="ticket-ticket-post-counts vertical-align-middle-important">
+            <div class="m-grid-col-xs-4 label ticket-label-count hidden-xs">
+              <!-- {{ticket.posts_count}} -->
+            </div>
+          </td>
+          <td class="width-sm-130px vertical-align-middle-important">
+            <span class="ticket-assigned-user">{{last_active(ticket.updated_at)}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div
+      ng-show="!loading && selects.count_ids > 0"
+      class="padding-left-10px padding-bottom-15px">
+      <div class="inline-block uppercase font-size-13px">
+        Đã chọn {{selects.count_ids}} công việc
+      </div>
+      <div class="inline-block padding-sides-15px
+        ticket-update-multiple font-size-13px">
+        <div class="dropup open uppercase">
+          <div
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            aria-expanded="true">
+            Cập nhật trạng thái
+            <i class="fa fa-angle-up"></i>
+          </div>
+          <ul class="dropdown-menu pull-right" role="menu">
+            <!-- <li>
+              <a href="javascript:;" ng-click="updateTicketStatus('new')"> Mới </a>
+            </li>
+            <li>
+              <a href="javascript:;" ng-click="updateTicketStatus('mine')"> Của tôi </a>
+            </li>
+            <li>
+              <a href="javascript:;" ng-click="updateTicketStatus('closed')"> Đóng </a>
+            </li> -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row row-flex" ng-show="!loading && tickets_data.tickets.length">
+  <div class="col-xs-12">
+    <ul
+      uib-pagination
+      ng-change="pageChanged()"
+      boundary-links="true"
+      total-items="tickets_data.total_entries"
+      ng-model="currentPage"
+      class="pagination-sm"
+      max-size="10"
+      items-per-page="tickets_data.per_page"
+      previous-text="&lsaquo;"
+      next-text="&rsaquo;"
+      first-text="&laquo;"
+      last-text="&raquo;">
+    </ul>
+    <div class="pull-right">
+      Tổng số công việc: {{tickets_data.total_entries}}
+    </div>
+  </div>
+</div>

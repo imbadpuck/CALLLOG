@@ -1,0 +1,123 @@
+<div ng-controller="CreateTicketController">
+  <form
+    class="background-color-rgba-192-255-193-0_25
+      padding-15px border-radius-10px"
+    ng-submit="form.$valid && createTicket()"
+    name="form"
+    novalidate>
+    <div class="row row-flex">
+      <div class="form-group col-xs-12 col-md-6 col-sm-6 col-lg-6">
+        <label class="required">Tiêu đề</label>
+        <input
+          type="text"
+          name="name"
+          ng-model="admin_create_ticket.ticket.name"
+          class="form-control border-radius-4px-important"
+          required>
+        <div
+          ng-messages="form.name.$error"
+          ng-show="form.$submitted"
+          class="text-error">
+          <div ng-message="required">
+            {{common_text.validate.require}}
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-md-6 col-sm-6 col-lg-6">
+        <label>Thời hạn thực hiện</label>
+        <input
+          class="form-control border-radius-4px-important
+            background-color-fff-important"
+          type="text"
+          name="daterange"
+          id="ticket-period-of-work"
+          readonly/>
+      </div>
+
+      <div class="col-xs-12 col-lg-6 col-sm-6 col-md-6 form-group">
+        <label>Gán cho nhóm</label>
+        <div class="m-grid-col-xs-12">
+          <div
+            class="input-icon right ticket-clear-group"
+            ng-show="admin_create_ticket.ticket.group_id">
+            <i
+              class="fa fa-close"
+              title="Xóa"
+              tooltip
+              ng-click="clearSelectedGroup()">
+            </i>
+            <input
+              type="text"
+              class="form-control border-radius-4px-important
+                background-color-fff-important"
+              ng-model="admin_create_ticket.ticket.group_name"
+              disabled>
+          </div>
+          <div id="tree_groups" class="padding-top-15px ticket-tree-groups">
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-lg-6 col-sm-6 col-md-6 form-group">
+        <label>Hoặc gán cho nhân viên</label>
+        <ui-select
+          class="background-color-fff-important height-34px"
+          ng-model="admin_create_ticket.ticket.assigned_user"
+          name="assigned_user"
+          theme="select2"
+          append-to-body="true"
+          ng-change="clearSelectedGroup()">
+          <ui-select-match
+            class="border-radius-4px-important height-34px font-size-14px"
+            placeholder="Chọn nhân viên"
+            allow-clear="true">
+            {{$select.selected.name}}
+          </ui-select-match>
+          <ui-select-choices repeat="item as item in employees">
+            <span ng-bind-html="item.name"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+
+      <div class="form-group col-xs-12">
+        <label class="required">Nội dung</label>
+        <textarea
+          name="body"
+          ng-model="admin_create_ticket.post.body"
+          class="form-control border-radius-4px-important"
+          rows="4"
+          required>
+        </textarea>
+        <div
+          ng-messages="form.body.$error"
+          ng-show="form.$submitted"
+          class="text-error">
+          <div ng-message="required">{{common_text.validate.require}}</div>
+        </div>
+      </div>
+      <div class="form-group col-xs-12">
+        <label>Tệp đính kèm</label>
+        <div>
+          <label class="btn btn-default btn-sm border-radius-4px-important">
+            Thêm <input class="hidden" type="file" file-upload data-multiple="true"/>
+          </label>
+        </div>
+        <div ng-repeat="file in $files">
+          {{file.name | fileName}}
+          <a
+            href="#"
+            ng-click="$files.splice($index, 1)"
+            class="text-red"
+            title="Xóa">
+            <i class="fa fa-times" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    <input
+      class="btn blue btn-sm padding-7px-20px-7px-20px-important
+        border-radius-4px-important"
+      type="submit"
+      value="Lưu">
+  </form>
+</div>

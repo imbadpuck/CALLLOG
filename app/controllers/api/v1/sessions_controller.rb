@@ -1,6 +1,6 @@
 class Api::V1::SessionsController < ApplicationController
-  before_action :load_user_authentication
   skip_before_action :verify_authenticity_token
+  before_action :load_user_authentication
 
   include SessionHelper
   respond_to :json
@@ -12,8 +12,8 @@ class Api::V1::SessionsController < ApplicationController
       :code    => Settings.code.success,
       :message => "Đăng nhập thành công",
       :data    => {
-        :user           => @user,
-        :token          => @auth_token,
+        :info  => session["info"],
+        :token => @auth_token,
       }
     }, status: 200
   end

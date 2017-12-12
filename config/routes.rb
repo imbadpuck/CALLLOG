@@ -6,9 +6,16 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users, only: [:index]
 
+      resources :tickets, only: [:index, :show] do
+        get :dashboard, on: :collection
+        get :search   , on: :collection
+      end
+
+      get 'search/ticket_search' => 'search#ticket_search', as: :ticket_search
+
       post "sign_in"              , :to => 'sessions#create'
       post "users/change_password", :to => "users#change_password"
-      get "sample_users"          , :to => "sample_users#index"
+      get  "sample_users"         , :to => "sample_users#index"
     end
   end
 

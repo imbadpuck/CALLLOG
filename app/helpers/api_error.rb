@@ -33,4 +33,9 @@ module APIError
     class UnSaved < APIError::Base
     end
   end
+
+  module  Client
+    class Unauthorized < APIError::Base
+    end
+  end
 end

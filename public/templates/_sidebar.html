@@ -1,14 +1,31 @@
 <div class="page-sidebar navbar-collapse collapse">
-  <ul class="page-sidebar-menu" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+  <ul
+    class="page-sidebar-menu"
+    data-keep-expanded="false"
+    data-auto-scroll="true"
+    data-slide-speed="200">
 
-    <!-- Employee -->
-
-    <!-- Admin -->
-
-    <li class="nav-item" ng-show="currentUser.type == 'Admin'">
-      <a ui-sref="main.admin_users" ui-sref-opts="{reload: 'main.admin_users', inherit: false}">
+    <li
+      ng-show="enableFunction('user_index')"
+      class="nav-item">
+      <a
+        ui-sref-if="enableFunction('user_index')"
+        ui-sref-val="main.user_index"
+        ui-sref-opts="{reload: false, inherit: false}">
         <i class="icon-users"></i>
         <span class="title">Quản lý tài khoản</span>
+      </a>
+    </li>
+
+    <li
+      ng-show="enableFunction('own_request_dashboard')"
+      class="nav-item">
+      <a
+        ui-sref-if="enableFunction('own_request_dashboard')"
+        ui-sref-val="main.ticket_dashboard({dashboard_label: 'own_request_dashboard'})"
+        ui-sref-opts="{reload: false, inherit: false}">
+        <i class="icon-users"></i>
+        <span class="title">Việc tôi yêu cầu</span>
       </a>
     </li>
   </ul>

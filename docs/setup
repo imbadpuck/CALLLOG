@@ -7,3 +7,4 @@ rake sample:create_users
 rake sample:create_groups
 rake sample:create_functions
 rake sample:create_user_function
+rake sample:create_fake_ticket

@@ -3,18 +3,58 @@ app.controller('MainController', ['$scope', '$rootScope', '$state', '$uibModal',
 
   $scope.state = $state;
 
-  if($state.current.name == 'main') {
-    if($rootScope.currentUser.type == 'Admin') {
-      $state.go('main.admin_users');
-    } else if($rootScope.currentUser.type == 'Employee') {
+  var init = function() {
+    functions = [
+      {state: 'main.user_index', function_label: 'user_index', argument: ''},
+      {
+        state: "main.ticket_dashboard",
+        function_label: 'own_request_dashboard',
+        argument: {dashboard_label: 'own_request_dashboard'}
+      },
+    ]
 
+    for (var i = 0; i < functions.length; i++) {
+      for (var j = 0; j < $rootScope.functionSystems.length; j++) {
+        if (functions[i].function_label == $rootScope.functionSystems[j].label) {
+          $state.go(functions[i].state, functions[i].argument);
+        }
+      }
     }
   }
 
-  $scope.home_state = {
-    Admin: 'main.admin_users',
-    Employee: 'main.admin_users'
-  };
+  $rootScope.enableFunction = function(function_label) {
+    var currentFunction = null;
+    for (var i = 0; i < $rootScope.functionSystems.length; i++) {
+      if ($rootScope.functionSystems[i].label == function_label) {
+        currentFunction = $rootScope.functionSystems[i];
+      }
+    }
+
+    if (currentFunction != null) {
+      for (var i = 0; i < $rootScope.functionSystems.length; i++) {
+        if ($rootScope.functionChecking({
+            label: function_label,
+            function: currentFunction,
+            node: {
+              lft: $rootScope.functionSystems[i].lft,
+              rgt: $rootScope.functionSystems[i].rgt
+            }})) return true;
+      }
+    }
+
+    return false;
+  }
+
+  $rootScope.functionChecking = function(data) {
+
+    if(data.label == data.function.label || data.label == 'function_root' ||
+      $rootScope.currentFunctionIsChildOf({c_func: data.function, e_func: data.node})) {
+
+      return true;
+    }
+
+    return false;
+  }
 
   $scope.changePassword = function() {
     NProgress.start();
@@ -49,5 +89,7 @@ app.controller('MainController', ['$scope', '$rootScope', '$state', '$uibModal',
   $scope.cloneObject = function(json) {
     return JSON.parse(JSON.stringify(json));
   }
+
+  init();
 
 }]);

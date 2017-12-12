@@ -4,6 +4,7 @@ class CreateGroups < ActiveRecord::Migration[5.1]
       t.string :label, index: true
       t.string :name
       t.string :content
+      t.integer :purpose, default: 2
 
       t.integer :parent_id, null: true, index: true
       t.integer :lft, null: false, index: true

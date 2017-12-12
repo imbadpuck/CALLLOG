@@ -1,5 +1,10 @@
 class Api::V1::UsersController < ApplicationController
-  skip_before_action  :verify_authenticity_token
+  before_action :authenticate_request!
+  skip_before_action :verify_authenticity_token
+  before_action -> { role_checking(action_name) }
+
+  include UserHelper
+
   respond_to :json
 
   def index

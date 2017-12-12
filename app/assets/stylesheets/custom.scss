@@ -79,19 +79,19 @@
 .ticket-label {
   padding: 4px 8px;
 }
-.ticket-background-new, .ticket-background-all {
+.ticket-background-new_ticket, .ticket-background-all {
   background-color: #5bc0de;
 }
-.ticket-background-active, .ticket-background-mine {
+.ticket-background-inprogress {
   background-color: #1abc9c;
 }
-.ticket-background-pending {
+.ticket-background-resolved {
   background-color: #f0ad4e;
 }
 .ticket-background-closed {
   background-color: #777;
 }
-.ticket-background-out_of_date {
+.ticket-background-out_of_date, .ticket-background-cancelled {
   background-color: #ed6b75;
 }
 .ticket-name {
@@ -142,11 +142,11 @@
   border-radius: .25em;
   margin-left: 15px;
 }
-.ticket-topic-status {
+.ticket-ticket-status {
   min-width: 120px;
   text-align: right;
 }
-.ticket-topic-post-counts {
+.ticket-ticket-post-counts {
   min-width: 50px;
   text-align: left;
 }

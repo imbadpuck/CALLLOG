@@ -42,9 +42,9 @@ var app = angular.module("CalllogApp",
     controller: 'MainController',
     requireSignIn: true
   })
-  .state('main.admin_users', {
-    url: "/admin/users?page&keyword",
-    templateUrl: "/templates/admin/users/index.html",
+  .state('main.user_index', {
+    url: "/users?page&keyword",
+    templateUrl: "/templates/users/index.html",
     resolve: {
       user_list: ['Admin_API', '$stateParams', function(Admin_API, $stateParams) {
         return Admin_API.getUsers({page: $stateParams.page || 1, keyword: $stateParams.keyword}).then(function(response) {
@@ -53,6 +53,32 @@ var app = angular.module("CalllogApp",
       }]
     },
     controller: 'AdminManageUserController',
+    requireSignIn: true
+  })
+  .state('main.ticket_dashboard', {
+    url: "/tickets?dashboard_label",
+    templateUrl: "/templates/tickets/index.html",
+    resolve: {
+      dashboard: ['Ticket_API', '$stateParams', function(Ticket_API, $stateParams) {
+        return Ticket_API.getDashboard({dashboard_label: $stateParams.dashboard_label}).then(function(response) {
+          return response.data.data;
+        });
+      }],
+    },
+    controller: 'TicketsController',
+    requireSignIn: true
+  })
+  .state('main.ticket_dashboard.list', {
+    url: "/list?page&status&search&dashboard_label",
+    templateUrl: "/templates/tickets/list.html",
+    controller: 'TicketsListController',
+    requireSignIn: true
+  })
+  .state('main.ticket_dashboard.show', {
+    url: "/show?ticket_id",
+    templateUrl: "/templates/tickets/show.html",
+    controller: 'TicketController',
+    requireSignIn: true
   });
   $urlRouterProvider.otherwise('/main');
 }])
@@ -71,14 +97,13 @@ var app = angular.module("CalllogApp",
 
   NProgress.start();
   if($window.localStorage.token) {
-    $rootScope.currentUser = JSON.parse($window.localStorage.user);
-    if ($window.localStorage.menu) {
-      $rootScope.menu = JSON.parse($window.localStorage.menu);
-    } else {
-      $rootScope.menu = null;
-    }
+    $rootScope.currentUser     = JSON.parse($window.localStorage.user);
+    $rootScope.groupsInvolved  = JSON.parse($window.localStorage.groups_involved);
+    $rootScope.functionSystems = JSON.parse($window.localStorage.function_systems);
+    $rootScope.generalInfo     = JSON.parse($window.localStorage.general_info);
     $http.defaults.headers.common["Authorization"] = 'Bearer ' + $window.localStorage.token;
     $state.go("main");
+
   } else {
     $state.go("signin");
   }
@@ -96,6 +121,19 @@ var app = angular.module("CalllogApp",
       password: "Mật khẩu dài ít nhất 8 kí tự.",
       password_confirm: "Mật khẩu xác nhận không đúng."
     }
+  }
+
+  $rootScope.currentFunctionIsParentOf = function(data) {
+    if (data.c_func.lft < data.e_func.lft &&
+        data.c_func.rgt > data.e_func.rgt) {
+      return true;
+    }
+
+    return false;
+  }
+
+  $rootScope.currentFunctionIsChildOf = function(data) {
+    return !$rootScope.currentFunctionIsParentOf(data);
   }
 
 

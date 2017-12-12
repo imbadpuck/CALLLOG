@@ -1,0 +1,133 @@
+<form
+  ng-submit="form.$valid && createTicket()"
+  name="form"
+  novalidate>
+  <div class="modal-header">
+    <button
+      ng-click="close()"
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close">
+    </button>
+    <h4 class="modal-title">Thêm mới công việc</h4>
+  </div>
+  <div class="modal-body">
+    <div class="row row-flex">
+      <div class="form-group col-xs-12">
+        <label class="required">Tiêu đề</label>
+        <input
+          type="text"
+          name="name"
+          ng-model="admin_create_ticket.ticket.name"
+          class="form-control"
+          required>
+        <div
+          ng-messages="form.name.$error"
+          ng-show="form.$submitted"
+          class="text-error">
+          <div ng-message="required">
+            {{common_text.validate.require}}
+          </div>
+        </div>
+      </div>
+<!--       <div class="form-group col-xs-12">
+        <label class="required">Tên</label>
+        <input type="text" name="name" ng-model="ticket.name" class="form-control" required>
+        <div ng-messages="form.name.$error" ng-show="form.$submitted" class="text-error">
+          <div ng-message="required">{{common_text.validate.require}}</div>
+        </div>
+      </div>
+      <div class="form-group col-xs-12">
+        <label class="required">Điện thoại</label>
+        <input type="text" name="phone" ng-model="ticket.phone" class="form-control" required>
+        <div ng-messages="form.phone.$error" ng-show="form.$submitted" class="text-error">
+          <div ng-message="required">{{common_text.validate.require}}</div>
+        </div>
+      </div>
+      <div class="form-group col-xs-12">
+        <label class="required">Email</label>
+        <input type="text" name="email" ng-model="ticket.email" class="form-control" required>
+        <div ng-messages="form.email.$error" ng-show="form.$submitted" class="text-error">
+          <div ng-message="required">{{common_text.validate.require}}</div>
+        </div>
+      </div> -->
+      <div class="form-group col-xs-12">
+        <label class="required">Nội dung</label>
+        <textarea
+          name="body"
+          ng-model="admin_create_ticket.post.body"
+          class="form-control"
+          rows="4"
+          required>
+        </textarea>
+        <div
+          ng-messages="form.body.$error"
+          ng-show="form.$submitted"
+          class="text-error">
+          <div ng-message="required">{{common_text.validate.require}}</div>
+        </div>
+      </div>
+      <div class="form-group col-xs-12">
+        <label>Tệp đính kèm</label>
+        <div>
+          <label class="btn btn-default btn-sm">
+            Thêm <input class="hidden" type="file" file-upload data-multiple="true"/>
+          </label>
+        </div>
+        <div ng-repeat="file in $files">
+          {{file.name | fileName}}
+          <a
+            href="#"
+            ng-click="$files.splice($index, 1)"
+            class="text-red"
+            title="Xóa">
+            <i class="fa fa-times" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+      <div class="col-xs-6">
+        <label>Gán cho</label>
+        <ui-select
+          ng-model="admin_create_ticket.ticket.assigned_user_type"
+          name="assigned_user_type"
+          theme="select2"
+          append-to-body="true"
+          search-enabled="false"
+          ng-change="loadEmployees()">
+          <ui-select-match placeholder="Chọn loại nhân viên">
+            {{translator[$select.selected]}}
+          </ui-select-match>
+          <ui-select-choices repeat="item as item in ['Technician', 'Cashier']">
+            <span ng-bind-html="translator[item]"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+
+      <div class="form-group col-xs-6">
+        <label>Tên nhân viên</label>
+        <ui-select
+          ng-model="admin_create_ticket.ticket.assigned_user"
+          name="assigned_user"
+          theme="select2"
+          append-to-body="true"
+          search-enabled="false">
+          <ui-select-match placeholder="Chọn nhân viên">
+            {{$select.selected.name}}
+          </ui-select-match>
+          <ui-select-choices repeat="item as item in employees">
+            <span ng-bind-html="item.name"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+<!--       <div class="form-group col-xs-12">
+        <label>Danh sách tag</label>
+        <input type="text" name="tags" ng-model="admin_create_ticket.ticket.tag_list" class="form-control">
+      </div> -->
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="btn btn-default btn-sm" ng-click="close()">Đóng</a>
+    <input class="btn blue btn-sm" type="submit" value="Lưu">
+  </div>
+</form>

@@ -1,16 +1,17 @@
 class User < ApplicationRecord
   has_many :group_users
-  has_many :groups, :through => :group_users
+  has_many :groups          , :through => :group_users
   has_many :ticket_assignments
-  has_many :ticket, :through => :ticket_assignments
+  has_many :ticket          , :through => :ticket_assignments
   has_many :user_functions
   has_many :function_systems, :through => :user_functions
   has_many :comments
   has_many :sub_comments
   has_many :notification_users
-  has_many :notifications, :through => :notification_users
+  has_many :notifications   , :through => :notification_users
 
   enum status: [:active, :inactive]
+  enum user_type: [:performer, :people_involved]
 
   attr_accessor :group_id
 
@@ -28,18 +29,25 @@ class User < ApplicationRecord
     end
 
     def get_user_group_function(query)
-      return User.eager_load(:function_systems, groups: [:function_systems])
-                 .find_by query
+      function_systems = []
+      groups           = []
+      user             = User.eager_load(:function_systems, groups: [:function_systems])
+                             .find_by query
 
-    end
+      if user.present?
+        function_systems = user.function_systems.map{|e| e.attributes}
+        groups           = user.groups
+      end
 
-    def get_sample_users
-      @users = User.find_by_sql(%Q|
-              (select username, type from users where type = 'Admin' limit 1)
-        union (select username, type from users where type = 'Employee' limit 1)
-      |)
+      groups.each do |group|
+        function_systems.concat(group.function_systems)
+      end
 
-      return @users
+      return {
+        "user"             => user.attributes,
+        "groups"           => groups.map{|e| e.attributes},
+        "function_systems" => function_systems
+      }
     end
   end
 end

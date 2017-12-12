@@ -6,15 +6,41 @@ app.controller('SignInController', ['$scope', '$rootScope', '$state', '$http', '
     Auth.signIn($scope.username, $scope.password).then(function(response) {
       NProgress.done();
       if(response.data.code == $rootScope.CODE_STATUS.success) {
-        $rootScope.currentUser     = response.data.data.user;
+
+        $rootScope.currentUser                = response.data.data.info.user;
+        $rootScope.functionSystems            = response.data.data.info.function_systems;
         $http.defaults.headers.common["Authorization"] = 'Bearer ' + response.data.data.token;
-        $window.localStorage.user  = JSON.stringify(response.data.data.user);
-        $window.localStorage.token = response.data.data.token;
+        $window.localStorage.user             = JSON.stringify(response.data.data.info.user);
+        $window.localStorage.groups_involved  = JSON.stringify(response.data.data.info.groups);
+        $window.localStorage.function_systems = JSON.stringify(response.data.data.info.function_systems);
+        $window.localStorage.general_info     = JSON.stringify(response.data.data.info);
+        $window.localStorage.token            = response.data.data.token;
         $state.go("main");
       } else {
         toastr.error(response.data.message)
       }
     });
+  }
+
+  $scope.translateRole = function(type) {
+    switch(type) {
+      case 'sample_admin':
+        return 'Quản trị viên';
+      case 'sample_it_hanoi_leader':
+        return 'Leader IT Hà Nội';
+      case 'sample_it_danang_leader':
+        return 'Leader IT Đà Nẵng';
+      case 'sample_it_hanoi_sub_leader':
+        return 'SubLeader IT Hà Nội';
+      case 'sample_it_danang_sub_leader':
+        return 'SubLeader IT Đà Nẵng';
+      case 'sample_it_hanoi_employee':
+        return 'Nhân viên nhóm IT Hà Nội';
+      case 'sample_it_danang_employee':
+        return 'Nhân viên nhóm IT Đà Nẵng';
+      case 'sample_member':
+        return 'Người dùng hệ thống';
+    };
   }
 
   $scope.showSampleUser = function() {

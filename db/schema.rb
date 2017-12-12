@@ -66,6 +66,7 @@ ActiveRecord::Schema.define(version: 20171209041936) do
     t.string "label"
     t.string "name"
     t.string "content"
+    t.integer "purpose", default: 2
     t.integer "parent_id"
     t.integer "lft", null: false
     t.integer "rgt", null: false
@@ -103,11 +104,14 @@ ActiveRecord::Schema.define(version: 20171209041936) do
   end
 
   create_table "ticket_assignments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "user_type", default: 0
     t.bigint "user_id"
     t.bigint "group_id"
+    t.bigint "ticket_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_ticket_assignments_on_group_id"
+    t.index ["ticket_id"], name: "index_ticket_assignments_on_ticket_id"
     t.index ["user_id"], name: "index_ticket_assignments_on_user_id"
   end
 
@@ -169,6 +173,7 @@ ActiveRecord::Schema.define(version: 20171209041936) do
   add_foreign_key "sub_comments", "comments"
   add_foreign_key "sub_comments", "users"
   add_foreign_key "ticket_assignments", "groups"
+  add_foreign_key "ticket_assignments", "tickets"
   add_foreign_key "ticket_assignments", "users"
   add_foreign_key "tickets", "users", column: "creator_id"
   add_foreign_key "user_functions", "function_systems"

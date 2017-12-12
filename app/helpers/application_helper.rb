@@ -11,27 +11,16 @@ module ApplicationHelper
         data = e.message[:data]
       end
     else
-      er_code = Settings.er_codes[key_e[0].to_sym][key_e[1].to_sym]
+      er_code = Settings.error_codes[key_e[0].to_sym][key_e[1].to_sym]
       message = e.message
     end
 
     return er_code, message, data
   end
 
-  def get_current_user_in_session
-    current_user_hash = {}
-    if session[:user].class == Hash
-      current_user_hash = session[:user]
-    elsif session[:user].present?
-      current_user_hash = session[:user].attributes
-    end
-
-    return current_user_hash
-  end
-
   def user_session_assignment
-    if session[:user].blank?
-      session[:user] = User.get_user_with_group({id: @payload.first['user_id']})
+    if session["info"].blank?
+      session["info"] = User.get_user_group_function({id: @payload.first['user_id']})
     end
   end
 
@@ -49,7 +38,6 @@ module ApplicationHelper
   end
 
   def generate_query_hash
-
     return {username: user_params[:username]}
   end
 
@@ -73,12 +61,6 @@ module ApplicationHelper
           :message => "Tên đăng nhập hoặc mật khẩu không đúng"
         }
       })
-    end
-  end
-
-  def update_device_token
-    if (params[:device_token].present? and @user.device_token != params[:device_token])
-      @user.update_attributes(device_token: params[:device_token])
     end
   end
 

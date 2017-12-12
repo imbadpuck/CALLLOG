@@ -16,9 +16,9 @@ class ApplicationController < ActionController::Base
   end
 
   def get_current_user
-    return unless session[:user]
+    return if session["info"].blank?
 
-    @current_user ||= User.new(get_current_user_in_session)
+    @current_user ||= User.new(session["info"]["user"])
   end
 
   protected
@@ -34,34 +34,6 @@ class ApplicationController < ActionController::Base
   def load_user_authentication
     username_checking
 
-    query_hash = generate_query_hash
-
-    @user = User.get_user_group_function(query_hash)
-
-    update_device_token
-  end
-
-  def check_Admin
-    check_access_role(__method__.to_s)
-  end
-
-  def check_Company
-    check_access_role(__method__.to_s)
-  end
-
-  def check_BuildingManager
-    check_access_role(__method__.to_s)
-  end
-
-  def check_Cashier
-    check_access_role(__method__.to_s)
-  end
-
-  def check_Technician
-    check_access_role(__method__.to_s)
-  end
-
-  def check_Customer
-    check_access_role(__method__.to_s)
+    session["info"] = User.get_user_group_function(generate_query_hash)
   end
 end
