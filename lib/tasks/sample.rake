@@ -53,7 +53,7 @@ namespace :sample do
       function_root = FunctionSystem.find_by(label: 'all')
       admin_group   = Group.find_by(label: 'admin_group')
       worker.add(
-        :function_id => function_root.id,
+        :function_system_id => function_root.id,
         :group_id    => admin_group.id
       )
     end

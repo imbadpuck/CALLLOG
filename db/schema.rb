@@ -136,10 +136,10 @@ ActiveRecord::Schema.define(version: 20171209041936) do
   create_table "user_functions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "user_id"
     t.bigint "group_id"
-    t.bigint "function_id"
+    t.bigint "function_system_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["function_id"], name: "index_user_functions_on_function_id"
+    t.index ["function_system_id"], name: "index_user_functions_on_function_system_id"
     t.index ["group_id"], name: "index_user_functions_on_group_id"
     t.index ["user_id"], name: "index_user_functions_on_user_id"
   end
@@ -171,7 +171,7 @@ ActiveRecord::Schema.define(version: 20171209041936) do
   add_foreign_key "ticket_assignments", "groups"
   add_foreign_key "ticket_assignments", "users"
   add_foreign_key "tickets", "users", column: "creator_id"
-  add_foreign_key "user_functions", "function_systems", column: "function_id"
+  add_foreign_key "user_functions", "function_systems"
   add_foreign_key "user_functions", "groups"
   add_foreign_key "user_functions", "users"
 end

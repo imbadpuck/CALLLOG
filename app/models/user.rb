@@ -27,9 +27,9 @@ class User < ApplicationRecord
                  .paginate :page => params[:page], :per_page => Settings.per_page
     end
 
-    def get_user_with_group(query)
-      return User.find_by query
-                 # .joins(:groups)
+    def get_user_group_function(query)
+      return User.eager_load(:function_systems, groups: [:function_systems])
+                 .find_by query
 
     end
 

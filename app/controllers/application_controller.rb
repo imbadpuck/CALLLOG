@@ -36,7 +36,7 @@ class ApplicationController < ActionController::Base
 
     query_hash = generate_query_hash
 
-    @user = User.get_user_with_group(query_hash)
+    @user = User.get_user_group_function(query_hash)
 
     update_device_token
   end
