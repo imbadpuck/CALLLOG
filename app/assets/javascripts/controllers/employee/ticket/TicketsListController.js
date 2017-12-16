@@ -5,14 +5,19 @@ app.controller('TicketsListController', ['$scope', '$rootScope', '$state', '$uib
 
   if ($state.params.search) {
     var search = JSON.parse($state.params.search);
-    Ticket_API.ticketsSearch({page: $state.params.page, search: search}).success(function(response) {
+    Ticket_API.ticketsSearch({
+      page: $state.params.page,
+      search: search,
+      status: (($state.params.status || 'new_ticket')),
+      dashboard_label: $scope.dashboard_label,
+    }).success(function(response) {
       $scope.tickets_data     = response.data;
       $scope.currentPage      = $scope.tickets_data.page;
-      $scope.current_stat_box = $scope.tickets_data.status;
-      $.each($scope.tickets_data.box, function(k, v) {
-        $scope.stat_box[k].value = v;
-      });
-      $scope.selects = {count_ids: 0, all: 0};
+      $scope.current_stat_box = $state.params.status;
+      // $.each($scope.tickets_data.box, function(k, v) {
+      //   $scope.stat_box[k].value = v;
+      // });
+      // $scope.selects = {count_ids: 0, all: 0};
       $scope.loading = false;
     });
   } else {
@@ -27,7 +32,7 @@ app.controller('TicketsListController', ['$scope', '$rootScope', '$state', '$uib
       // $.each($scope.tickets_data.box, function(k, v) {
       //   $scope.stat_box[k].value = v;
       // });
-      $scope.selects = {count_ids: 0, all: 0};
+      // $scope.selects = {count_ids: 0, all: 0};
       $scope.loading = false;
     });
   }

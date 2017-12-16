@@ -68,8 +68,10 @@ angular.module("app.factory", [])
         params: {
           page: params.page || 1,
           keyword: params.search.keyword,
-          created_at: search.created_at,
-          closed_date: search.closed_date
+          status: params.status,
+          created_at: params.search.created_at,
+          closed_date: params.search.closed_date,
+          dashboard_label: params.dashboard_label,
         }
       });
     },

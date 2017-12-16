@@ -45,8 +45,8 @@ namespace :sample do
       :description => 'Xem danh sách người dùng',
     )
 
-    create_request_it = FunctionSystem.create(
-      :label       => 'create_request_it',
+    create_ticket = FunctionSystem.create(
+      :label       => 'create_ticket',
       :name        => 'Tạo công việc',
       :description => 'Tạo công việc',
     )
@@ -55,28 +55,24 @@ namespace :sample do
       :label       => 'own_request_dashboard',
       :name        => 'Xem công việc tôi yêu cầu',
       :description => 'Xem công việc tôi yêu cầu',
-      :parent_id   => create_request_it.id
     )
 
     FunctionSystem.create(
       :label       => 'related_request_dashboard',
       :name        => 'Xem công việc liên quan',
       :description => 'Xem công việc liên quan',
-      :parent_id   => create_request_it.id
     )
 
     FunctionSystem.create(
       :label       => 'assigned_request_dashboard',
       :name        => 'Xem công việc tôi được giao',
       :description => 'Xem công việc tôi được giao',
-      :parent_id   => create_request_it.id
     )
 
     FunctionSystem.create(
       :label       => 'team_dashboard',
       :name        => 'Xem công việc cả nhóm',
       :description => 'Xem công việc cả nhóm',
-      :parent_id   => create_request_it.id
     )
   end
 
@@ -139,7 +135,11 @@ namespace :sample do
         :group_id           => member_group.id
       )
 
-      # worker.add()
+      company_group = Group.find_by_label('company_group')
+      worker.add(
+        :function_system_id => func[:create_ticket].id,
+        :group_id           => company_group.id
+      )
     end
   end
 

@@ -66,19 +66,15 @@ module TicketHelper
     eval(tickets_query.gsub("\n",''))
   end
 
-  def searchTicket
-    return Ticket.select(
-          "users.id as user_id", "users.name as user_name",
-          "users.email as user_email", "tickets.*",
-          "assigned_users.id as assigned_user_id",
-          "assigned_users.name as assigned_user_name",
-          "assigned_users.email as assigned_user_email")
-          .eager_load(:user)
-          .search(
-            name_cont: params[:keyword],
-            created_at_gteq: params[:created_at],
-            closed_date_lteq: params[:closed_date])
-          .result.order(updated_at: :desc)
-          .paginate(page: params[:page], per_page: Settings.per_page)
+  def searchTickets
+    @query << %Q|
+      .search(
+        title_cont: params[:keyword],
+        created_at_gteq: params[:created_at],
+        closed_date_lteq: params[:closed_date])
+      .result
+    |
+
+    getTickets
   end
 end

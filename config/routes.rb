@@ -11,8 +11,6 @@ Rails.application.routes.draw do
         get :search   , on: :collection
       end
 
-      get 'search/ticket_search' => 'search#ticket_search', as: :ticket_search
-
       post "sign_in"              , :to => 'sessions#create'
       post "users/change_password", :to => "users#change_password"
       get  "sample_users"         , :to => "sample_users#index"

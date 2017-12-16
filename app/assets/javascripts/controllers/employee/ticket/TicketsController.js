@@ -56,12 +56,18 @@ app.controller('TicketsController', ['$scope', '$rootScope', '$state',
       $("#stat-box-" + $scope.current_stat_box).removeClass('start-box-shadow');
       $scope.current_stat_box = status;
       $("#stat-box-" + $scope.current_stat_box).addClass('start-box-shadow');
-      $state.go('main.ticket_dashboard.list',{status: status, search: null},
+      $state.go('main.ticket_dashboard.list', {status: status, search: null},
       );
     }
   }
 
   $scope.searchTickets = function() {
-    $state.go('main.ticket_dashboard.list', {status: null, search: JSON.stringify($scope.search)});
+    $state.go(
+      'main.ticket_dashboard.list',
+      {
+        status: null,
+        search: JSON.stringify($scope.search)
+      }
+    );
   }
 }]);
