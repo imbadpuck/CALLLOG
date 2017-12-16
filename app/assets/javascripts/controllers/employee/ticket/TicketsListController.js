@@ -1,6 +1,6 @@
 app.controller('TicketsListController', ['$scope', '$rootScope', '$state', '$uibModal',
-  '$http', 'Ticket_API', 'toastr', '$stateParams',
-  function ($scope, $rootScope, $state, $uibModal, $http, Ticket_API, toastr, $stateParams) {
+  '$http', 'Ticket_API', 'toastr',
+  function ($scope, $rootScope, $state, $uibModal, $http, Ticket_API, toastr) {
   $scope.loading = true;
 
   if ($state.params.search) {
@@ -19,11 +19,11 @@ app.controller('TicketsListController', ['$scope', '$rootScope', '$state', '$uib
     Ticket_API.getTickets({
       page: $state.params.page,
       status: (($state.params.status || 'new_ticket')),
-      dashboard_label: $stateParams.dashboard_label
+      dashboard_label: $scope.dashboard_label,
     }).success(function(response) {
       $scope.tickets_data     = response.data;
       $scope.currentPage      = $scope.tickets_data.page;
-      $scope.current_stat_box = $scope.tickets_data.status;
+      $scope.current_stat_box = $state.params.status;
       // $.each($scope.tickets_data.box, function(k, v) {
       //   $scope.stat_box[k].value = v;
       // });

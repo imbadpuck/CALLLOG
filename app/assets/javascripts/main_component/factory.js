@@ -57,7 +57,7 @@ angular.module("app.factory", [])
         params: {
           page: params.page || 1,
           status: params.status,
-          dashboard_label: params.dashboard_label
+          dashboard_label: params.dashboard_label,
         }
       });
     },

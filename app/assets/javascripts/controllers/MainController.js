@@ -7,16 +7,25 @@ app.controller('MainController', ['$scope', '$rootScope', '$state', '$uibModal',
     functions = [
       {state: 'main.user_index', function_label: 'user_index', argument: ''},
       {
-        state: "main.ticket_dashboard",
+        state: "main.ticket_dashboard.list",
         function_label: 'own_request_dashboard',
-        argument: {dashboard_label: 'own_request_dashboard'}
+        argument: {dashboard_label: 'own_request_dashboard', status: 'all'}
+      },
+      {
+        state: "main.ticket_dashboard.list",
+        function_label: 'related_request_dashboard',
+        argument: {dashboard_label: 'related_request_dashboard', status: 'all'}
       },
     ]
 
+    var exit = false;
     for (var i = 0; i < functions.length; i++) {
+      if (exit) break;
       for (var j = 0; j < $rootScope.functionSystems.length; j++) {
         if (functions[i].function_label == $rootScope.functionSystems[j].label) {
           $state.go(functions[i].state, functions[i].argument);
+          exit = true;
+          break;
         }
       }
     }

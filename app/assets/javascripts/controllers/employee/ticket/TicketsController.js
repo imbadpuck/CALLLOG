@@ -2,7 +2,8 @@ app.controller('TicketsController', ['$scope', '$rootScope', '$state',
     '$uibModal', 'dashboard', 'Ticket_API',
   function ($scope, $rootScope, $state, $uibModal, dashboard, Ticket_API) {
 
-  $scope.dashboard_label = dashboard.dashboard_label;
+  $scope.current_stat_box = $state.params.status || 'all';
+  $scope.dashboard_label  = dashboard.dashboard_label;
 
   $scope.stat_box = {
     all:         {name: 'Tất cả'},
@@ -13,8 +14,6 @@ app.controller('TicketsController', ['$scope', '$rootScope', '$state',
     closed:      {name: 'Đã đóng'},
     cancelled:   {name: 'Hủy bỏ'}
   };
-
-  $scope.current_stat_box = $state.params.status || 'all';
 
   $scope.breakpoints = [
     {
@@ -57,13 +56,7 @@ app.controller('TicketsController', ['$scope', '$rootScope', '$state',
       $("#stat-box-" + $scope.current_stat_box).removeClass('start-box-shadow');
       $scope.current_stat_box = status;
       $("#stat-box-" + $scope.current_stat_box).addClass('start-box-shadow');
-      $state.go(
-        'main.ticket_dashboard.list',
-        {
-          status: status,
-          search: null,
-          dashboard_label: $scope.dashboard_label
-        }
+      $state.go('main.ticket_dashboard.list',{status: status, search: null},
       );
     }
   }
@@ -71,6 +64,4 @@ app.controller('TicketsController', ['$scope', '$rootScope', '$state',
   $scope.searchTickets = function() {
     $state.go('main.ticket_dashboard.list', {status: null, search: JSON.stringify($scope.search)});
   }
-
-  $scope.change_current_stat_box($scope.current_stat_box);
 }]);

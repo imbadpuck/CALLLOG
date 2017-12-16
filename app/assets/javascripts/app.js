@@ -56,7 +56,7 @@ var app = angular.module("CalllogApp",
     requireSignIn: true
   })
   .state('main.ticket_dashboard', {
-    url: "/tickets?dashboard_label",
+    url: "/tickets/:dashboard_label",
     templateUrl: "/templates/tickets/index.html",
     resolve: {
       dashboard: ['Ticket_API', '$stateParams', function(Ticket_API, $stateParams) {
@@ -69,7 +69,7 @@ var app = angular.module("CalllogApp",
     requireSignIn: true
   })
   .state('main.ticket_dashboard.list', {
-    url: "/list?page&status&search&dashboard_label",
+    url: "/list?page&status&search",
     templateUrl: "/templates/tickets/list.html",
     controller: 'TicketsListController',
     requireSignIn: true

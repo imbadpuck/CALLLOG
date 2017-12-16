@@ -74,6 +74,7 @@
         id="ticket_stats"
         class="margin-0-50px-0-50px">
         <div
+          id="{{box_key}}-ticket-box"
           ng-repeat="(box_key, box) in stat_box"
           ng-class="{'start-box-shadow': box_key == current_stat_box,
             'text-center': true, 'padding-20px-0-20px-0': true,

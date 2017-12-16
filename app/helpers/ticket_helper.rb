@@ -9,6 +9,7 @@ module TicketHelper
       @select_attributes = %Q|'tickets.*'|
       @query             = %Q|.where(creator_id: #{@current_user.id})|
     when 'related_request_dashboard'
+      @select_attributes = %Q|'tickets.*'|
       @query = %Q|.joins(:ticket_assignments)
                   .where("ticket_assignments.user_id = #{@current_user.id}
                           and
