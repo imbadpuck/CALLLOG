@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(version: 20171209041936) do
 
   create_table "group_users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "regency"
+    t.float "role_level", limit: 24
     t.bigint "user_id", null: false
     t.bigint "group_id", null: false
     t.datetime "created_at", null: false

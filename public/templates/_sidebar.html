@@ -5,17 +5,29 @@
     data-auto-scroll="true"
     data-slide-speed="200">
 
-    <!-- <li
+    <li
       ng-class="{'active': state.current.name == 'main.create_ticket'}"
       ng-show="enableFunction('create_ticket')">
       <a
         ui-sref-if="enableFunction('create_ticket')"
-        ui-sref-val="main.user_index"
+        ui-sref-val="main.create_ticket"
         ui-sref-opts="{reload: false, inherit: false}">
-        <i class="icon-users"></i>
+        <i class="icon-note"></i>
         <span class="title">Tạo yêu cầu</span>
       </a>
-    </li> -->
+    </li>
+
+    <li
+      ng-class="{'active': state.current.name == 'main.manage_group'}"
+      ng-show="enableFunction('manage_group')">
+      <a
+        ui-sref-if="enableFunction('manage_group')"
+        ui-sref-val="main.manage_group"
+        ui-sref-opts="{reload: false, inherit: false}">
+        <i class="icon-users"></i>
+        <span class="title">Quản lý nhóm</span>
+      </a>
+    </li>
 
     <li
       ng-class="{'active': state.current.name == 'main.user_index'}"
@@ -37,7 +49,7 @@
         ui-sref-if="enableFunction('own_request_dashboard')"
         ui-sref-val="main.ticket_dashboard.list({dashboard_label: 'own_request_dashboard', status: 'all'})"
         ui-sref-opts="{reload: false, inherit: false}">
-        <i class="icon-note"></i>
+        <i class="icon-speedometer"></i>
         <span class="title">Việc tôi yêu cầu</span>
       </a>
     </li>
@@ -50,7 +62,7 @@
         ui-sref-if="enableFunction('related_request_dashboard')"
         ui-sref-val="main.ticket_dashboard.list({dashboard_label: 'related_request_dashboard', status: 'all'})"
         ui-sref-opts="{reload: false, inherit: false}">
-        <i class="icon-note"></i>
+        <i class="icon-speedometer"></i>
         <span class="title">Công việc liên quan</span>
       </a>
     </li>

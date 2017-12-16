@@ -22,3 +22,8 @@ result_codes:
 http_code:
   code_400: 400
   code_200: 200
+
+genders:
+  0: "Nam"
+  1: "Nữ"
+  2: "Khác"

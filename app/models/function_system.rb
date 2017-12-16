@@ -1,6 +1,6 @@
 class FunctionSystem < ApplicationRecord
   belongs_to :user
-  has_many :user_functions
+  has_many :user_functions, :dependent => :delete_all
 
   acts_as_nested_set
   enum status: [:active, :inactive]

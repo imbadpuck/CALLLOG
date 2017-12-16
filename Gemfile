@@ -29,6 +29,7 @@ gem "will_paginate"
 gem "awesome_nested_set"
 gem "mysql2", "~> 0.3.20"
 gem "ransack"
+gem 'redis-rails'
 #========>
 
 group :development, :test do

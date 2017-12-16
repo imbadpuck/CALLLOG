@@ -1,4 +1,4 @@
-app.controller('AdminManageUserController', ['$scope', '$state', 'user_list',
+app.controller('ManageUserController', ['$scope', '$state', 'user_list',
   function ($scope, $state, user_list) {
 
   $scope.users       = user_list.data;

@@ -1,14 +1,13 @@
 class User < ApplicationRecord
-  has_many :group_users
+  has_many :group_users     , :dependent => :delete_all
   has_many :groups          , :through => :group_users
-  has_many :ticket_assignments
+  has_many :ticket_assignments, :dependent => :delete_all
   has_many :ticket          , :through => :ticket_assignments
-  has_many :user_functions
+  has_many :user_functions  , :dependent => :delete_all
   has_many :function_systems, :through => :user_functions
-  has_many :comments
-  has_many :sub_comments
-  has_many :notification_users
-  has_many :notifications   , :through => :notification_users
+  has_many :comments     , :dependent => :delete_all
+  has_many :sub_comments , :dependent => :delete_all
+  has_many :notifications, :dependent => :delete_all
 
   enum status: [:active, :inactive]
   enum user_type: [:performer, :people_involved]
@@ -36,7 +35,11 @@ class User < ApplicationRecord
 
       if user.present?
         function_systems = user.function_systems.map{|e| e.attributes}
-        groups           = user.groups
+        user.groups.each do |group|
+          groups.concat(group.self_and_ancestors.to_a)
+        end
+
+        groups.uniq
       end
 
       groups.each do |group|
