@@ -11,6 +11,11 @@ Rails.application.routes.draw do
         get :search   , on: :collection
       end
 
+      resources :groups, only: [:index, :create, :destroy]
+      resources :group_users, only: [:create, :destroy] do
+        get :get_group_not_joined_users, on: :collection
+      end
+
       post "sign_in"              , :to => 'sessions#create'
       post "users/change_password", :to => "users#change_password"
       get  "sample_users"         , :to => "sample_users#index"

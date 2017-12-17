@@ -1,5 +1,5 @@
 class Ticket < ApplicationRecord
-  has_many :ticket_assignments
+  has_many :ticket_assignments, :dependent => :delete_all
   belongs_to :user
 
   acts_as_nested_set

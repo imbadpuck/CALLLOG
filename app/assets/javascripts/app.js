@@ -46,13 +46,26 @@ var app = angular.module("CalllogApp",
     url: "/users?page&keyword",
     templateUrl: "/templates/users/index.html",
     resolve: {
-      user_list: ['Admin_API', '$stateParams', function(Admin_API, $stateParams) {
-        return Admin_API.getUsers({page: $stateParams.page || 1, keyword: $stateParams.keyword}).then(function(response) {
+      user_list: ['User_API', '$stateParams', function(User_API, $stateParams) {
+        return User_API.getUsers({page: $stateParams.page || 1, keyword: $stateParams.keyword}).then(function(response) {
           return response.data;
         });
       }]
     },
-    controller: 'AdminManageUserController',
+    controller: 'ManageUserController',
+    requireSignIn: true
+  })
+  .state('main.manage_group', {
+    url: '/groups',
+    templateUrl: '/templates/groups/index.html',
+    resolve: {
+      groups_data: ['Group_API', function(Group_API) {
+        return Group_API.getGroups({function_label: 'get_tree_group'}).then(function(response) {
+          return response.data.data;
+        });
+      }]
+    },
+    controller: 'GroupsController',
     requireSignIn: true
   })
   .state('main.ticket_dashboard', {
@@ -66,6 +79,19 @@ var app = angular.module("CalllogApp",
       }],
     },
     controller: 'TicketsController',
+    requireSignIn: true
+  })
+  .state('main.create_ticket', {
+    url: "/create_ticket",
+    templateUrl: "/templates/tickets/new_without_modal.html",
+    resolve: {
+      working_groups: ['Group_API', function(Group_API) {
+        return Group_API.getGroups({function_label: 'working_group_index'}).then(function(response) {
+          return response.data.data;
+        });
+      }],
+    },
+    controller: 'CreateTicketController',
     requireSignIn: true
   })
   .state('main.ticket_dashboard.list', {
@@ -122,6 +148,22 @@ var app = angular.module("CalllogApp",
       password_confirm: "Mật khẩu xác nhận không đúng."
     }
   }
+
+  $rootScope.group_types = [
+    {title: 'Phân loại người dùng', value: 2, label: 'classify'},
+    {title: 'Nhóm làm việc'       , value: 3, label: 'working_group'}
+  ]
+
+  $rootScope.user_types = [
+    {title: 'Quản trị viên', value: 'Admin'},
+    {title: 'Nhân viên'    , value: 'Employee'}
+  ]
+
+  $rootScope.user_regency_in_group = [
+    {title: 'Trưởng nhóm', value: 3},
+    {title: 'Phó nhóm'   , value: 2},
+    {title: 'Thành viên' , value: 1}
+  ]
 
   $rootScope.currentFunctionIsParentOf = function(data) {
     if (data.c_func.lft < data.e_func.lft &&

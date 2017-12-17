@@ -1,7 +1,7 @@
 module TicketDashboardHelper
   include RequestValidation
 
-  def dashboard_role_checking
+  def generate_dashboard_query
     dashboard_pre_validation
 
     case params[:dashboard_label]
@@ -29,8 +29,6 @@ module TicketDashboardHelper
       #     ticket_assignments.user_type = #{User.user_types[:performer]}
       # |
     end
-
-    dashboard_loading
   end
 
   def dashboard_pre_validation

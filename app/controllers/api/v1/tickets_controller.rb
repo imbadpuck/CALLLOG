@@ -1,7 +1,6 @@
 class Api::V1::TicketsController < ApplicationController
   before_action :authenticate_request!
-  before_action -> { ticket_role_checking }   , only: [:index, :search]
-  before_action -> { dashboard_role_checking }, only: [:dashboard]
+  before_action -> { ticket_role_checking(action_name) }
   skip_before_action :verify_authenticity_token
   respond_to :json
 
@@ -47,8 +46,6 @@ class Api::V1::TicketsController < ApplicationController
   end
 
   def search
-    searchTickets
-
     render json: {
       :code    => Settings.code.success,
       :message => '',

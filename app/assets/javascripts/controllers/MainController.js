@@ -5,7 +5,9 @@ app.controller('MainController', ['$scope', '$rootScope', '$state', '$uibModal',
 
   var init = function() {
     functions = [
-      {state: 'main.user_index', function_label: 'user_index', argument: ''},
+      {state: 'main.create_ticket', function_label: 'create_ticket', argument: ''},
+      {state: 'main.manage_group' , function_label: 'manage_group' , argument: ''},
+      {state: 'main.user_index'   , function_label: 'user_index'   , argument: ''},
       {
         state: "main.ticket_dashboard.list",
         function_label: 'own_request_dashboard',

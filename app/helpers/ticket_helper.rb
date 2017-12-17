@@ -1,9 +1,24 @@
 module TicketHelper
   include RequestValidation
 
-  def ticket_role_checking
+  def ticket_role_checking(action_name)
     ticket_pre_validation
 
+    case action_name
+    when 'index'
+      generate_tickets_query
+
+      get_tickets
+    when 'dashboard'
+      generate_dashboard_query
+
+      dashboard_loading
+    when 'search'
+      search_tickets
+    end
+  end
+
+  def generate_tickets_query
     case params[:dashboard_label]
     when 'own_request_dashboard'
       @select_attributes = %Q|'tickets.*'|
@@ -29,8 +44,6 @@ module TicketHelper
       #     ticket_assignments.user_type = #{User.user_types[:performer]}
       # |
     end
-
-    getTickets
   end
 
   def ticket_pre_validation
@@ -45,7 +58,7 @@ module TicketHelper
     allow_access?(params[:dashboard_label])
   end
 
-  def getTickets
+  def get_tickets
     @status = params[:status] || "new_ticket"
 
     if @status == 'all'
@@ -66,7 +79,7 @@ module TicketHelper
     eval(tickets_query.gsub("\n",''))
   end
 
-  def searchTickets
+  def search_tickets
     @query << %Q|
       .search(
         title_cont: params[:keyword],
@@ -75,6 +88,6 @@ module TicketHelper
       .result
     |
 
-    getTickets
+    get_tickets
   end
 end

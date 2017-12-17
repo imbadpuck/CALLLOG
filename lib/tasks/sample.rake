@@ -45,7 +45,7 @@ namespace :sample do
       :description => 'Xem danh sách người dùng',
     )
 
-    create_ticket = FunctionSystem.create(
+    FunctionSystem.create(
       :label       => 'create_ticket',
       :name        => 'Tạo công việc',
       :description => 'Tạo công việc',
@@ -74,6 +74,78 @@ namespace :sample do
       :name        => 'Xem công việc cả nhóm',
       :description => 'Xem công việc cả nhóm',
     )
+
+    FunctionSystem.create(
+      :label       => 'group_index',
+      :name        => 'Xem các nhóm làm việc',
+      :description => 'Xem các nhóm làm việc',
+    )
+
+    FunctionSystem.create(
+      :label       => 'working_group_index',
+      :name        => 'Xem các nhóm làm việc',
+      :description => 'Xem các nhóm làm việc',
+    )
+
+    FunctionSystem.create(
+      :label       => 'assign_request_to_working_group',
+      :name        => 'Gán công việc cho nhóm',
+      :description => 'Gán công việc cho nhóm',
+    )
+
+    FunctionSystem.create(
+      :label       => 'assign_request_to_user',
+      :name        => 'Gán công việc cho người dùng',
+      :description => 'Gán công việc cho người dùng',
+    )
+
+    manage_group   = FunctionSystem.create(
+      :label       => 'manage_group',
+      :name        => 'Quản lý nhóm',
+      :description => 'Quản lý nhóm',
+    )
+
+    FunctionSystem.create(
+      :label       => 'create_group',
+      :name        => 'Tạo nhóm',
+      :description => 'Tạo nhóm',
+      :parent_id   => manage_group.id
+    )
+
+    FunctionSystem.create(
+      :label       => 'get_tree_group',
+      :name        => 'Xem danh sách nhóm',
+      :description => 'Xem danh sách nhóm',
+      :parent_id   => manage_group.id
+    )
+
+    FunctionSystem.create(
+      :label       => 'add_user_into_group',
+      :name        => 'Thêm người vào nhóm',
+      :description => 'Thêm người vào nhóm',
+      :parent_id   => manage_group.id
+    )
+
+    FunctionSystem.create(
+      :label       => 'get_group_not_joined_users',
+      :name        => 'Chọn người dùng chưa thuộc nhóm hiện tại',
+      :description => 'Chọn người dùng chưa thuộc nhóm hiện tại',
+      :parent_id   => manage_group.id
+    )
+
+    FunctionSystem.create(
+      :label       => 'delete_group',
+      :name        => 'Xóa nhóm',
+      :description => 'Xóa nhóm',
+      :parent_id   => manage_group.id
+    )
+
+    FunctionSystem.create(
+      :label       => 'delete_group_user',
+      :name        => 'Xóa người dùng ra khỏi nhóm',
+      :description => 'Xóa người dùng ra khỏi nhóm',
+      :parent_id   => manage_group.id
+    )
   end
 
   task create_user_function: :environment do
@@ -84,16 +156,18 @@ namespace :sample do
       FunctionSystem.all.each do |f|
         func.merge!("#{f.label}": f)
       end
-      # function_root
-      # user_index
-      # own_request_dashboard
-      # related_request_dashboard
-      # assigned_request_dashboard
-      # team_dashboard
 
       admin_group = Group.find_by(label: 'admin_group')
       worker.add(
         :function_system_id => func[:user_index].id,
+        :group_id           => admin_group.id
+      )
+      worker.add(
+        :function_system_id => func[:assign_request_to_user].id,
+        :group_id           => admin_group.id
+      )
+      worker.add(
+        :function_system_id => func[:manage_group].id,
         :group_id           => admin_group.id
       )
 
@@ -140,6 +214,10 @@ namespace :sample do
         :function_system_id => func[:create_ticket].id,
         :group_id           => company_group.id
       )
+      worker.add(
+        :function_system_id => func[:assign_request_to_working_group].id,
+        :group_id           => company_group.id
+      )
     end
   end
 
@@ -177,6 +255,7 @@ namespace :sample do
       :label     => 'it_hanoi',
       :name      => 'Nhóm It Hà Nội',
       :content   => 'Nhóm It Hà Nội',
+      :purpose   => Group.purposes[:working_group],
       :parent_id => company_group.id
     )
 
@@ -184,6 +263,7 @@ namespace :sample do
       :label     => 'it_danang',
       :name      => 'Nhóm It Đà Nẵng',
       :content   => 'Nhóm It Đà Nẵng',
+      :purpose   => Group.purposes[:working_group],
       :parent_id => company_group.id
     )
 
@@ -196,8 +276,8 @@ namespace :sample do
 
     it_employee  = Group.create(
       :label     => 'it_employee',
-      :name      => 'Nhóm thành viên hệ thống',
-      :content   => 'Nhóm thành viên hệ thống',
+      :name      => 'Nhóm nhân viên IT hệ thống',
+      :content   => 'Nhóm nhân viên IT hệ thống',
       :parent_id => company_group.id
     )
 
@@ -205,15 +285,17 @@ namespace :sample do
       Admin.all.each_with_index do |admin, index|
         if index == 0
           worker.add(
-            :user_id  => admin.id,
-            :group_id => admin_group.id,
-            :regency  => 'Trưởng nhóm'
+            :user_id    => admin.id,
+            :group_id   => admin_group.id,
+            :regency    => 'Trưởng nhóm',
+            :role_level => GroupUser.role_levels[:leader]
           )
         else
           worker.add(
-            :user_id  => admin.id,
-            :group_id => admin_group.id,
-            :regency  => 'Thành viên'
+            :user_id    => admin.id,
+            :group_id   => admin_group.id,
+            :regency    => 'Thành viên',
+            :role_level => GroupUser.role_levels[:member]
           )
         end
       end
@@ -221,75 +303,88 @@ namespace :sample do
       Employee.all.each_with_index do |employee, index|
         if index == 0
           worker.add(
-            :user_id  => employee.id,
-            :group_id => leader_group.id,
-            :regency  => 'Trưởng nhóm'
+            :user_id    => employee.id,
+            :group_id   => leader_group.id,
+            :regency    => 'Trưởng nhóm',
+            :role_level => GroupUser.role_levels[:leader]
           )
           worker.add(
-            :user_id  => employee.id,
-            :group_id => it_hanoi.id,
-            :regency  => 'Trưởng nhóm'
+            :user_id    => employee.id,
+            :group_id   => it_hanoi.id,
+            :regency    => 'Trưởng nhóm',
+            :role_level => GroupUser.role_levels[:leader]
           )
         elsif index == 1
           worker.add(
-            :user_id  => employee.id,
-            :group_id => leader_group.id,
-            :regency  => 'Thành viên'
+            :user_id    => employee.id,
+            :group_id   => leader_group.id,
+            :regency    => 'Thành viên',
+            :role_level => GroupUser.role_levels[:member]
           )
           worker.add(
-            :user_id  => employee.id,
-            :group_id => it_danang.id,
-            :regency  => 'Trưởng nhóm'
+            :user_id    => employee.id,
+            :group_id   => it_danang.id,
+            :regency    => 'Trưởng nhóm',
+            :role_level => GroupUser.role_levels[:leader]
           )
         elsif index == 2
           worker.add(
-            :user_id  => employee.id,
-            :group_id => sub_leader_group.id,
-            :regency  => 'Trưởng nhóm'
+            :user_id    => employee.id,
+            :group_id   => sub_leader_group.id,
+            :regency    => 'Trưởng nhóm',
+            :role_level => GroupUser.role_levels[:leader]
           )
           worker.add(
-            :user_id  => employee.id,
-            :group_id => it_hanoi.id,
-            :regency  => 'Phó nhóm'
+            :user_id    => employee.id,
+            :group_id   => it_hanoi.id,
+            :regency    => 'Phó nhóm',
+            :role_level => GroupUser.role_levels[:sub_leader]
           )
          elsif index == 3
           worker.add(
-            :user_id  => employee.id,
-            :group_id => sub_leader_group.id,
-            :regency  => 'Thành viên'
+            :user_id    => employee.id,
+            :group_id   => sub_leader_group.id,
+            :regency    => 'Thành viên',
+            :role_level => GroupUser.role_levels[:leader]
           )
           worker.add(
-            :user_id  => employee.id,
-            :group_id => it_danang.id,
-            :regency  => 'Phó nhóm'
+            :user_id    => employee.id,
+            :group_id   => it_danang.id,
+            :regency    => 'Phó nhóm',
+            :role_level => GroupUser.role_levels[:sub_leader]
           )
         elsif index < 10
           worker.add(
-            :user_id  => employee.id,
-            :group_id => it_hanoi.id,
-            :regency  => 'Thành viên'
+            :user_id    => employee.id,
+            :group_id   => it_hanoi.id,
+            :regency    => 'Thành viên',
+            :role_level => GroupUser.role_levels[:member]
           )
           worker.add(
-            :user_id  => employee.id,
-            :group_id => it_employee.id,
-            :regency  => 'Thành viên'
+            :user_id    => employee.id,
+            :group_id   => it_employee.id,
+            :regency    => 'Thành viên',
+            :role_level => GroupUser.role_levels[:member]
           )
         elsif index < 16
           worker.add(
-            :user_id  => employee.id,
-            :group_id => it_danang.id,
-            :regency  => 'Thành viên'
+            :user_id    => employee.id,
+            :group_id   => it_danang.id,
+            :regency    => 'Thành viên',
+            :role_level => GroupUser.role_levels[:member]
           )
           worker.add(
-            :user_id  => employee.id,
-            :group_id => it_employee.id,
-            :regency  => 'Thành viên'
+            :user_id    => employee.id,
+            :group_id   => it_employee.id,
+            :regency    => 'Thành viên',
+            :role_level => GroupUser.role_levels[:member]
           )
         else
           worker.add(
-            :user_id  => employee.id,
-            :group_id => member_group.id,
-            :regency  => 'Thành viên'
+            :user_id    => employee.id,
+            :group_id   => member_group.id,
+            :regency    => 'Thành viên',
+            :role_level => GroupUser.role_levels[:member]
           )
         end
       end
