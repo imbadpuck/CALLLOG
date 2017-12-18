@@ -1,21 +1,32 @@
 module TicketHelper
   include RequestValidation
+  include TicketCreateHelper
 
   def ticket_role_checking(action_name)
-    ticket_pre_validation
-
     case action_name
     when 'index'
+      dashboard_pre_validation
+
       generate_tickets_query
 
       get_tickets
+    when 'create'
+      ticket_creating
     when 'dashboard'
+      dashboard_pre_validation
+
       generate_dashboard_query
 
       dashboard_loading
     when 'search'
+      dashboard_pre_validation
+
       search_tickets
     end
+  end
+
+  def create_ticket_pre_validation
+    allow_access?('create_tickets')
   end
 
   def generate_tickets_query
@@ -28,34 +39,22 @@ module TicketHelper
       @query = %Q|.joins(:ticket_assignments)
                   .where("ticket_assignments.user_id = #{@current_user.id}
                           and
-                        ticket_assignments.user_type = #{User.user_types[:people_involved]}")
+                        ticket_assignments.user_type = #{TicketAssignment.user_types[:people_involved]}")
       |
     when 'assigned_request_dashboard'
       @query = %Q|.joins(:ticket_assignments)
                   .where("ticket_assignments.user_id = #{@current_user.id}
                           and
-                        ticket_assignments.user_type = #{User.user_types[:performer]}")
+                        ticket_assignments.user_type = #{TicketAssignment.user_types[:performer]}")
       |
     when 'team_dashboard'
       # @query =  %Q|inner join ticket_assignments on tickets.id = ticket_assignments.ticket_id
       #   where
       #     ticket_assignments.user_id = #{@current_user.id}
       #       and
-      #     ticket_assignments.user_type = #{User.user_types[:performer]}
+      #     ticket_assignments.user_type = #{TicketAssignment.user_types[:performer]}
       # |
     end
-  end
-
-  def ticket_pre_validation
-    unless (["own_request_dashboard", "related_request_dashboard",
-             "assigned_request_dashboard", "team_dashboard"
-            ].include?(params[:dashboard_label]))
-
-
-      raise APIError::Common::BadRequest.new
-    end
-
-    allow_access?(params[:dashboard_label])
   end
 
   def get_tickets

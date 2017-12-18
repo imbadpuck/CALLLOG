@@ -2,8 +2,6 @@ module TicketDashboardHelper
   include RequestValidation
 
   def generate_dashboard_query
-    dashboard_pre_validation
-
     case params[:dashboard_label]
     when 'own_request_dashboard'
       @query = %Q|where creator_id = #{@current_user.id}|
@@ -12,21 +10,21 @@ module TicketDashboardHelper
         where
           ticket_assignments.user_id = #{@current_user.id}
             and
-          ticket_assignments.user_type = #{User.user_types[:people_involved]}
+          ticket_assignments.user_type = #{TicketAssignment.user_types[:people_involved]}
       |
     when 'assigned_request_dashboard'
       @query = %Q|inner join ticket_assignments on tickets.id = ticket_assignments.ticket_id
         where
           ticket_assignments.user_id = #{@current_user.id}
             and
-          ticket_assignments.user_type = #{User.user_types[:performer]}
+          ticket_assignments.user_type = #{TicketAssignment.user_types[:performer]}
       |
     when 'team_dashboard'
       # @query =  %Q|inner join ticket_assignments on tickets.id = ticket_assignments.ticket_id
       #   where
       #     ticket_assignments.user_id = #{@current_user.id}
       #       and
-      #     ticket_assignments.user_type = #{User.user_types[:performer]}
+      #     ticket_assignments.user_type = #{TicketAssignment.user_types[:performer]}
       # |
     end
   end

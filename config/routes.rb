@@ -4,14 +4,19 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
-      resources :users, only: [:index]
+      resources :users, only: [:index] do
+        get :get_related_users, on: :collection
+      end
 
-      resources :tickets, only: [:index, :show] do
+      resources :tickets, only: [:index, :show, :create] do
         get :dashboard, on: :collection
         get :search   , on: :collection
       end
 
-      resources :groups, only: [:index, :create, :destroy]
+      resources :groups, only: [:index, :create, :destroy] do
+        get :assigned_user_in_group_preload, on: :collection
+      end
+
       resources :group_users, only: [:create, :destroy] do
         get :get_group_not_joined_users, on: :collection
       end

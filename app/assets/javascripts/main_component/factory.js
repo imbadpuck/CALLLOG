@@ -51,6 +51,25 @@ angular.module("app.factory", [])
     },
     deleteGroup: function(group_id) {
       return $http.delete("/api/v1/groups/" + group_id);
+    },
+    loadEmployeesForAssignedUser: function(params) {
+      return $http({
+        url: '/api/v1/groups/assigned_user_in_group_preload',
+        method: 'GET',
+        params: {
+          group_id: params.group_id,
+          keyword: params.keyword
+        }
+      });
+    },
+    loadRelatedUser: function(params) {
+      return $http({
+        url: '/api/v1/users/get_related_users',
+        method: 'GET',
+        params: {
+          keyword: params.keyword
+        }
+      });
     }
   }
 }])
@@ -111,14 +130,14 @@ angular.module("app.factory", [])
         }
       });
     },
-    createTicket: function(admin_create_topic, files) {
-      admin_create_topic = JSON.stringify(admin_create_topic);
+    createTicket: function(new_ticket, files) {
+      new_ticket = JSON.stringify(new_ticket);
       var formData = new FormData();
-      formData.append('admin_create_topic', admin_create_topic);
+      formData.append('new_ticket', new_ticket);
       $.each(files, function(i, file){
         formData.append('attachments[]', file);
       });
-      return $http.post('/api/v1/admin/topics', formData, {headers: {'Content-Type': undefined}});
+      return $http.post('/api/v1/tickets', formData, {headers: {'Content-Type': undefined}});
     },
   }
 }]);
