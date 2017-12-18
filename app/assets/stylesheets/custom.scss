@@ -582,6 +582,10 @@
   border-radius: 4px 4px 0 0!important;
 }
 
+.border-radius-4-0-0-4 {
+  border-radius: 4px 0 0 4px!important;
+}
+
 .border-radius-0-0-4-4 {
   border-radius: 0 0 4px 4px!important;
 }
@@ -909,4 +913,8 @@ a[href="http://www.amcharts.com/javascript-charts/"] {
 
 .max-width-200px {
   max-width: 200px;
+}
+
+.margin-20px-0-20px-0 {
+  margin: 20px 0 10px 0!important;
 }

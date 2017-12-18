@@ -88,15 +88,22 @@ namespace :sample do
     )
 
     FunctionSystem.create(
-      :label       => 'assign_request_to_working_group',
+      :label       => 'assign_ticket_to_working_group',
       :name        => 'Gán công việc cho nhóm',
       :description => 'Gán công việc cho nhóm',
     )
 
+    assign_ticket_to_user_in_all_group = FunctionSystem.create(
+      :label       => 'assign_ticket_to_user_in_all_group',
+      :name        => 'Gán công việc cho người dùng trong cùng nhóm',
+      :description => 'Gán công việc cho người dùng trong cùng nhóm',
+    )
+
     FunctionSystem.create(
-      :label       => 'assign_request_to_user',
-      :name        => 'Gán công việc cho người dùng',
-      :description => 'Gán công việc cho người dùng',
+      :label       => 'assign_ticket_to_user_in_own_group',
+      :name        => 'Gán công việc cho người dùng trong cùng nhóm',
+      :description => 'Gán công việc cho người dùng trong cùng nhóm',
+      :parent_id   => assign_ticket_to_user_in_all_group.id
     )
 
     manage_group   = FunctionSystem.create(
@@ -156,6 +163,15 @@ namespace :sample do
       FunctionSystem.all.each do |f|
         func.merge!("#{f.label}": f)
       end
+      company_group = Group.find_by_label('company_group')
+      worker.add(
+        :function_system_id => func[:create_ticket].id,
+        :group_id           => company_group.id
+      )
+      worker.add(
+        :function_system_id => func[:assign_ticket_to_working_group].id,
+        :group_id           => company_group.id
+      )
 
       admin_group = Group.find_by(label: 'admin_group')
       worker.add(
@@ -163,7 +179,7 @@ namespace :sample do
         :group_id           => admin_group.id
       )
       worker.add(
-        :function_system_id => func[:assign_request_to_user].id,
+        :function_system_id => func[:assign_ticket_to_user_in_own_group].id,
         :group_id           => admin_group.id
       )
       worker.add(
@@ -171,7 +187,21 @@ namespace :sample do
         :group_id           => admin_group.id
       )
 
-      it_hanoi = Group.find_by(label: 'it_hanoi')
+      worker.add(
+        :function_system_id => func[:assign_ticket_to_user_in_all_group].id,
+        :group_id           => admin_group.id
+      )
+
+      it_hanoi            = Group.find_by(label: 'it_hanoi')
+      it_hanoi_leader     = it_hanoi.users.where("group_users.role_level = #{GroupUser.role_levels[:leader]}")
+      it_hanoi_sub_leader = it_hanoi.users.where("group_users.role_level = #{GroupUser.role_levels[:sub_leader]}")
+      it_hanoi_leader.each do |l|
+        worker.add(
+          :function_system_id => func[:assign_ticket_to_user_in_own_group].id,
+          :user_id           => l.id
+        )
+      end
+
       worker.add(
         :function_system_id => func[:own_request_dashboard].id,
         :group_id           => it_hanoi.id
@@ -207,16 +237,6 @@ namespace :sample do
       worker.add(
         :function_system_id => func[:related_request_dashboard].id,
         :group_id           => member_group.id
-      )
-
-      company_group = Group.find_by_label('company_group')
-      worker.add(
-        :function_system_id => func[:create_ticket].id,
-        :group_id           => company_group.id
-      )
-      worker.add(
-        :function_system_id => func[:assign_request_to_working_group].id,
-        :group_id           => company_group.id
       )
     end
   end

@@ -1,7 +1,83 @@
-app.controller('CreateTicketController', ['$scope', 'toastr', '$state', 'Ticket_API', '$rootScope', 'working_groups',
-  function($scope, toastr, $state, Ticket_API, $rootScope, working_groups) {
+app.controller('CreateTicketController', ['$scope', 'toastr', '$state', 'Ticket_API',
+    '$rootScope', 'working_groups', 'Group_API',
+  function($scope, toastr, $state, Ticket_API, $rootScope, working_groups, Group_API) {
 
-  $scope.new_ticket = {ticket: {}, post: {}};
+  $scope.new_ticket = {
+    ticket: {
+      title: null,
+      priority: null,
+      group_id: null,
+      group_name: null,
+      assigned_users: [null],
+      related_users: [null]
+    },
+  };
+
+  $scope.priority_levels = [
+    {title: 'Thấp'      , value: 0},
+    {title: 'Trung Bình', value: 1},
+    {title: 'Cao'       , value: 2},
+    {title: 'Khẩn Cấp'  , value: 3}
+  ]
+
+  $scope.assigned_user_preload = [];
+  $scope.related_user_preload  = [];
+
+  $scope.addAssignedUser = function() {
+    $scope.new_ticket.ticket.assigned_users.push(null);
+  }
+
+  $scope.addRelatedUser = function() {
+    $scope.new_ticket.ticket.related_users.push(null);
+  }
+
+  $scope.deleteAssignedUser = function(index) {
+    if (index == 0) return;
+    $scope.new_ticket.ticket.assigned_users.splice(index, 1);
+  }
+
+  $scope.deleteRelatedUser = function(index) {
+    if (index == 0) return;
+    $scope.new_ticket.ticket.related_users.splice(index, 1);
+  }
+
+  $scope.loadEmployees = function(keyword) {
+    $scope.assigned_user_preload = [];
+    if (_.isNull($scope.new_ticket.ticket.group_id)) {
+      return;
+    } else {
+      if (!$rootScope.enableFunction('assign_ticket_to_user_in_all_group')) {
+        var accept_group = false;
+        for (var i = 0; i < $rootScope.groupsInvolved.length; i++) {
+          if ($rootScope.groupsInvolved[i].id == $scope.new_ticket.ticket.group_id)
+            accept_group = true;
+        }
+
+        if (!accept_group) return;
+      }
+    }
+
+    Group_API.loadEmployeesForAssignedUser({
+      group_id: $scope.new_ticket.ticket.group_id,
+      keyword: keyword
+    }).success(function(response){
+      if (response.code == $rootScope.CODE_STATUS.success) {
+        $scope.assigned_user_preload = response.data;
+      }
+    })
+  }
+
+  $scope.loadRelatedUser = function(keyword) {
+    $scope.related_user_preload = [];
+
+    Group_API.loadRelatedUser({
+      keyword: keyword
+    }).success(function(response){
+      if (response.code == $rootScope.CODE_STATUS.success) {
+        $scope.related_user_preload = response.data;
+      }
+    });
+  }
 
   $scope.makeTreeGroups = function() {
     // $scope.tree_groups = $scope.groups_data;
@@ -40,9 +116,12 @@ app.controller('CreateTicketController', ['$scope', 'toastr', '$state', 'Ticket_
     });
 
     $('#tree_groups').on("select_node.jstree", function (e, data) {
-      $scope.new_ticket.ticket.group_id      = data.node.original.id;
-      $scope.new_ticket.ticket.group_name    = data.node.original.name;
-      $scope.new_ticket.ticket.assigned_user = '';
+      $scope.new_ticket.ticket.group_id       = data.node.original.id;
+      $scope.new_ticket.ticket.group_name     = data.node.original.name;
+      if (!$rootScope.enableFunction('assign_ticket_to_user_in_all_group')) {
+        $scope.new_ticket.ticket.assigned_users = [null];
+        $scope.assigned_user_preload            = [];
+      }
       $scope.$apply();
     });
   }
@@ -69,7 +148,7 @@ app.controller('CreateTicketController', ['$scope', 'toastr', '$state', 'Ticket_
     $(this).val(picker.startDate.format('MM/DD/YYYY h:mm A') + ' - ' + picker.endDate.format('MM/DD/YYYY h:mm A'));
     var period = $(this).val().split('-');
     $scope.new_ticket.ticket.begin_date = period[0].trim();
-    $scope.new_ticket.ticket.deadline = period[1].trim();
+    $scope.new_ticket.ticket.deadline   = period[1].trim();
   });
 
   $('input[id="ticket-period-of-work"]').on('cancel.daterangepicker', function(ev, picker) {
@@ -78,23 +157,33 @@ app.controller('CreateTicketController', ['$scope', 'toastr', '$state', 'Ticket_
     delete $scope.new_ticket.ticket.deadline;
   });
 
-  $scope.loadEmployees = function() {
-    // if ($scope.new_ticket.ticket.assigned_user_type == 'Technician')
-    //   Employee_API.getTechnicians().success(function(response) {
-    //     $scope.employees = response.data;
-    //   });
-    // else
-    //   Employee_API.getCashiers().success(function(response) {
-    //     $scope.employees = response.data;
-    //   });
-  }
-
   $scope.createTicket = function() {
     NProgress.start();
+    for (var i = 0; i < $scope.new_ticket.ticket.assigned_users.length; i++) {
+      if (_.isNull($scope.new_ticket.ticket.assigned_users[i])) {
+        $scope.new_ticket.ticket.assigned_users.splice(i, 1);
+      }
+    }
+    for (var i = 0; i < $scope.new_ticket.ticket.related_users.length; i++) {
+      if (_.isNull($scope.new_ticket.ticket.related_users[i])) {
+        $scope.new_ticket.ticket.related_users.splice(i, 1);
+      }
+    }
+
+    if (_.isNull($scope.new_ticket.ticket.title) ||
+        _.isNull($scope.new_ticket.ticket.group_id) ||
+        _.isNull($scope.new_ticket.ticket.priority)) {
+
+      toastr.error("Xin vui lòng điền đầy đủ thông tin");
+      return;
+    }
     Ticket_API.createTicket($scope.new_ticket, $scope.$files).success(function(response) {
       NProgress.done();
-      if(response.code == 1) {
-        $state.reload('main.building_manager_tickets');
+      if(response.code == $rootScope.CODE_STATUS.success) {
+        $state.reload(
+          'main.ticket_dashboard.list',
+          {dashboard_label: 'own_request_dashboard', status: 'all'
+        });
         toastr.success(response.message);
       } else {
         toastr.error(response.message);
@@ -112,7 +201,7 @@ app.controller('CreateTicketController', ['$scope', 'toastr', '$state', 'Ticket_
     $scope.new_ticket.ticket.group_name = '';
   }
 
-  if ($rootScope.enableFunction('assign_request_to_working_group')) {
+  if ($rootScope.enableFunction('assign_ticket_to_working_group')) {
     $scope.tree_groups = working_groups.groups;
     $scope.makeTreeGroups();
   }

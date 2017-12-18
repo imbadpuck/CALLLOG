@@ -124,6 +124,9 @@ ActiveRecord::Schema.define(version: 20171209041936) do
     t.datetime "deadline"
     t.datetime "resolved_at"
     t.datetime "closed_at"
+    t.string "attachments", default: "[]"
+    t.date "begin_date", default: "2017-12-19"
+    t.date "end_date"
     t.integer "parent_id"
     t.integer "lft", null: false
     t.integer "rgt", null: false

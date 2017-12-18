@@ -17,7 +17,15 @@ module GroupHelper
       group_destroy_pre_validation
 
       group_destroy_process
+    when 'assigned_user_in_group_preload'
+      user_in_gr_preload_pre_validation
+
+      assigned_user_in_own_gr_preload_execution
     end
+  end
+
+  def user_in_gr_preload_pre_validation
+    allow_access?('assign_ticket_to_user_in_own_group')
   end
 
   def group_destroy_pre_validation
@@ -26,6 +34,23 @@ module GroupHelper
 
   def group_creation_pre_validation
     allow_access?('create_group')
+  end
+
+  def assigned_user_in_own_gr_preload_execution
+    group = Group.find_by(id: params[:group_id])
+
+    if group.blank? or Group.purposes[group.purpose].blank?
+      raise APIError::Common::BadRequest
+    end
+
+    @users = []
+
+    group.users.search(name_or_code_or_phone_cont: params[:keyword])
+         .result.each do |user|
+      if user.type != 'Admin'
+        @users << user.attributes.extract!('id', 'name', 'code', 'phone')
+      end
+    end
   end
 
   def group_destroy_process
