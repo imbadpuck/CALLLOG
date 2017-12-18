@@ -38,9 +38,9 @@ app.controller('TicketsListController', ['$scope', '$rootScope', '$state', '$uib
   }
 
   $scope.last_active = function(date_time) {
-    var last_update = new Date(date_time);
+    var last_update  = new Date(date_time);
     var current_date = new Date();
-    var diff_second = (current_date - last_update) / 1000;
+    var diff_second  = (current_date - last_update) / 1000;
     if (diff_second < 3600)
       return parseInt(diff_second / 60) + " phút trước";
     if (diff_second < 86400)

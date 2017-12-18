@@ -1,5 +1,6 @@
 class Api::V1::GroupsController < ApplicationController
   skip_before_action :verify_authenticity_token
+  before_action :authenticate_request!
   before_action -> { group_role_checking(action_name) }
   respond_to :json
 
@@ -13,6 +14,14 @@ class Api::V1::GroupsController < ApplicationController
         :groups => @groups,
         :users  => @users
       }
+    }
+  end
+
+  def assigned_user_in_group_preload
+    render json: {
+      :code    => Settings.code.success,
+      :message => 'Thành công',
+      :data    => @users
     }
   end
 

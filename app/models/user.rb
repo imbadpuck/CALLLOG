@@ -10,7 +10,6 @@ class User < ApplicationRecord
   has_many :notifications, :dependent => :delete_all
 
   enum status: [:active, :inactive]
-  enum user_type: [:performer, :people_involved]
 
   attr_accessor :group_id
 

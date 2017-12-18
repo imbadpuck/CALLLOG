@@ -7,6 +7,10 @@ class Api::V1::TicketsController < ApplicationController
   include TicketHelper
   include TicketDashboardHelper
 
+  def create
+    render json: @status
+  end
+
   def index
     render json: {
       :code    => Settings.code.success,
@@ -37,12 +41,6 @@ class Api::V1::TicketsController < ApplicationController
         }
       }
     }
-  end
-
-  def show
-  end
-
-  def update_status
   end
 
   def search
