@@ -8,9 +8,10 @@ Rails.application.routes.draw do
         get :get_related_users, on: :collection
       end
 
-      resources :tickets, only: [:index, :show, :create] do
-        get :dashboard, on: :collection
-        get :search   , on: :collection
+      resources :tickets, only: [:index, :create] do
+        get :dashboard        , on: :collection
+        get :search           , on: :collection
+        get :get_single_ticket, on: :collection
       end
 
       resources :groups, only: [:index, :create, :destroy] do
@@ -20,6 +21,8 @@ Rails.application.routes.draw do
       resources :group_users, only: [:create, :destroy] do
         get :get_group_not_joined_users, on: :collection
       end
+
+      resources :comments, only: [:create]
 
       post "sign_in"              , :to => 'sessions#create'
       post "users/change_password", :to => "users#change_password"

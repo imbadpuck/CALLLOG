@@ -10,91 +10,7 @@
 
   <div class="row row-flex">
     <div class="col-xs-12">
-      <h2>#{{ticket.id}}- {{ticket.name}}</h2>
-    </div>
-  </div>
-
-  <div class="row row-flex">
-    <div class="col-xs-12 padding-top-10px">
-      <div class="dropdown ticket-select-status">
-        <button
-          class="btn dropdown-toggle btn-sm
-            ticket-background-{{ticket.current_status}}"
-          type="button"
-          data-toggle="dropdown">
-        <span ng-show="ticket.current_status == 'active' &&
-          ticket.assigned_user.uid == currentUser.id">
-          {{stat_box.mine.name}}
-        </span>
-        <span ng-show="ticket.current_status != 'active' ||
-          ticket.assigned_user.uid != currentUser.id">
-          {{stat_box[ticket.current_status].name}}
-        </span>
-        <span class="caret"></span></button>
-
-        <ul
-          ng-show="ticket.current_status == 'new' ||
-            (ticket.current_status == 'active' && ticket.assigned_user.uid != currentUser.id)"
-          class="dropdown-menu">
-          <li>
-            <a href="javascript:;" ng-click="updateTicketStatus('mine')">Của tôi</a>
-          </li>
-          <li>
-            <a href="javascript:;" ng-click="updateTicketStatus('closed')">Đóng</a>
-          </li>
-        </ul>
-        <ul
-          class="dropdown-menu"
-          ng-show="ticket.current_status == 'active' &&
-            ticket.assigned_user.uid == currentUser.id">
-          <li>
-            <a href="javascript:;" ng-click="updateTicketStatus('new')">Mới</a>
-          </li>
-          <li>
-            <a href="javascript:;" ng-click="updateTicketStatus('closed')">Đóng</a>
-          </li>
-        </ul>
-
-        <ul class="dropdown-menu" ng-if="ticket.current_status == 'closed'">
-          <li>
-            <a href="javascript:;" ng-click="updateTicketStatus('mine')">Của tôi</a>
-          </li>
-          <li>
-            <a href="javascript:;" ng-click="updateTicketStatus('new')">Mới</a>
-          </li>
-        </ul>
-      </div>
-      <div class="ticket-select">
-        <ui-select
-          ng-model="ticket.assigned_user.type"
-          name="assigned_user_type"
-          theme="select2"
-          append-to-body="true"
-          search-enabled="false"
-          ng-change="loadEmployees()">
-          <ui-select-match placeholder="Chọn loại nhân viên">
-            {{translator[$select.selected]}}
-          </ui-select-match>
-          <ui-select-choices repeat="item as item in ['Technician', 'Cashier', 'BuildingManager']">
-            <span ng-bind-html="translator[item]"></span>
-          </ui-select-choices>
-        </ui-select>
-      </div>
-      <div class="ticket-select">
-        <ui-select
-          ng-model="ticket.assigned_user.uid"
-          name="ticket_assigned_user_id"
-          theme="select2"
-          append-to-body="true"
-          ng-change="updateTicketAssignedUser()">
-          <ui-select-match placeholder="Tên nhân viên">
-            {{$select.selected.name}}
-          </ui-select-match>
-          <ui-select-choices repeat="item.id as item in employees">
-            <span ng-bind-html="item.name"></span>
-          </ui-select-choices>
-        </ui-select>
-      </div>
+      <h2>#{{ticket.id}}- {{ticket.title}}</h2>
     </div>
   </div>
 
@@ -102,16 +18,16 @@
     <div class="col-xs-1 text-right">
       <img
         class="profile img-circle border-gray"
-        src="{{ticket.user.avatar || '/images/avatar.png'}}"
+        src="{{creator.avatar || '/images/avatar.png'}}"
         width="40px"
         height="40px">
     </div>
     <div class="col-xs-8 bold ticket-name">
-      {{ticket.user.name}} đã tạo mới một công việc
+      {{creator.id == currentUser.id ? 'Bạn' : creator.name}} đã tạo mới một công việc
     </div>
-    <div class="col-xs-2 text-right ticket-post-last-activity">
+    <div class="col-xs-2 text-right ticket-comment-last-activity">
       <span>
-        {{last_active(ticket.created_at)}}
+        {{last_active(ticket.updated_at)}}
       </span>
     </div>
     <div class="col-xs-1"></div>
@@ -119,14 +35,14 @@
     <div class="col-xs-10">
       <div class="row row-flex">
         <div class="col-xs-12">
-          {{posts[0].body}}
+          Nội dung: {{ticket.content}}
         </div>
-        <div class="col-xs-4 col-md-3 padding-top-15px" ng-repeat="attachment in posts[0].attachments">
+        <div class="col-xs-4 col-md-3 padding-top-15px"
+          ng-repeat="attachment in ticket.attachments track by $index">
           <a
-            href="{{ticket_url}}/attachments/posts/{{posts[0].id}}/{{attachment}}"
-            target="_blank">
+            ng-href="{{ '/attachments/tickets/' + ticket.id + '/' + attachment}}" download target="_self">
             <img
-              ng-src="{{ticket_url}}/attachments/posts/{{posts[0].id}}/{{attachment}}"
+              ng-src="{{ '/attachments/tickets/' + ticket.id + '/' + attachment}}"
               width="100%">
           </a>
         </div>
@@ -137,20 +53,20 @@
 
   <div
     class="row row-flex padding-top-15px"
-    ng-repeat="post in posts | limitTo:(1 - posts.length)">
+    ng-repeat="comment in comments | limitTo:(1 - comments.length)">
     <div class="col-xs-2 text-right">
       <img
         class="profile img-circle border-gray"
-        src="{{ticket.user.avatar || '/images/avatar.png'}}"
+        src="{{comment.user.avatar || '/images/avatar.png'}}"
         width="40px"
         height="40px">
     </div>
     <div class="col-xs-7 bold ticket-name">
-      {{post.user_name}} đã trả lời
+      {{comment.user.name}} đã trả lời
     </div>
-    <div class="col-xs-2 text-right ticket-post-last-activity">
+    <div class="col-xs-2 text-right ticket-comment-last-activity">
       <span>
-        {{last_active(post.created_at)}}
+        {{last_active(comment.created_at)}}
       </span>
     </div>
     <div class="col-xs-1"></div>
@@ -159,14 +75,14 @@
     <div class="col-xs-7">
       <div class="row row-flex">
         <div class="col-xs-12 padding-bottom-15px">
-          {{post.body}}
+          {{comment.content}}
         </div>
-        <div class="col-xs-4 col-md-3" ng-repeat="attachment in post.attachments">
+        <div class="col-xs-4 col-md-3 padding-top-15px"
+          ng-repeat="attachment in comment.attachments track by $index">
           <a
-            href="{{ticket_url}}/attachments/posts/{{post.id}}/{{attachment}}"
-            target="_blank">
+            ng-href="{{ '/attachments/comments/' + comment.id + '/' + attachment}}" download target="_self">
             <img
-              ng-src="{{ticket_url}}/attachments/posts/{{post.id}}/{{attachment}}"
+              ng-src="{{ '/attachments/comments/' + comment.id + '/' + attachment}}"
               width="100%">
           </a>
         </div>
@@ -181,13 +97,15 @@
         rows="2"
         class="form-control"
         placeholder="Viết phản hồi..."
-        ng-model="new_post.body"
+        ng-model="new_comment.content"
         name="body">
       </textarea>
-      <div class="text-error" ng-show="error.body">
+
+      <div class="text-error" ng-show="error.content">
         <div>Không được để trống</div>
       </div>
     </div>
+
     <div class="form-group col-xs-10 col-xs-offset-1">
       <label>Tệp đính kèm</label>
       <div>
@@ -195,7 +113,7 @@
           Thêm <input
             class="hidden"
             type="file"
-            model="new_post.attachments"
+            model="new_comment.attachments"
             file-upload-model
             data-multiple="true"/>
         </label>
@@ -203,19 +121,18 @@
           type="button"
           value="Gửi phản hồi"
           class="btn blue btn-sm pull-right"
-          ng-click="createPost()">
+          ng-click="createComment()">
       </div>
-      <div ng-repeat="file in new_post.attachments">
+      <div ng-repeat="file in new_comment.attachments">
         {{file.name | fileName}}
         <a
           href="#"
-          ng-click="new_post.attachments.splice($index, 1)"
+          ng-click="new_comment.attachments.splice($index, 1)"
           class="text-red"
           title="Xóa">
           <i class="fa fa-times" aria-hidden="true"></i>
         </a>
       </div>
     </div>
-
   </div>
 </div>

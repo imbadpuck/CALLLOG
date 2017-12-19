@@ -24,22 +24,22 @@ module TicketCreateHelper
 
   def init_variables
     @new_ticket = {
-      :title       => params[:new_ticket][:ticket][:title],
-      :content     => params[:new_ticket][:ticket][:content],
-      :priority    => params[:new_ticket][:ticket][:priority],
+      :title       => params[:new_ticket][:title],
+      :content     => params[:new_ticket][:content],
+      :priority    => params[:new_ticket][:priority],
       :creator_id  => @current_user.id
     }
 
     @new_ticket_assignments = {
-      :group_id       => params[:new_ticket][:ticket][:group_id],
-      :assigned_users => params[:new_ticket][:ticket][:assigned_users] || [],
-      :related_users  => params[:new_ticket][:ticket][:related_users] || []
+      :group_id       => params[:new_ticket][:group_id],
+      :assigned_users => params[:new_ticket][:assigned_users] || [],
+      :related_users  => params[:new_ticket][:related_users] || []
     }
 
     [:begin_date, :deadline].each do |key|
-      if params[:new_ticket][:ticket].has_key?(key) &&
-         params[:new_ticket][:ticket][key].present?
-        @new_ticket.merge!({"#{key}": params[:new_ticket][:ticket][key]})
+      if params[:new_ticket].has_key?(key) &&
+         params[:new_ticket][key].present?
+        @new_ticket.merge!({"#{key}": params[:new_ticket][key]})
       end
     end
 
@@ -77,7 +77,7 @@ module TicketCreateHelper
   end
 
   def create_ticket
-    if params[:new_ticket][:ticket][:assigned_users].present?
+    if params[:new_ticket][:assigned_users].present?
       @new_ticket.merge!({status: Ticket.statuses[:inprogress]})
     else
       @new_ticket.merge!({status: Ticket.statuses[:new_ticket]})

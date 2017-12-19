@@ -44,6 +44,20 @@ class Api::V1::TicketsController < ApplicationController
     }
   end
 
+  def get_single_ticket
+    render json: {
+      :code    => Settings.code.success,
+      :message => "Thành công",
+      :data    => {
+        :ticket         => @ticket,
+        :comments       => @comments,
+        :creator        => @creator,
+        :related_users  => @related_users,
+        :assigned_users => @assigned_users
+      }
+    }
+  end
+
   def search
     render json: {
       :code    => Settings.code.success,
