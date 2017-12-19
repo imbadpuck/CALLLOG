@@ -3,14 +3,12 @@ app.controller('CreateTicketController', ['$scope', 'toastr', '$state', 'Ticket_
   function($scope, toastr, $state, Ticket_API, $rootScope, working_groups, Group_API) {
 
   $scope.new_ticket = {
-    ticket: {
-      title: null,
-      priority: null,
-      group_id: null,
-      group_name: null,
-      assigned_users: [null],
-      related_users: [null]
-    },
+    title: null,
+    priority: null,
+    group_id: null,
+    group_name: null,
+    assigned_users: [null],
+    related_users: [null]
   };
 
   $scope.priority_levels = [
@@ -24,32 +22,32 @@ app.controller('CreateTicketController', ['$scope', 'toastr', '$state', 'Ticket_
   $scope.related_user_preload  = [];
 
   $scope.addAssignedUser = function() {
-    $scope.new_ticket.ticket.assigned_users.push(null);
+    $scope.new_ticket.assigned_users.push(null);
   }
 
   $scope.addRelatedUser = function() {
-    $scope.new_ticket.ticket.related_users.push(null);
+    $scope.new_ticket.related_users.push(null);
   }
 
   $scope.deleteAssignedUser = function(index) {
     if (index == 0) return;
-    $scope.new_ticket.ticket.assigned_users.splice(index, 1);
+    $scope.new_ticket.assigned_users.splice(index, 1);
   }
 
   $scope.deleteRelatedUser = function(index) {
     if (index == 0) return;
-    $scope.new_ticket.ticket.related_users.splice(index, 1);
+    $scope.new_ticket.related_users.splice(index, 1);
   }
 
   $scope.loadEmployees = function(keyword) {
     $scope.assigned_user_preload = [];
-    if (_.isNull($scope.new_ticket.ticket.group_id)) {
+    if (_.isNull($scope.new_ticket.group_id)) {
       return;
     } else {
       if (!$rootScope.enableFunction('assign_ticket_to_user_in_all_group')) {
         var accept_group = false;
         for (var i = 0; i < $rootScope.groupsInvolved.length; i++) {
-          if ($rootScope.groupsInvolved[i].id == $scope.new_ticket.ticket.group_id)
+          if ($rootScope.groupsInvolved[i].id == $scope.new_ticket.group_id)
             accept_group = true;
         }
 
@@ -58,7 +56,7 @@ app.controller('CreateTicketController', ['$scope', 'toastr', '$state', 'Ticket_
     }
 
     Group_API.loadEmployeesForAssignedUser({
-      group_id: $scope.new_ticket.ticket.group_id,
+      group_id: $scope.new_ticket.group_id,
       keyword: keyword
     }).success(function(response){
       if (response.code == $rootScope.CODE_STATUS.success) {
@@ -116,10 +114,10 @@ app.controller('CreateTicketController', ['$scope', 'toastr', '$state', 'Ticket_
     });
 
     $('#tree_groups').on("select_node.jstree", function (e, data) {
-      $scope.new_ticket.ticket.group_id       = data.node.original.id;
-      $scope.new_ticket.ticket.group_name     = data.node.original.name;
+      $scope.new_ticket.group_id       = data.node.original.id;
+      $scope.new_ticket.group_name     = data.node.original.name;
       if (!$rootScope.enableFunction('assign_ticket_to_user_in_all_group')) {
-        $scope.new_ticket.ticket.assigned_users = [null];
+        $scope.new_ticket.assigned_users = [null];
         $scope.assigned_user_preload            = [];
       }
       $scope.$apply();
@@ -147,40 +145,51 @@ app.controller('CreateTicketController', ['$scope', 'toastr', '$state', 'Ticket_
   $('input[id="ticket-period-of-work"]').on('apply.daterangepicker', function(ev, picker) {
     $(this).val(picker.startDate.format('MM/DD/YYYY h:mm A') + ' - ' + picker.endDate.format('MM/DD/YYYY h:mm A'));
     var period = $(this).val().split('-');
-    $scope.new_ticket.ticket.begin_date = period[0].trim();
-    $scope.new_ticket.ticket.deadline   = period[1].trim();
+    $scope.new_ticket.begin_date = period[0].trim();
+    $scope.new_ticket.deadline   = period[1].trim();
   });
 
   $('input[id="ticket-period-of-work"]').on('cancel.daterangepicker', function(ev, picker) {
     $(this).val('');
-    delete $scope.new_ticket.ticket.begin_date;
-    delete $scope.new_ticket.ticket.deadline;
+    delete $scope.new_ticket.begin_date;
+    delete $scope.new_ticket.deadline;
   });
 
   $scope.createTicket = function() {
-    NProgress.start();
-    for (var i = 0; i < $scope.new_ticket.ticket.assigned_users.length; i++) {
-      if (_.isNull($scope.new_ticket.ticket.assigned_users[i])) {
-        $scope.new_ticket.ticket.assigned_users.splice(i, 1);
+    for (var i = 0; i < $scope.new_ticket.assigned_users.length; i++) {
+      if (_.isNull($scope.new_ticket.assigned_users[i])) {
+        if ($scope.new_ticket.assigned_users.length == 1) {
+          $scope.new_ticket.assigned_users = [null];
+          break;
+        }
+        $scope.new_ticket.assigned_users.splice(i, 1);
       }
     }
-    for (var i = 0; i < $scope.new_ticket.ticket.related_users.length; i++) {
-      if (_.isNull($scope.new_ticket.ticket.related_users[i])) {
-        $scope.new_ticket.ticket.related_users.splice(i, 1);
+    for (var i = 0; i < $scope.new_ticket.related_users.length; i++) {
+      if ($scope.new_ticket.related_users.length == 1) {
+        $scope.new_ticket.related_users = [null];
+        break;
+      }
+      if (_.isNull($scope.new_ticket.related_users[i])) {
+        $scope.new_ticket.related_users.splice(i, 1);
       }
     }
 
-    if (_.isNull($scope.new_ticket.ticket.title) ||
-        _.isNull($scope.new_ticket.ticket.group_id) ||
-        _.isNull($scope.new_ticket.ticket.priority)) {
+    if (_.isNull($scope.new_ticket.title) ||
+        _.isNull($scope.new_ticket.group_id) ||
+        _.isNull($scope.new_ticket.priority) ||
+        _.isNull($scope.new_ticket.content)) {
 
       toastr.error("Xin vui lòng điền đầy đủ thông tin");
       return;
     }
+
+    NProgress.start();
+
     Ticket_API.createTicket($scope.new_ticket, $scope.$files).success(function(response) {
       NProgress.done();
       if(response.code == $rootScope.CODE_STATUS.success) {
-        $state.reload(
+        $state.go(
           'main.ticket_dashboard.list',
           {dashboard_label: 'own_request_dashboard', status: 'all'
         });
@@ -197,23 +206,12 @@ app.controller('CreateTicketController', ['$scope', 'toastr', '$state', 'Ticket_
 
   $scope.clearSelectedGroup = function() {
     $('#tree_groups').jstree("deselect_all");
-    $scope.new_ticket.ticket.group_id = '';
-    $scope.new_ticket.ticket.group_name = '';
+    $scope.new_ticket.group_id = '';
+    $scope.new_ticket.group_name = '';
   }
 
   if ($rootScope.enableFunction('assign_ticket_to_working_group')) {
     $scope.tree_groups = working_groups.groups;
     $scope.makeTreeGroups();
   }
-
-  // $repeater.repeater({
-  //   show: function () {
-  //     $(this).slideDown();
-  //   },
-  //   hide: function (remove) {
-  //     if(confirm('Are you sure you want to remove this item?')) {
-  //       $(this).slideUp(remove);
-  //     }
-  //   }
-  // });
 }]);

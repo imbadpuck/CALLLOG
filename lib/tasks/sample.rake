@@ -69,8 +69,8 @@ namespace :sample do
       :description => 'Xem công việc tôi được giao',
     )
 
-    view_all_dashboard_of_working_group = FunctionSystem.create(
-      :label       => 'view_all_dashboard_of_working_group',
+    all_working_group_dashboard = FunctionSystem.create(
+      :label       => 'all_working_group_dashboard',
       :name        => 'Xem công việc tất cả các nhóm',
       :description => 'Xem công việc tất cả các nhóm',
     )
@@ -79,7 +79,7 @@ namespace :sample do
       :label       => 'team_dashboard',
       :name        => 'Xem công việc cả nhóm',
       :description => 'Xem công việc cả nhóm',
-      :parent_id   => view_all_dashboard_of_working_group.id
+      :parent_id   => all_working_group_dashboard.id
     )
 
     FunctionSystem.create(
@@ -160,6 +160,33 @@ namespace :sample do
       :description => 'Xóa người dùng ra khỏi nhóm',
       :parent_id   => manage_group.id
     )
+
+    comment_in_all_ticket = FunctionSystem.create(
+      :label       => 'comment_in_all_ticket',
+      :name        => 'Bình luận ở mọi công việc',
+      :description => 'Bình luận ở mọi công việc',
+    )
+
+    FunctionSystem.create(
+      :label       => 'comment_in_own_ticket',
+      :name        => 'Bình luận trong công việc của mình',
+      :description => 'Bình luận trong công việc của mình',
+      :parent_id   => comment_in_all_ticket.id
+    )
+
+    FunctionSystem.create(
+      :label       => 'comment_in_ticket_in_group',
+      :name        => 'Bình luận trong công việc của nhóm',
+      :description => 'Bình luận trong công việc của nhóm',
+      :parent_id   => comment_in_all_ticket.id
+    )
+
+    FunctionSystem.create(
+      :label       => 'comment_in_assigned_ticket',
+      :name        => 'Bình luận trong công việc mình được giao',
+      :description => 'Bình luận trong công việc mình được giao',
+      :parent_id   => comment_in_all_ticket.id
+    )
   end
 
   task create_user_function: :environment do
@@ -183,6 +210,18 @@ namespace :sample do
         :function_system_id => func[:related_request_dashboard].id,
         :group_id           => company_group.id
       )
+      worker.add(
+        :function_system_id => func[:related_request_dashboard].id,
+        :group_id           => company_group.id
+      )
+      worker.add(
+        :function_system_id => func[:own_request_dashboard].id,
+        :group_id           => company_group.id
+      )
+      worker.add(
+        :function_system_id => func[:comment_in_own_ticket].id,
+        :group_id           => company_group.id
+      )
 
       admin_group = Group.find_by(label: 'admin_group')
       worker.add(
@@ -204,7 +243,12 @@ namespace :sample do
       )
 
       worker.add(
-        :function_system_id => func[:view_all_dashboard_of_working_group].id,
+        :function_system_id => func[:all_working_group_dashboard].id,
+        :group_id           => admin_group.id
+      )
+
+      worker.add(
+        :function_system_id => func[:comment_in_all_ticket].id,
         :group_id           => admin_group.id
       )
 
@@ -220,27 +264,27 @@ namespace :sample do
           :function_system_id => func[:team_dashboard].id,
           :user_id           => l.id
         )
+        worker.add(
+          :function_system_id => func[:comment_in_ticket_in_group].id,
+          :user_id           => l.id
+        )
       end
 
-      worker.add(
-        :function_system_id => func[:own_request_dashboard].id,
-        :group_id           => it_hanoi.id
-      )
       worker.add(
         :function_system_id => func[:related_request_dashboard].id,
         :group_id           => it_hanoi.id
       )
       worker.add(
         :function_system_id => func[:assigned_request_dashboard].id,
+        :group_id           => it_hanoi.id
+      )
+      worker.add(
+        :function_system_id => func[:comment_in_assigned_ticket].id,
         :group_id           => it_hanoi.id
       )
 
       it_danang = Group.find_by(label: 'it_danang')
       worker.add(
-        :function_system_id => func[:own_request_dashboard].id,
-        :group_id           => it_danang.id
-      )
-      worker.add(
         :function_system_id => func[:related_request_dashboard].id,
         :group_id           => it_danang.id
       )
@@ -248,12 +292,12 @@ namespace :sample do
         :function_system_id => func[:assigned_request_dashboard].id,
         :group_id           => it_danang.id
       )
+      worker.add(
+        :function_system_id => func[:comment_in_assigned_ticket].id,
+        :group_id           => it_danang.id
+      )
 
       member_group = Group.find_by(label: 'member_group')
-      worker.add(
-        :function_system_id => func[:own_request_dashboard].id,
-        :group_id           => member_group.id
-      )
       worker.add(
         :function_system_id => func[:related_request_dashboard].id,
         :group_id           => member_group.id
@@ -444,6 +488,7 @@ namespace :sample do
           title: Faker::StarWars.quote,
           creator_id: users[rand(1..(users.length - 1))].id,
           status: rand(0..5),
+          content: Faker::HitchhikersGuideToTheGalaxy.quote,
           priority: rand(0..3)
         )
 

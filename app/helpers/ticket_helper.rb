@@ -14,6 +14,10 @@ module TicketHelper
       create_ticket_pre_validation
 
       ticket_creating
+    when 'get_single_ticket'
+      dashboard_pre_validation
+
+      get_ticket
     when 'dashboard'
       dashboard_pre_validation
 
@@ -25,6 +29,27 @@ module TicketHelper
 
       search_tickets
     end
+  end
+
+  def get_ticket
+    @ticket = Ticket.eager_load(:creator).find_by(id: params[:ticket_id].to_i)
+
+    raise APIError::Common::NotFound if @ticket.blank?
+
+    @creator            = @ticket.creator
+    @related_users      = @ticket.related_users
+    @assigned_users     = @ticket.assigned_users
+    @ticket.attachments = eval(@ticket.attachments)
+
+    @comments    = Comment.eager_load(:user).where(ticket_id: @ticket.id)
+    comment_temp = []
+    @comments.each do |c|
+      comment_temp << c.attributes.merge!({
+        user: c.user.attributes.extract!('id', 'code', 'username', 'email')
+      })
+    end
+
+    @comments = comment_temp
   end
 
   def create_ticket_pre_validation
@@ -66,7 +91,7 @@ module TicketHelper
         .where("ticket_assignments.group_id = #{params[:group_id]}")
         .distinct("tickets.id")
       |
-    when 'view_all_dashboard_of_working_group'
+    when 'all_working_group_dashboard'
       @select_attributes = %Q|'tickets.*', 'users.name as creator_name', 'users.email as creator_email'|
       @query =  %Q|
         .joins("left join users on users.id = tickets.creator_id")

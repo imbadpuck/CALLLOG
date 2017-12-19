@@ -14,11 +14,13 @@ ActiveRecord::Schema.define(version: 20171209041936) do
 
   create_table "comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.text "content"
-    t.integer "type"
     t.string "note"
+    t.string "attachments", default: "[]"
     t.bigint "user_id"
+    t.bigint "ticket_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["ticket_id"], name: "index_comments_on_ticket_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
@@ -85,18 +87,6 @@ ActiveRecord::Schema.define(version: 20171209041936) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["receiver_id"], name: "index_notifications_on_receiver_id"
-  end
-
-  create_table "sub_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.text "content"
-    t.bigint "comment_id", null: false
-    t.bigint "user_id"
-    t.integer "type"
-    t.string "note"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["comment_id"], name: "index_sub_comments_on_comment_id"
-    t.index ["user_id"], name: "index_sub_comments_on_user_id"
   end
 
   create_table "ticket_assignments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -166,12 +156,11 @@ ActiveRecord::Schema.define(version: 20171209041936) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "comments", "tickets"
   add_foreign_key "comments", "users"
   add_foreign_key "group_users", "groups"
   add_foreign_key "group_users", "users"
   add_foreign_key "notifications", "users", column: "receiver_id"
-  add_foreign_key "sub_comments", "comments"
-  add_foreign_key "sub_comments", "users"
   add_foreign_key "ticket_assignments", "groups"
   add_foreign_key "ticket_assignments", "tickets"
   add_foreign_key "ticket_assignments", "users"

@@ -121,7 +121,7 @@
 
     <li
       class="nav-item"
-      ng-show="enableFunction('view_all_dashboard_of_working_group')">
+      ng-show="enableFunction('all_working_group_dashboard')">
       <a
         href="javascript:;"
         class="nav-link nav-toggle">
@@ -134,10 +134,10 @@
           ng-repeat="group in workingGroups track by $index"
           ng-show="group.purpose == 'working_group'">
           <a
-            ui-sref-if="enableFunction('view_all_dashboard_of_working_group')"
+            ui-sref-if="enableFunction('all_working_group_dashboard')"
             ui-sref-val="main.ticket_dashboard.list({
               group_id: group.id,
-              dashboard_label: 'view_all_dashboard_of_working_group',
+              dashboard_label: 'all_working_group_dashboard',
               status: 'all'
             })"
             ui-sref-opts="{reload: false, inherit: false}">

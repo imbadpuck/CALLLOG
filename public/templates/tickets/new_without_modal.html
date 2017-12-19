@@ -1,4 +1,3 @@
-<!-- <div ng-controller="CreateTicketController"> -->
 <form
   class="background-color-rgba-192-255-193-0_25
     padding-15px border-radius-10px"
@@ -11,7 +10,7 @@
       <input
         type="text"
         name="name"
-        ng-model="new_ticket.ticket.title"
+        ng-model="new_ticket.title"
         class="form-control border-radius-4px-important"
         required>
       <div
@@ -52,7 +51,7 @@
             type="text"
             class="form-control border-radius-4px-important
               background-color-fff-important"
-            ng-model="new_ticket.ticket.group_name"
+            ng-model="new_ticket.group_name"
             disabled>
         </div>
         <div id="tree_groups" class="padding-top-15px ticket-tree-groups">
@@ -68,7 +67,7 @@
         class="background-color-fff-important height-34px
           border-radius-4-0-0-4"
         name="priority"
-        ng-model="new_ticket.ticket.priority"
+        ng-model="new_ticket.priority"
         theme="select2"
         append-to-body="true">
         <ui-select-match
@@ -89,12 +88,12 @@
       <label>Gán cho nhân viên(Cần chọn nhóm giao việc trước)</label>
       <div
         class="margin-20px-0-20px-0 input-group"
-        ng-repeat="assigned_user in new_ticket.ticket.assigned_users track by $index">
+        ng-repeat="assigned_user in new_ticket.assigned_users track by $index">
         <ui-select
           class="background-color-fff-important height-34px
             border-radius-4-0-0-4"
           name="assigned_user-{{$index}}"
-          ng-model="new_ticket.ticket.assigned_users[$index]"
+          ng-model="new_ticket.assigned_users[$index]"
           theme="select2"
           append-to-body="true">
           <ui-select-match
@@ -120,7 +119,7 @@
         class="btn green margin-20px-0-20px-0
           padding-7px-20px-7px-20px-important
           border-radius-4px-important"
-        ng-click="addAssignedUser();">
+        ng-click="addAssignedUser()">
         Thêm nhân viên
         <i class="fa fa-plus"></i>
       </button>
@@ -133,11 +132,11 @@
       <label>Người liên quan</label>
       <div
         class="margin-20px-0-20px-0 input-group"
-        ng-repeat="related_user in new_ticket.ticket.related_users track by $index">
+        ng-repeat="related_user in new_ticket.related_users track by $index">
         <ui-select
           class="background-color-fff-important height-34px
             border-radius-4-0-0-4"
-          ng-model="new_ticket.ticket.related_users[$index]"
+          ng-model="new_ticket.related_users[$index]"
           name="related_user-{{$index}}"
           theme="select2"
           append-to-body="true">
@@ -164,7 +163,7 @@
         class="btn green margin-20px-0-20px-0
           padding-7px-20px-7px-20px-important
           border-radius-4px-important"
-        ng-click="addRelatedUser();">
+        ng-click="addRelatedUser()">
         Thêm người liên quan
         <i class="fa fa-plus"></i>
       </button>
