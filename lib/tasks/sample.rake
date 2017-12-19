@@ -433,20 +433,37 @@ namespace :sample do
 
   desc "Create fake ticket"
   task create_fake_ticket: :environment do
-    member_group  = Group.find_by(label: 'member_group')
-    sample_member = User.find_by_sql(%Q|
-      select users.id from users
-      where
-        exists(select 1 from group_users where group_users.group_id = #{member_group.id} and group_users.user_id = users.id)
-      limit 1;
-    |).first
+    puts "Create fake ticket"
+    users = User.all
+    it_danang = Group.eager_load(:users).find_by(label: 'it_danang')
+    it_hanoi  = Group.eager_load(:users).find_by(label: 'it_hanoi')
 
-    60.times {
-      Ticket.create(
-        title: Faker::StarWars.quote,
-        creator_id: sample_member.id,
-        status: rand(0..5)
-      )
-    }
+    TicketAssignment.bulk_insert do |worker|
+      100.times {
+        ticket = Ticket.create(
+          title: Faker::StarWars.quote,
+          creator_id: users[rand(1..(users.length - 1))].id,
+          status: rand(0..5),
+          priority: rand(0..3)
+        )
+
+        assigned_group = [it_danang, it_hanoi][rand(0..1)]
+
+        worker.add(
+          user_type: 0,
+          group_id: assigned_group.id,
+          user_id: assigned_group.users[rand(0..(assigned_group.users.length - 1))].id,
+          ticket_id: ticket.id
+        )
+
+        worker.add(
+          user_type: 1,
+          group_id: assigned_group.id,
+          user_id: users[rand(0..(users.length - 1))].id,
+          ticket_id: ticket.id
+        )
+      }
+    end
+
   end
 end

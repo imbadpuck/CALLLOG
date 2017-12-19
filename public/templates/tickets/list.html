@@ -119,14 +119,14 @@
                 #{{ticket.id}}- {{ticket.title}}
               </a>
             </div>
-            <!-- <div class="m-grid-col-xs-12">
+            <div class="m-grid-col-xs-12">
               <span class="font-size-13px">
-                Bắt đầu bởi {{ticket.user.name || ticket.user.email}}&nbsp;-&nbsp;
+                Bắt đầu bởi {{ticket.creator_name || ticket.creator_email}}&nbsp;
               </span>
-              <span class="ticket-assigned-user">
+              <!-- <span class="ticket-assigned-user">
                 {{showAssignName(ticket)}}
-              </span>
-            </div> -->
+              </span> -->
+            </div>
           </td>
           <td class="ticket-ticket-status vertical-align-middle-important">
             <div
@@ -138,7 +138,7 @@
           </td>
           <td class="ticket-ticket-post-counts vertical-align-middle-important">
             <div class="m-grid-col-xs-4 label ticket-label-count hidden-xs">
-              <!-- {{ticket.posts_count}} -->
+              {{ticket.comment_count}}
             </div>
           </td>
           <td class="width-sm-130px vertical-align-middle-important">
