@@ -34,35 +34,45 @@ module TicketHelper
   def generate_tickets_query
     case params[:dashboard_label]
     when 'own_request_dashboard'
-      @select_attributes = %Q|'tickets.*'|
-      @query             = %Q|.where(creator_id: #{@current_user.id})|
+      @select_attributes = %Q|'tickets.*', 'users.name as creator_name', 'users.email as creator_email'|
+      @query             = %Q|
+        .joins("left join users on users.id = tickets.creator_id")
+        .where(creator_id: #{@current_user.id})
+      |
     when 'related_request_dashboard'
-      @select_attributes = %Q|'tickets.*'|
-      @query = %Q|.joins(:ticket_assignments)
-                  .where("ticket_assignments.user_id = #{@current_user.id}
-                          and
-                          ticket_assignments.user_type = #{TicketAssignment.user_types[:people_involved]}")
-                  .distinct("tickets.id")
+      @select_attributes = %Q|'tickets.*', 'users.name as creator_name', 'users.email as creator_email'|
+      @query = %Q|
+        .joins("left join users on users.id = tickets.creator_id")
+        .joins(:ticket_assignments)
+        .where("ticket_assignments.user_id = #{@current_user.id}
+                and
+                ticket_assignments.user_type = #{TicketAssignment.user_types[:people_involved]}")
+        .distinct("tickets.id")
       |
     when 'assigned_request_dashboard'
-      @select_attributes = %Q|'tickets.*'|
-      @query = %Q|.joins(:ticket_assignments)
-                  .where("ticket_assignments.user_id = #{@current_user.id}
-                          and
-                          ticket_assignments.user_type = #{TicketAssignment.user_types[:performer]}")
-                  .distinct("tickets.id")
+      @select_attributes = %Q|'tickets.*', 'users.name as creator_name', 'users.email as creator_email'|
+      @query = %Q|
+        .joins("left join users on users.id = tickets.creator_id")
+        .joins(:ticket_assignments)
+        .where("ticket_assignments.user_id = #{@current_user.id}
+                and
+                ticket_assignments.user_type = #{TicketAssignment.user_types[:performer]}")
+        .distinct("tickets.id")
       |
     when 'team_dashboard'
-      @select_attributes = %Q|'tickets.*'|
-      @query =  %Q|.joins(:ticket_assignments)
-                   .where("ticket_assignments.group_id = #{params[:group_id]}")
-                   .distinct("tickets.id")
+      @select_attributes = %Q|'tickets.*', 'users.name as creator_name', 'users.email as creator_email'|
+      @query =  %Q|
+        .joins(:ticket_assignments)
+        .where("ticket_assignments.group_id = #{params[:group_id]}")
+        .distinct("tickets.id")
       |
     when 'view_all_dashboard_of_working_group'
-      @select_attributes = %Q|'tickets.*'|
-      @query =  %Q|.joins(:ticket_assignments)
-                   .where("ticket_assignments.group_id = #{params[:group_id]}")
-                   .distinct("tickets.id")
+      @select_attributes = %Q|'tickets.*', 'users.name as creator_name', 'users.email as creator_email'|
+      @query =  %Q|
+        .joins("left join users on users.id = tickets.creator_id")
+        .joins(:ticket_assignments)
+        .where("ticket_assignments.group_id = #{params[:group_id]}")
+        .distinct("tickets.id")
       |
     end
   end
