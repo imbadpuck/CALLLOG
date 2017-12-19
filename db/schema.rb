@@ -12,11 +12,6 @@
 
 ActiveRecord::Schema.define(version: 20171209041936) do
 
-  create_table "attachment_files", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.text "content"
     t.integer "type"
@@ -127,6 +122,7 @@ ActiveRecord::Schema.define(version: 20171209041936) do
     t.string "attachments", default: "[]"
     t.date "begin_date", default: "2017-12-19"
     t.date "end_date"
+    t.integer "comment_count", default: 0
     t.integer "parent_id"
     t.integer "lft", null: false
     t.integer "rgt", null: false

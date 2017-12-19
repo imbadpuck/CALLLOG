@@ -11,6 +11,7 @@ class CreateTickets < ActiveRecord::Migration[5.1]
       t.string   :attachments, array: true, default: "[]"
       t.date     :begin_date, :default => Time.zone.now
       t.date     :end_date
+      t.integer  :comment_count, :default => 0
 
       t.integer  :parent_id, null: true, index: true
       t.integer  :lft, null: false, index: true
