@@ -133,6 +133,32 @@ angular.module("app.factory", [])
         }
       });
     },
+    getTicket: function(params) {
+      return $http({
+        method: 'GET',
+        url: '/api/v1/tickets/get_single_ticket',
+        params: {
+          ticket_id: params.ticket_id,
+          dashboard_label: params.dashboard_label,
+        }
+      });
+    },
+    updateTicketStatus: function(ticket_ids, status) {
+      return $http.put('/api/v1/tickets/update_ticket', {change_status: status, ticket_ids: ticket_ids});
+    },
+    updateAssignedUser: function(ticket_ids, user) {
+      return $http.put('/api/v1/tickets/assign_agent', {ticket_ids: ticket_ids, assigned_user: user});
+    },
+    createComment: function(params) {
+      var formData = new FormData();
+      formData.append('new_comment', JSON.stringify(params.new_comment));
+      formData.append('comment_function_label', params.comment_function_label);
+      $.each(params.files, function(i, file){
+        formData.append('attachments[]', file);
+      });
+      return $http.post('/api/v1/comments/',
+        formData, {headers: {'Content-Type': undefined}});
+    },
     createTicket: function(new_ticket, files) {
       new_ticket = JSON.stringify(new_ticket);
       var formData = new FormData();

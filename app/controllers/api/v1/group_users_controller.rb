@@ -2,6 +2,7 @@ class Api::V1::GroupUsersController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_action :authenticate_request!
   before_action -> { group_users_role_checking(action_name) }
+  respond_to :json
 
   include GroupUsersHelper
 

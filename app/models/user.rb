@@ -6,7 +6,6 @@ class User < ApplicationRecord
   has_many :user_functions  , :dependent => :delete_all
   has_many :function_systems, :through => :user_functions
   has_many :comments     , :dependent => :delete_all
-  has_many :sub_comments , :dependent => :delete_all
   has_many :notifications, :dependent => :delete_all
 
   enum status: [:active, :inactive]

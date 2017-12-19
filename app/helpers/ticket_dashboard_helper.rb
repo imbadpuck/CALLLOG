@@ -33,7 +33,7 @@ module TicketDashboardHelper
         where
           ticket_assignments.group_id = #{params[:group_id]}) as tickets
       |
-    when 'view_all_dashboard_of_working_group'
+    when 'all_working_group_dashboard'
       @query =  %Q|from (
         select distinct(ticket_assignments.group_id), tickets.*
           from tickets
@@ -48,7 +48,7 @@ module TicketDashboardHelper
   def dashboard_pre_validation
     unless ["own_request_dashboard", "related_request_dashboard",
             "assigned_request_dashboard", "team_dashboard",
-            "view_all_dashboard_of_working_group"
+            "all_working_group_dashboard"
            ].include?(params[:dashboard_label])
 
 
