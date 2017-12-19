@@ -5,7 +5,7 @@ module CommentCreateHelper
     params[:new_comment] = JSON.parse(params[:new_comment])
 
     unless ['comment_in_all_ticket', 'comment_in_own_ticket',
-            'comment_in_ticket_in_group', 'comment_in_assigned_ticket'
+            'comment_in_ticket_in_working_group', 'comment_in_assigned_ticket'
            ].include?(params[:comment_function_label])
 
       raise APIError::Common::BadRequest
@@ -25,7 +25,7 @@ module CommentCreateHelper
       if @ticket.creator_id != @current_user.id
         raise APIError::Common::BadRequest
       end
-    when 'comment_in_ticket_in_group'
+    when 'comment_in_ticket_in_working_group'
       unless session['info']['groups'].map{|g| g.id}.include?(@ticket.group_id)
         raise APIError::Common::BadRequest
       end
@@ -52,6 +52,7 @@ module CommentCreateHelper
     end
 
     if @new_comment.present?
+      @ticket.update_attributes(comment_count: @ticket.comment_count + 1)
       @status = {
         :code    => Settings.code.success,
         :message => "Thành công",

@@ -8,7 +8,7 @@ app.controller('CreateTicketController', ['$scope', 'toastr', '$state', 'Ticket_
     group_id: null,
     group_name: null,
     assigned_users: [null],
-    related_users: [null]
+    related_users: [null],
   };
 
   $scope.priority_levels = [
@@ -17,6 +17,10 @@ app.controller('CreateTicketController', ['$scope', 'toastr', '$state', 'Ticket_
     {title: 'Cao'       , value: 2},
     {title: 'Khẩn Cấp'  , value: 3}
   ]
+
+  $(".cancel-default-behaviour").click(function(event) {
+    event.preventDefault();
+  });
 
   $scope.assigned_user_preload = [];
   $scope.related_user_preload  = [];
@@ -41,7 +45,8 @@ app.controller('CreateTicketController', ['$scope', 'toastr', '$state', 'Ticket_
 
   $scope.loadEmployees = function(keyword) {
     $scope.assigned_user_preload = [];
-    if (_.isNull($scope.new_ticket.group_id)) {
+    if (_.isNull($scope.new_ticket.group_id) ||
+        _.isEmpty(keyword)) {
       return;
     } else {
       if (!$rootScope.enableFunction('assign_ticket_to_user_in_all_group')) {
@@ -114,11 +119,11 @@ app.controller('CreateTicketController', ['$scope', 'toastr', '$state', 'Ticket_
     });
 
     $('#tree_groups').on("select_node.jstree", function (e, data) {
-      $scope.new_ticket.group_id       = data.node.original.id;
-      $scope.new_ticket.group_name     = data.node.original.name;
-      if (!$rootScope.enableFunction('assign_ticket_to_user_in_all_group')) {
+      if (data.node.original.id != $scope.new_ticket.group_id) {
+        $scope.new_ticket.group_id   = data.node.original.id;
+        $scope.new_ticket.group_name = data.node.original.name;
         $scope.new_ticket.assigned_users = [null];
-        $scope.assigned_user_preload            = [];
+        $scope.assigned_user_preload     = [];
       }
       $scope.$apply();
     });
@@ -198,10 +203,6 @@ app.controller('CreateTicketController', ['$scope', 'toastr', '$state', 'Ticket_
         toastr.error(response.message);
       }
     });
-  }
-
-  $scope.close = function() {
-    $uibModalInstance.dismiss();
   }
 
   $scope.clearSelectedGroup = function() {

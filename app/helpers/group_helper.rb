@@ -108,7 +108,7 @@ module GroupHelper
         @groups.concat(group_array)
       end
 
-      @groups.uniq
+      @groups.uniq!
 
     when 'get_tree_group'
       @groups = Group.find_by(label: 'company_group').self_and_descendants.to_a
@@ -120,7 +120,7 @@ module GroupHelper
                     .joins(:group_users)
                     .where(group_users: {group_id: @groups.map(&:id)})
 
-      @groups.uniq
+      @groups.uniq!
       modify_data_before_render
     when 'get_group_not_joined_users'
     end

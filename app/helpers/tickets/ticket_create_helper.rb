@@ -1,4 +1,4 @@
-module TicketCreateHelper
+module Tickets::TicketCreateHelper
 
   def ticket_creating
     params[:new_ticket] = JSON.parse(params[:new_ticket])
@@ -87,7 +87,9 @@ module TicketCreateHelper
 
     if params[:attachments].present? and @new_ticket.present?
       dir = "#{Rails.root}/public/attachments/tickets/#{@new_ticket.id}/"
-      @new_ticket.update_columns(attachments: save_files_with_token(dir, params[:attachments]).to_json)
+      @new_ticket.update_columns(
+        attachments: save_files_with_token(dir, params[:attachments]).to_json
+      )
     end
   end
 

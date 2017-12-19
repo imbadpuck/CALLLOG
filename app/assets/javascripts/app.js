@@ -93,13 +93,6 @@ var app = angular.module("CalllogApp",
   .state('main.create_ticket', {
     url: "/create_ticket",
     templateUrl: "/templates/tickets/new_without_modal.html",
-    resolve: {
-      working_groups: ['Group_API', function(Group_API) {
-        return Group_API.getGroups({function_label: 'working_group_index'}).then(function(response) {
-          return response.data.data;
-        });
-      }],
-    },
     controller: 'CreateTicketController',
     requireSignIn: true
   })
@@ -112,6 +105,16 @@ var app = angular.module("CalllogApp",
   .state('main.ticket_dashboard.show', {
     url: "/show?ticket_id",
     templateUrl: "/templates/tickets/show.html",
+    resolve: {
+      ticket_data: ['Ticket_API', '$stateParams', function(Ticket_API, $stateParams) {
+        return  Ticket_API.getTicket({
+                  ticket_id: $stateParams.ticket_id,
+                  dashboard_label: $stateParams.dashboard_label
+                }).then(function(response) {
+          return response.data.data;
+        });
+      }],
+    },
     controller: 'TicketController',
     requireSignIn: true
   });
@@ -174,6 +177,18 @@ var app = angular.module("CalllogApp",
     {title: 'Phó nhóm'   , value: 2},
     {title: 'Thành viên' , value: 1}
   ]
+
+  Array.prototype.removeIf = function(callback) {
+    var i = 0;
+    while (i < this.length) {
+      if (callback(this[i], i)) {
+        this.splice(i, 1);
+      }
+      else {
+        ++i;
+      }
+    }
+  };
 
   $rootScope.currentFunctionIsParentOf = function(data) {
     if (data.c_func.lft < data.e_func.lft &&
