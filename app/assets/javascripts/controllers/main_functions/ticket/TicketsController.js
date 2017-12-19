@@ -11,6 +11,7 @@ app.controller('TicketsController', ['$scope', '$rootScope', '$state',
     inprogress:  {name: 'Đang giải quyết'},
     resolved:    {name: 'Đã giải quyết'},
     out_of_date: {name: 'Quá hạn'},
+    feedback:    {name: 'Đã đánh giá'},
     closed:      {name: 'Đã đóng'},
     cancelled:   {name: 'Hủy bỏ'}
   };

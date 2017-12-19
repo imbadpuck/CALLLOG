@@ -36,6 +36,7 @@ class Api::V1::TicketsController < ApplicationController
           :inprogress  => @inprogress,
           :resolved    => @resolved,
           :out_of_date => @out_of_date,
+          :feedback    => @feedback,
           :closed      => @closed,
           :cancelled   => @cancelled
         }

@@ -78,6 +78,7 @@ module TicketDashboardHelper
             @resolved    = 0,
             @out_of_date = 0,
             @closed      = 0,
+            @feedback    = 0,
             @cancelled   = 0;
       |)
 
@@ -92,14 +93,17 @@ module TicketDashboardHelper
                   @out_of_date := @out_of_date + 1,
                 if (tickets.status = '#{Ticket.statuses[:closed]}',
                   @closed      := @closed + 1,
+                if (tickets.status = '#{Ticket.statuses[:closed]}',
+                  @feedback    := @feedback + 1,
                 if (tickets.status = '#{Ticket.statuses[:cancelled]}',
-                  @cancelled   := @cancelled + 1, 0)))))),
+                  @cancelled   := @cancelled + 1, 0))))))),
                 (@all := @all + 1)
         #{@query};
       |)
 
       Ticket.connection.execute(%Q|
-        select  @all, @new_ticket, @inprogress, @resolved, @out_of_date, @closed, @cancelled;
+        select  @all, @new_ticket, @inprogress, @resolved,
+                @out_of_date, @feedback, @closed, @cancelled;
       |)
     end
 
@@ -110,6 +114,7 @@ module TicketDashboardHelper
     @inprogress  = result[:@inprogress]
     @resolved    = result[:@resolved]
     @out_of_date = result[:@out_of_date]
+    @feedback    = result[:@feedback]
     @closed      = result[:@closed]
     @cancelled   = result[:@cancelled]
   end
