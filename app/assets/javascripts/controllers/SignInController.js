@@ -9,12 +9,15 @@ app.controller('SignInController', ['$scope', '$rootScope', '$state', '$http', '
 
         $rootScope.currentUser                = response.data.data.info.user;
         $rootScope.functionSystems            = response.data.data.info.function_systems;
+        $rootScope.groupsInvolved             = response.data.data.info.groups;
+        // $rootScope.generalInfo                = response.data.data.info;
         $http.defaults.headers.common["Authorization"] = 'Bearer ' + response.data.data.token;
         $window.localStorage.user             = JSON.stringify(response.data.data.info.user);
         $window.localStorage.groups_involved  = JSON.stringify(response.data.data.info.groups);
         $window.localStorage.function_systems = JSON.stringify(response.data.data.info.function_systems);
         $window.localStorage.general_info     = JSON.stringify(response.data.data.info);
         $window.localStorage.token            = response.data.data.token;
+
         $state.go("main");
       } else {
         toastr.error(response.data.message)

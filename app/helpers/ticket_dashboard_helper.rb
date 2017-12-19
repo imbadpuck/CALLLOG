@@ -4,38 +4,65 @@ module TicketDashboardHelper
   def generate_dashboard_query
     case params[:dashboard_label]
     when 'own_request_dashboard'
-      @query = %Q|where creator_id = #{@current_user.id}|
+      @query = %Q|from tickets where creator_id = #{@current_user.id}|
     when 'related_request_dashboard'
-      @query = %Q|inner join ticket_assignments on tickets.id = ticket_assignments.ticket_id
+      @query = %Q|
+        from tickets
+        inner join
+          ticket_assignments on tickets.id = ticket_assignments.ticket_id
         where
           ticket_assignments.user_id = #{@current_user.id}
             and
           ticket_assignments.user_type = #{TicketAssignment.user_types[:people_involved]}
       |
     when 'assigned_request_dashboard'
-      @query = %Q|inner join ticket_assignments on tickets.id = ticket_assignments.ticket_id
+      @query = %Q|
+        from tickets
+          inner join ticket_assignments on tickets.id = ticket_assignments.ticket_id
         where
           ticket_assignments.user_id = #{@current_user.id}
             and
           ticket_assignments.user_type = #{TicketAssignment.user_types[:performer]}
       |
     when 'team_dashboard'
-      # @query =  %Q|inner join ticket_assignments on tickets.id = ticket_assignments.ticket_id
-      #   where
-      #     ticket_assignments.user_id = #{@current_user.id}
-      #       and
-      #     ticket_assignments.user_type = #{TicketAssignment.user_types[:performer]}
-      # |
+      @query =  %Q|from (
+        select distinct(ticket_assignments.group_id), tickets.*
+          from tickets
+          left join
+            ticket_assignments on tickets.id = ticket_assignments.ticket_id
+        where
+          ticket_assignments.group_id = #{params[:group_id]}) as tickets
+      |
+    when 'view_all_dashboard_of_working_group'
+      @query =  %Q|from (
+        select distinct(ticket_assignments.group_id), tickets.*
+          from tickets
+          left join
+            ticket_assignments on tickets.id = ticket_assignments.ticket_id
+        where
+          ticket_assignments.group_id = #{params[:group_id]}) as tickets
+      |
     end
   end
 
   def dashboard_pre_validation
     unless ["own_request_dashboard", "related_request_dashboard",
-            "assigned_request_dashboard", "team_dashboard"
+            "assigned_request_dashboard", "team_dashboard",
+            "view_all_dashboard_of_working_group"
            ].include?(params[:dashboard_label])
 
 
-      raise APIError::Common::BadRequest.new
+      raise APIError::Common::BadRequest
+    end
+
+    if params[:dashboard_label] == "team_dashboard"
+      @group = Group.find_by_id(params[:group_id])
+
+      group_users = @group.group_users.where(user_id: @current_user.id)
+
+      if group_users.blank?
+         raise APIError::Common::BadRequest
+      end
     end
 
     allow_access?(params[:dashboard_label])
@@ -68,7 +95,7 @@ module TicketDashboardHelper
                 if (tickets.status = '#{Ticket.statuses[:cancelled]}',
                   @cancelled   := @cancelled + 1, 0)))))),
                 (@all := @all + 1)
-        from tickets #{@query};
+        #{@query};
       |)
 
       Ticket.connection.execute(%Q|

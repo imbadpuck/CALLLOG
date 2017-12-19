@@ -27,6 +27,11 @@ angular.module("app.filter", [])
     return moment(input).format("DD/MM/YYYY")
   };
 }])
+.filter('workingGroup', [function() {
+  return function(input) {
+    if (input.purpose == 'working_group') return input;
+  }
+}])
 .filter('formatDateTime', [function() {
   return function(input) {
     return moment(input).format("DD/MM/YYYY hh:mm:ss")

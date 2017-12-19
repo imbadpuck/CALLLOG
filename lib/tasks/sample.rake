@@ -69,10 +69,17 @@ namespace :sample do
       :description => 'Xem công việc tôi được giao',
     )
 
+    view_all_dashboard_of_working_group = FunctionSystem.create(
+      :label       => 'view_all_dashboard_of_working_group',
+      :name        => 'Xem công việc tất cả các nhóm',
+      :description => 'Xem công việc tất cả các nhóm',
+    )
+
     FunctionSystem.create(
       :label       => 'team_dashboard',
       :name        => 'Xem công việc cả nhóm',
       :description => 'Xem công việc cả nhóm',
+      :parent_id   => view_all_dashboard_of_working_group.id
     )
 
     FunctionSystem.create(
@@ -172,6 +179,10 @@ namespace :sample do
         :function_system_id => func[:assign_ticket_to_working_group].id,
         :group_id           => company_group.id
       )
+      worker.add(
+        :function_system_id => func[:related_request_dashboard].id,
+        :group_id           => company_group.id
+      )
 
       admin_group = Group.find_by(label: 'admin_group')
       worker.add(
@@ -192,12 +203,21 @@ namespace :sample do
         :group_id           => admin_group.id
       )
 
+      worker.add(
+        :function_system_id => func[:view_all_dashboard_of_working_group].id,
+        :group_id           => admin_group.id
+      )
+
       it_hanoi            = Group.find_by(label: 'it_hanoi')
       it_hanoi_leader     = it_hanoi.users.where("group_users.role_level = #{GroupUser.role_levels[:leader]}")
       it_hanoi_sub_leader = it_hanoi.users.where("group_users.role_level = #{GroupUser.role_levels[:sub_leader]}")
       it_hanoi_leader.each do |l|
         worker.add(
           :function_system_id => func[:assign_ticket_to_user_in_own_group].id,
+          :user_id           => l.id
+        )
+        worker.add(
+          :function_system_id => func[:team_dashboard].id,
           :user_id           => l.id
         )
       end

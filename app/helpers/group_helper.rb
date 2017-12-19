@@ -100,11 +100,16 @@ module GroupHelper
   def group_index
     case params[:function_label]
     when 'working_group_index'
+      @groups = []
       Group.where(purpose: Group.purposes[:working_group]).each do |group|
-        @groups.concat(group.self_and_ancestors.to_a)
+        group_array = group.self_and_ancestors.to_a
+        group_array.keep_if{|g| g.purpose == 'working_group' || g.label == 'company_group'}
+
+        @groups.concat(group_array)
       end
 
       @groups.uniq
+
     when 'get_tree_group'
       @groups = Group.find_by(label: 'company_group').self_and_descendants.to_a
       @users  = User.select(

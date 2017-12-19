@@ -1,7 +1,9 @@
-app.controller('MainController', ['$scope', '$rootScope', '$state', '$uibModal', 'Auth', '$compile',
-  function ($scope, $rootScope, $state, $uibModal, Auth, $compile) {
+app.controller('MainController', ['$scope', '$rootScope', '$state',
+  '$uibModal', 'Auth', '$compile', 'working_groups',
+  function ($scope, $rootScope, $state, $uibModal, Auth, $compile, working_groups) {
 
-  $scope.state = $state;
+  $scope.state             = $state;
+  $rootScope.workingGroups = working_groups.groups;
 
   var init = function() {
     functions = [
