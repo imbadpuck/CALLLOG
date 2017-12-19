@@ -6,6 +6,7 @@
     data-slide-speed="200">
 
     <li
+      class="nav-item"
       ng-class="{'active': state.current.name == 'main.create_ticket'}"
       ng-show="enableFunction('create_ticket')">
       <a
@@ -13,11 +14,12 @@
         ui-sref-val="main.create_ticket"
         ui-sref-opts="{reload: false, inherit: false}">
         <i class="icon-note"></i>
-        <span class="title">Tạo yêu cầu</span>
+        <span class="title"> Tạo yêu cầu </span>
       </a>
     </li>
 
     <li
+      class="nav-item"
       ng-class="{'active': state.current.name == 'main.manage_group'}"
       ng-show="enableFunction('manage_group')">
       <a
@@ -25,11 +27,12 @@
         ui-sref-val="main.manage_group"
         ui-sref-opts="{reload: false, inherit: false}">
         <i class="icon-users"></i>
-        <span class="title">Quản lý nhóm</span>
+        <span class="title"> Quản lý nhóm </span>
       </a>
     </li>
 
     <li
+      class="nav-item"
       ng-class="{'active': state.current.name == 'main.user_index'}"
       ng-show="enableFunction('user_index')">
       <a
@@ -37,34 +40,112 @@
         ui-sref-val="main.user_index"
         ui-sref-opts="{reload: false, inherit: false}">
         <i class="icon-users"></i>
-        <span class="title">Quản lý tài khoản</span>
+        <span class="title"> Quản lý tài khoản </span>
       </a>
     </li>
 
     <li
+      class="nav-item"
       ng-class="{'active': state.current.name.match('main.ticket_dashboard.list')
         && state.params.dashboard_label == 'own_request_dashboard'}"
       ng-show="enableFunction('own_request_dashboard')">
       <a
         ui-sref-if="enableFunction('own_request_dashboard')"
-        ui-sref-val="main.ticket_dashboard.list({dashboard_label: 'own_request_dashboard', status: 'all'})"
+        ui-sref-val="main.ticket_dashboard.list({
+          dashboard_label: 'own_request_dashboard', status: 'all'
+        })"
         ui-sref-opts="{reload: false, inherit: false}">
         <i class="icon-speedometer"></i>
-        <span class="title">Việc tôi yêu cầu</span>
+        <span class="title"> Việc tôi yêu cầu </span>
       </a>
     </li>
 
     <li
+      class="nav-item"
       ng-class="{'active': state.current.name.match('main.ticket_dashboard.list')
         && state.params.dashboard_label == 'related_request_dashboard'}"
       ng-show="enableFunction('related_request_dashboard')">
       <a
         ui-sref-if="enableFunction('related_request_dashboard')"
-        ui-sref-val="main.ticket_dashboard.list({dashboard_label: 'related_request_dashboard', status: 'all'})"
+        ui-sref-val="main.ticket_dashboard.list({
+          dashboard_label: 'related_request_dashboard', status: 'all'
+        })"
         ui-sref-opts="{reload: false, inherit: false}">
         <i class="icon-speedometer"></i>
-        <span class="title">Công việc liên quan</span>
+        <span class="title"> Công việc liên quan </span>
       </a>
+    </li>
+
+    <li
+      class="nav-item"
+      ng-class="{'active': state.current.name.match('main.ticket_dashboard.list')
+        && state.params.dashboard_label == 'assigned_request_dashboard'}"
+      ng-show="enableFunction('assigned_request_dashboard')">
+      <a
+        ui-sref-if="enableFunction('assigned_request_dashboard')"
+        ui-sref-val="main.ticket_dashboard.list({
+          dashboard_label: 'assigned_request_dashboard', status: 'all'
+        })"
+        ui-sref-opts="{reload: false, inherit: false}">
+        <i class="icon-speedometer"></i>
+        <span class="title"> Việc tôi được giao </span>
+      </a>
+    </li>
+
+    <li
+      class="nav-item"
+      ng-show="enableFunction('team_dashboard')">
+      <a
+        href="javascript:;"
+        class="nav-link nav-toggle">
+        <i class="icon-users"></i>
+          <span class="title"> Công việc nhóm </span>
+          <span class="arrow "></span>
+      </a>
+      <ul class="sub-menu">
+        <li
+          ng-repeat="group in groupsInvolved track by $index"
+          ng-show="group.purpose == 'working_group'">
+          <a
+            ui-sref-if="enableFunction('team_dashboard') && group.purpose == 'working_group'"
+            ui-sref-val="main.ticket_dashboard.list({
+              group_id: group.id, dashboard_label: 'team_dashboard', status: 'all'
+            })"
+            ui-sref-opts="{reload: false, inherit: false}">
+            <i class="icon-speedometer"></i>
+            <span class="title">{{group.name}}</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <li
+      class="nav-item"
+      ng-show="enableFunction('view_all_dashboard_of_working_group')">
+      <a
+        href="javascript:;"
+        class="nav-link nav-toggle">
+        <i class="icon-users"></i>
+          <span class="title"> Công việc của các nhóm </span>
+          <span class="arrow "></span>
+      </a>
+      <ul class="sub-menu">
+        <li
+          ng-repeat="group in workingGroups track by $index"
+          ng-show="group.purpose == 'working_group'">
+          <a
+            ui-sref-if="enableFunction('view_all_dashboard_of_working_group')"
+            ui-sref-val="main.ticket_dashboard.list({
+              group_id: group.id,
+              dashboard_label: 'view_all_dashboard_of_working_group',
+              status: 'all'
+            })"
+            ui-sref-opts="{reload: false, inherit: false}">
+            <i class="icon-speedometer"></i>
+            <span class="title">{{group.name}}</span>
+          </a>
+        </li>
+      </ul>
     </li>
   </ul>
 </div>

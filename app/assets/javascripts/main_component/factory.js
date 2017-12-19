@@ -92,7 +92,8 @@ angular.module("app.factory", [])
         method: 'GET',
         url: '/api/v1/tickets/dashboard',
         params: {
-          dashboard_label: params.dashboard_label
+          dashboard_label: params.dashboard_label,
+          group_id: params.group_id
         }
       });
     },
@@ -113,6 +114,7 @@ angular.module("app.factory", [])
           page: params.page || 1,
           status: params.status,
           dashboard_label: params.dashboard_label,
+          group_id: params.group_id
         }
       });
     },
@@ -127,6 +129,7 @@ angular.module("app.factory", [])
           created_at: params.search.created_at,
           closed_date: params.search.closed_date,
           dashboard_label: params.dashboard_label,
+          group_id: params.group_id
         }
       });
     },

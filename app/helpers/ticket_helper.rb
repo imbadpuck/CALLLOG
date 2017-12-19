@@ -11,6 +11,8 @@ module TicketHelper
 
       get_tickets
     when 'create'
+      create_ticket_pre_validation
+
       ticket_creating
     when 'dashboard'
       dashboard_pre_validation
@@ -26,7 +28,7 @@ module TicketHelper
   end
 
   def create_ticket_pre_validation
-    allow_access?('create_tickets')
+    allow_access?('create_ticket')
   end
 
   def generate_tickets_query
@@ -39,21 +41,29 @@ module TicketHelper
       @query = %Q|.joins(:ticket_assignments)
                   .where("ticket_assignments.user_id = #{@current_user.id}
                           and
-                        ticket_assignments.user_type = #{TicketAssignment.user_types[:people_involved]}")
+                          ticket_assignments.user_type = #{TicketAssignment.user_types[:people_involved]}")
+                  .distinct("tickets.id")
       |
     when 'assigned_request_dashboard'
+      @select_attributes = %Q|'tickets.*'|
       @query = %Q|.joins(:ticket_assignments)
                   .where("ticket_assignments.user_id = #{@current_user.id}
                           and
-                        ticket_assignments.user_type = #{TicketAssignment.user_types[:performer]}")
+                          ticket_assignments.user_type = #{TicketAssignment.user_types[:performer]}")
+                  .distinct("tickets.id")
       |
     when 'team_dashboard'
-      # @query =  %Q|inner join ticket_assignments on tickets.id = ticket_assignments.ticket_id
-      #   where
-      #     ticket_assignments.user_id = #{@current_user.id}
-      #       and
-      #     ticket_assignments.user_type = #{TicketAssignment.user_types[:performer]}
-      # |
+      @select_attributes = %Q|'tickets.*'|
+      @query =  %Q|.joins(:ticket_assignments)
+                   .where("ticket_assignments.group_id = #{params[:group_id]}")
+                   .distinct("tickets.id")
+      |
+    when 'view_all_dashboard_of_working_group'
+      @select_attributes = %Q|'tickets.*'|
+      @query =  %Q|.joins(:ticket_assignments)
+                   .where("ticket_assignments.group_id = #{params[:group_id]}")
+                   .distinct("tickets.id")
+      |
     end
   end
 
