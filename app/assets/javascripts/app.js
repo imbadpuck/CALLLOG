@@ -38,6 +38,13 @@ var app = angular.module("CalllogApp",
   })
   .state('main', {
     url: "/main",
+    resolve: {
+      working_groups: ['Group_API', function(Group_API) {
+        return Group_API.getGroups({function_label: 'working_group_index'}).then(function(response) {
+          return response.data.data;
+        });
+      }],
+    },
     templateUrl: "/templates/main.html",
     controller: 'MainController',
     requireSignIn: true
@@ -69,11 +76,13 @@ var app = angular.module("CalllogApp",
     requireSignIn: true
   })
   .state('main.ticket_dashboard', {
-    url: "/tickets/:dashboard_label",
+    url: "/tickets/:dashboard_label?group_id",
     templateUrl: "/templates/tickets/index.html",
     resolve: {
       dashboard: ['Ticket_API', '$stateParams', function(Ticket_API, $stateParams) {
-        return Ticket_API.getDashboard({dashboard_label: $stateParams.dashboard_label}).then(function(response) {
+        return Ticket_API.getDashboard({
+          dashboard_label: $stateParams.dashboard_label, group_id: $stateParams.group_id
+        }).then(function(response) {
           return response.data.data;
         });
       }],

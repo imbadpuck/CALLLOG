@@ -10,6 +10,7 @@ app.controller('TicketsListController', ['$scope', '$rootScope', '$state', '$uib
       search: search,
       status: (($state.params.status || 'new_ticket')),
       dashboard_label: $scope.dashboard_label,
+      group_id: $state.params.group_id
     }).success(function(response) {
       $scope.tickets_data     = response.data;
       $scope.currentPage      = $scope.tickets_data.page;
@@ -25,6 +26,7 @@ app.controller('TicketsListController', ['$scope', '$rootScope', '$state', '$uib
       page: $state.params.page,
       status: (($state.params.status || 'new_ticket')),
       dashboard_label: $scope.dashboard_label,
+      group_id: $state.params.group_id
     }).success(function(response) {
       $scope.tickets_data     = response.data;
       $scope.currentPage      = $scope.tickets_data.page;
