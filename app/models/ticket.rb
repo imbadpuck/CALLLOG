@@ -4,6 +4,6 @@ class Ticket < ApplicationRecord
 
   acts_as_nested_set
 
-  enum status: [:new_ticket, :inprogress, :resolved, :out_of_date, :closed, :cancelled]
+  enum status: [:new_ticket, :inprogress, :resolved, :feedback, :out_of_date, :closed, :cancelled]
   enum priority: [:low, :medium, :high, :imminent]
 end
