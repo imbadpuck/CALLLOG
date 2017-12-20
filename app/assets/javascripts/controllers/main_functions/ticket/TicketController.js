@@ -269,14 +269,14 @@ app.controller('TicketController', ['$scope', '$rootScope', '$state', 'toastr',
 
     Ticket_API.createComment({
       new_comment: $scope.new_comment,
-      comment_function_label: comment_function_label,
+      comment_function_label: $scope.comment_function_label,
       files: files
     }).success(function (response) {
       NProgress.done();
       if (response.code == $rootScope.CODE_STATUS.success) {
         $scope.new_comment        = {};
-        ticket_data.attachments = JSON.parse(ticket_data.attachments)
-        $scope.comments.push(ticket_data);
+        response.data.attachments = JSON.parse(response.data.attachments)
+        $scope.comments.push(response.data);
       } else {
         toastr.error(response.message);
       }

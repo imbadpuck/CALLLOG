@@ -178,7 +178,7 @@
     <div class="form-group col-xs-10 col-xs-offset-1">
       <textarea
         rows="2"
-        class="form-control"
+         class="form-control border-radius-4px margin-top-15px"
         placeholder="Viết phản hồi..."
         ng-model="new_comment.content"
         name="body">
@@ -192,7 +192,9 @@
     <div class="form-group col-xs-10 col-xs-offset-1">
       <label>Tệp đính kèm</label>
       <div>
-        <label class="btn btn-default btn-sm">
+        <label
+          class="btn btn-default btn-sm
+            border-radius-4px-important">
           Thêm <input
             class="hidden"
             type="file"
@@ -203,7 +205,8 @@
         <input
           type="button"
           value="Gửi phản hồi"
-          class="btn blue btn-sm pull-right"
+          class="btn blue btn-sm padding-7px-20px-7px-20px-important
+            border-radius-4px-important pull-right"
           ng-click="createComment()">
       </div>
       <div ng-repeat="file in new_comment.attachments">
