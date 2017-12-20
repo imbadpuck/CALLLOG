@@ -5,13 +5,13 @@ class CreateTickets < ActiveRecord::Migration[5.1]
       t.text     :content
       t.integer  :status
       t.integer  :priority
-      t.datetime :deadline
       t.datetime :resolved_at
       t.datetime :closed_at
       t.string   :attachments, array: true, default: "[]"
       t.date     :begin_date, :default => Time.zone.now
-      t.date     :end_date
+      t.datetime :deadline
       t.integer  :comment_count, :default => 0
+      t.integer  :rating, :default => 0
 
       t.integer  :parent_id, null: true, index: true
       t.integer  :lft, null: false, index: true

@@ -7,23 +7,7 @@
       {{stat_box[current_stat_box].name}}
     </span>
   </div>
-  <!-- <div class="col-xs-2 text-center">
-    <div
-      class="btn blue btn-sm padding-7px-20px-7px-20px-important
-        border-radius-4px-important"
-      ng-click="toggleCreationTicketTemplate()">
-      <i class="fa fa-plus"></i>
-      <span>Thêm mới</span>
-    </div>
-  </div> -->
 </div>
-
-<!-- <div
-  id="building-manager-create-ticket"
-  class="collapse padding-30px"
-  aria-expanded="false"
-  ng-include="'templates/building_manager/tickets/new_without_modal'">
-</div> -->
 
 <div class="row row-flex">
   <div class="col-xs-12 scrollable margin-top-15px">
@@ -38,7 +22,7 @@
       ng-show="!loading && !tickets_data.tickets.length">
       Không có công việc nào
     </div>
-    <div
+    <!-- <div
       ng-show="!loading && selects.count_ids > 0"
       class="padding-left-10px padding-bottom-15px">
       <div class="inline-block uppercase font-size-13px">
@@ -66,14 +50,14 @@
           </ul>
         </div>
       </div>
-    </div>
+    </div> -->
     <table
       class="table table-hover table-custom"
       ng-show="!loading && tickets_data.tickets.length">
       <thead>
         <tr>
           <td class="width-sm-90px">
-            <label class="mt-checkbox mt-checkbox-outline">
+            <!-- <label class="mt-checkbox mt-checkbox-outline">
               <input
                 type="checkbox"
                 value="1"
@@ -81,7 +65,7 @@
                 ng-model="selects.all"
                 ng-change="applySelects('all')">
               <span></span>
-            </label>
+            </label> -->
           </td>
           <td class="caption uppercase">Tiêu đề</td>
           <td></td>
@@ -93,14 +77,14 @@
         <tr ng-repeat="ticket in tickets_data.tickets track by $index">
           <td class="width-sm-90px">
             <div>
-              <label class="mt-checkbox mt-checkbox-outline ticket-checkbox">
+              <!-- <label class="mt-checkbox mt-checkbox-outline ticket-checkbox">
                 <input
                   type="checkbox"
                   value="1"
                   ng-model="selects[ticket.id]"
                   ng-change="applySelects(ticket.id)">
                 <span></span>
-              </label>
+              </label> -->
               <span class="user-thumbnail pull-right hidden-xs">
                 <a href="#" ng-click="showUserInfo(ticket.user_id)">
                   <img

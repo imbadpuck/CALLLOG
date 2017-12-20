@@ -4,10 +4,14 @@ class Api::V1::TicketsController < ApplicationController
   skip_before_action :verify_authenticity_token
   respond_to :json
 
-  include TicketHelper
-  include TicketDashboardHelper
+  include Tickets::TicketHelper
+  include Tickets::TicketDashboardHelper
 
   def create
+    render json: @status
+  end
+
+  def update
     render json: @status
   end
 

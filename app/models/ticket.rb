@@ -1,11 +1,13 @@
 class Ticket < ApplicationRecord
   has_many :ticket_assignments, :dependent => :delete_all
+  belongs_to :group
   belongs_to :creator, class_name: 'User' , foreign_key: 'creator_id'
 
   acts_as_nested_set
 
   enum status: [:new_ticket, :inprogress, :resolved, :feedback, :out_of_date, :closed, :cancelled]
   enum priority: [:low, :medium, :high, :imminent]
+  enum rating: [:satisfied, :unsatisfied]
 
   def related_users
     return  User.joins("left join ticket_assignments on users.id = ticket_assignments.user_id")

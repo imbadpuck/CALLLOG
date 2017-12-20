@@ -1,6 +1,7 @@
-module TicketHelper
+module Tickets::TicketHelper
   include RequestValidation
-  include TicketCreateHelper
+  include Tickets::TicketCreateHelper
+  include Tickets::TicketUpdateHelper
 
   def ticket_role_checking(action_name)
     case action_name
@@ -15,7 +16,7 @@ module TicketHelper
 
       ticket_creating
     when 'get_single_ticket'
-      dashboard_pre_validation
+      get_single_ticket_pre_validation
 
       get_ticket
     when 'dashboard'
@@ -24,6 +25,10 @@ module TicketHelper
       generate_dashboard_query
 
       dashboard_loading
+    when 'update'
+      ticket_update_pre_validation
+
+      ticket_update
     when 'search'
       dashboard_pre_validation
 
@@ -31,8 +36,25 @@ module TicketHelper
     end
   end
 
+  def get_single_ticket_pre_validation
+    unless ["own_request_dashboard", "related_request_dashboard",
+            "assigned_request_dashboard", "team_dashboard",
+            "all_working_group_dashboard"
+           ].include?(params[:dashboard_label])
+
+
+      raise APIError::Common::BadRequest
+    end
+
+    allow_access?(params[:dashboard_label])
+  end
+
   def get_ticket
-    @ticket = Ticket.eager_load(:creator).find_by(id: params[:ticket_id].to_i)
+    @ticket = Ticket.select('tickets.*', 'groups.name as group_name')
+                    .joins("left join ticket_assignments on tickets.id = ticket_assignments.ticket_id")
+                    .joins("left join users on users.id = ticket_assignments.user_id")
+                    .joins("left join groups on groups.id = ticket_assignments.group_id")
+                    .find_by(id: params[:ticket_id].to_i)
 
     raise APIError::Common::NotFound if @ticket.blank?
 
@@ -87,6 +109,7 @@ module TicketHelper
     when 'team_dashboard'
       @select_attributes = %Q|'tickets.*', 'users.name as creator_name', 'users.email as creator_email'|
       @query =  %Q|
+        .joins("left join users on users.id = tickets.creator_id")
         .joins(:ticket_assignments)
         .where("ticket_assignments.group_id = #{params[:group_id]}")
         .distinct("tickets.id")

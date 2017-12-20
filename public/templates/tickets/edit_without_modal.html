@@ -1,0 +1,415 @@
+<form
+  class="background-color-rgba-192-255-193-0_25
+    padding-15px border-radius-10px"
+  ng-submit="form.$valid && editTicket()"
+  name="form"
+  novalidate>
+  <div class="row row-flex">
+    <div class="form-group col-xs-12 col-md-6 col-sm-6 col-lg-6">
+      <label class="required">Tiêu đề</label>
+      <div class="input-group">
+        <input
+          ng-disabled="disabledItem({active_labels: ['edit_own_ticket']})"
+          type="text"
+          name="name"
+          ng-model="ticket.title"
+          class="form-control border-radius-4-0-0-4"
+          required>
+
+        <span
+          class="input-group-addon padding-0px
+            ticket-border-color-{{ticket.status}}
+            border-radius-0-4-4-0"
+          class="ticket-background-{{ticket.status}}"
+          ng-disabled="disabledItem({disabled_labels: ['edit_own_ticket']})">
+          <button
+            ng-disabled="disabledItem({disabled_labels: ['edit_own_ticket']})"
+            class="btn default date-reset height-32px
+              ticket-background-{{ticket.status}}
+              ticket-border-color-{{ticket.status}}
+              color-fff border-radius-0-4-4-0
+              cancel-default-behaviour"
+            type="button"
+            ng-click="ticket.title = oldTicket.title">
+            <i class="fa fa-refresh"></i>
+          </button>
+        </span>
+      </div>
+
+      <div
+        ng-messages="form.name.$error"
+        ng-show="form.$submitted"
+        class="text-error">
+        <div ng-message="required">
+          {{common_text.validate.require}}
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 col-md-6 col-sm-6 col-lg-6">
+      <label>Thời hạn thực hiện</label>
+      <div class="input-group">
+        <input
+          class="form-control border-radius-4-0-0-4
+            background-color-fff-important"
+          type="text"
+          name="daterange"
+          id="edit-ticket-period-of-work"
+          readonly/>
+        <span
+          class="input-group-addon padding-0px
+            ticket-border-color-{{ticket.status}}
+            border-radius-0-4-4-0"
+          class="ticket-background-{{ticket.status}}"
+          ng-disabled="disabledItem({disabled_labels: ['edit_own_ticket']})">
+          <button
+            ng-disabled="disabledItem({disabled_labels: ['edit_own_ticket']})"
+            class="btn default date-reset height-32px
+              ticket-background-{{ticket.status}}
+              ticket-border-color-{{ticket.status}}
+              color-fff border-radius-0-4-4-0
+              cancel-default-behaviour"
+            type="button"
+            ng-click="
+              ticket.begin_date = oldTicket.begin_date;
+              ticket.deadline   = oldTicket.deadline
+            ">
+            <i class="fa fa-refresh"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+
+    <div
+      class="col-xs-12 col-lg-6 col-sm-6 col-md-6"
+      class="form-group">
+      <label class="required">Gán cho nhóm</label>
+      <div class="m-grid-col-xs-12">
+          <div class="input-group input-icon right ticket-clear-group">
+<!--             <i
+              class="fa fa-close"
+              title="Xóa"
+              tooltip
+              ng-click="clearSelectedGroup()">
+            </i> -->
+            <input
+              type="text"
+              class="form-control border-radius-4-0-0-4
+                background-color-fff-important"
+              ng-model="ticket.group_name"
+              disabled>
+            <span
+              class="input-group-addon padding-0px
+                ticket-border-color-{{ticket.status}}
+                border-radius-0-4-4-0"
+              class="ticket-background-{{ticket.status}}"
+              ng-disabled="disabledItem({disabled_labels: ['edit_own_ticket']})">
+              <button
+                ng-disabled="disabledItem({disabled_labels: ['edit_own_ticket']})"
+                class="btn default date-reset height-32px
+                  ticket-background-{{ticket.status}}
+                  ticket-border-color-{{ticket.status}}
+                  color-fff border-radius-0-4-4-0
+                  cancel-default-behaviour"
+                type="button"
+                ng-click="
+                  ticket.group_id   = oldTicket.group_id;
+                  ticket.group_name = oldTicket.group_name
+                ">
+                <i class="fa fa-refresh"></i>
+              </button>
+            </span>
+          </div>
+
+        <div id="tree_groups_edit_ticket" class="padding-top-15px ticket-tree-groups">
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="col-xs-12 col-lg-6 col-sm-6 col-md-6"
+      class="form-group">
+      <label class="required">Mức độ ưu tiên</label>
+      <div class="input-group">
+        <ui-select
+          class="background-color-fff-important height-34px
+            border-radius-4-0-0-4"
+          name="priority"
+          ng-model="ticket.priority"
+          theme="select2"
+          append-to-body="true">
+          <ui-select-match
+            class="border-radius-4-0-0-4 height-34px font-size-14px"
+            placeholder="Mức độ ưu tiên"
+            allow-clear="true">
+            {{getPriorityTitle(ticket.priority) || $select.selected.title}}
+          </ui-select-match>
+          <ui-select-choices repeat="priority.value as priority in priority_levels">
+            <span ng-bind-html="priority.title"></span>
+          </ui-select-choices>
+        </ui-select>
+        <span
+          class="input-group-addon padding-0px
+            ticket-border-color-{{ticket.status}}
+            border-radius-0-4-4-0"
+          class="ticket-background-{{ticket.status}}"
+          ng-disabled="disabledItem({disabled_labels: ['edit_own_ticket']})">
+          <button
+            ng-disabled="disabledItem({disabled_labels: ['edit_own_ticket']})"
+            class="btn default date-reset height-32px
+              ticket-background-{{ticket.status}}
+              ticket-border-color-{{ticket.status}}
+              color-fff border-radius-0-4-4-0
+              cancel-default-behaviour"
+            type="button"
+            ng-click="ticket.priority = oldTicket.priority">
+            <i class="fa fa-refresh"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+
+    <div
+      class="col-xs-12 col-lg-6 col-sm-6 col-md-6">
+      <div class="input-group">
+        <span
+          class="padding-0px margin-right-10px
+            ticket-border-color-{{ticket.status}}
+            border-radius-4px"
+          class="ticket-background-{{ticket.status}}"
+          ng-disabled="disabledItem({disabled_labels: ['edit_own_ticket']})">
+          <button
+            ng-disabled="disabledItem({disabled_labels: ['edit_own_ticket']})"
+            class="btn default date-reset height-32px
+              ticket-background-{{ticket.status}}
+              ticket-border-color-{{ticket.status}}
+              color-fff border-radius-4px
+              cancel-default-behaviour"
+            type="button"
+            ng-click="
+              ticket.assigned_users = oldTicket.assigned_users;
+              ticket.group_id       = oldTicket.group_id;
+              ticket.group_name     = oldTicket.group_name">
+            <i class="fa fa-refresh"></i>
+          </button>
+        </span>
+        <label class="label-config-1">
+          Gán cho nhân viên(Cần chọn nhóm giao việc trước)
+        </label>
+      </div>
+      <div
+        class="margin-20px-0-20px-0 input-group"
+        ng-repeat="assigned_user in ticket.assigned_users track by $index">
+        <ui-select
+          ng-disabled="disabledItem({disabled_labels: ['edit_own_ticket']})"
+          class="background-color-fff-important height-34px
+            border-radius-4-0-0-4"
+          name="assigned_user-{{$index}}"
+          ng-model="ticket.assigned_users[$index]"
+          theme="select2"
+          append-to-body="true">
+          <ui-select-match
+            class="border-radius-4-0-0-4 height-34px font-size-14px"
+            placeholder="Mã số nhân viên/Tên/Số điện thoại "
+            allow-clear="true">
+            {{$select.selected.code + ' / ' + $select.selected.name + ' / ' + $select.selected.phone}}
+          </ui-select-match>
+          <ui-select-choices
+            repeat="user.id as user in assigned_user_preload"
+            refresh="loadEmployees($select.search)"
+            refresh-delay="400">
+            <span ng-bind-html="user.code + ' / ' + user.name + ' / ' + user.phone"></span>
+          </ui-select-choices>
+        </ui-select>
+
+        <span class="input-group-addon padding-0px"
+          ng-disabled="disabledItem({disabled_labels: ['edit_own_ticket']})"
+          ng-click="deleteAssignedUser($index)">
+          <button
+            class="btn default date-reset height-32px
+              cancel-default-behaviour"
+            type="button">
+            <i class="fa fa-times"></i>
+          </button>
+        </span>
+      </div>
+      <button
+        ng-show="!disabledItem({disabled_labels: ['edit_own_ticket']})"
+        ng-disabled="disabledItem({disabled_labels: ['edit_own_ticket']})"
+        class="btn green margin-20px-0-20px-0
+          padding-7px-20px-7px-20px-important
+          border-radius-4px"
+        ng-click="addAssignedUser()">
+        Thêm nhân viên
+        <i class="fa fa-plus"></i>
+      </button>
+    </div>
+
+    <div
+      ng-class="{
+        'col-xs-12 col-lg-12 col-sm-12 col-md-12': !enableFunction('assign_ticket_to_user_in_own_group'),
+        'col-xs-12 col-lg-6 col-sm-6 col-md-6': enableFunction('assign_ticket_to_user_in_own_group')}">
+      <div class="input-group">
+        <span
+          class="padding-0px margin-right-10px
+            ticket-border-color-{{ticket.status}}
+            border-radius-4px"
+          class="ticket-background-{{ticket.status}}"
+          ng-disabled="disabledItem({disabled_labels: ['edit_own_ticket']})">
+          <button
+            ng-disabled="disabledItem({disabled_labels: ['edit_own_ticket']})"
+            class="btn default date-reset height-32px
+              ticket-background-{{ticket.status}}
+              ticket-border-color-{{ticket.status}}
+              color-fff border-radius-4px
+              cancel-default-behaviour"
+            type="button"
+            ng-click="ticket.related_users = oldTicket.related_users">
+            <i class="fa fa-refresh"></i>
+          </button>
+        </span>
+        <label class="label-config-1">Người liên quan</label>
+      </div>
+      <div
+        class="margin-20px-0-20px-0 input-group"
+        ng-repeat="related_user in ticket.related_users track by $index">
+        <ui-select
+          class="background-color-fff-important height-34px
+            border-radius-4-0-0-4"
+          ng-model="ticket.related_users[$index]"
+          name="related_user-{{$index}}"
+          theme="select2"
+          append-to-body="true">
+          <ui-select-match
+            class="border-radius-4-0-0-4 height-34px font-size-14px"
+            placeholder="Mã số nhân viên/Tên/Số điện thoại "
+            allow-clear="true">
+            {{$select.selected.code + ' / ' + $select.selected.name + ' / ' + $select.selected.phone}}
+          </ui-select-match>
+          <ui-select-choices
+            repeat="user.id as user in related_user_preload"
+            refresh="loadRelatedUser($select.search)"
+            refresh-delay="400">
+            <span ng-bind-html="user.code + ' / ' + user.name + ' / ' + user.phone"></span>
+          </ui-select-choices>
+        </ui-select>
+
+        <span
+          class="input-group-addon padding-0px"
+          ng-click="deleteRelatedUser($index)">
+          <button
+            class="btn default date-reset height-32px
+              cancel-default-behaviour"
+            type="button">
+            <i class="fa fa-times"></i>
+          </button>
+        </span>
+      </div>
+      <button
+        class="btn green margin-20px-0-20px-0
+          padding-7px-20px-7px-20px-important
+          border-radius-4px"
+        ng-click="addRelatedUser()">
+        Thêm người liên quan
+        <i class="fa fa-plus"></i>
+      </button>
+    </div>
+
+    <div class="form-group col-xs-12 margin-top-15px">
+      <div class="input-group">
+        <span
+          class="padding-0px margin-right-10px
+            ticket-border-color-{{ticket.status}}
+            border-radius-4px"
+          class="ticket-background-{{ticket.status}}"
+          ng-disabled="disabledItem({disabled_labels: ['edit_own_ticket']})">
+          <button
+            ng-disabled="disabledItem({disabled_labels: ['edit_own_ticket']})"
+            class="btn default date-reset height-32px
+              ticket-background-{{ticket.status}}
+              ticket-border-color-{{ticket.status}}
+              color-fff border-radius-4px
+              cancel-default-behaviour"
+            type="button"
+            ng-click="ticket.content = oldTicket.content">
+            <i class="fa fa-refresh"></i>
+          </button>
+        </span>
+        <label class="required label-config-1">Nội dung</label>
+      </div>
+
+      <textarea
+        ng-disabled="disabledItem({active_labels: ['edit_own_ticket']})"
+        name="body"
+        ng-model="ticket.content"
+        class="form-control border-radius-4px margin-top-15px"
+        rows="4"
+        required>
+      </textarea>
+      <div
+        ng-messages="form.body.$error"
+        ng-show="form.$submitted"
+        class="text-error">
+        <div ng-message="required">{{common_text.validate.require}}</div>
+      </div>
+    </div>
+    <div
+      ng-show="disabledItem({disabled_labels: ['edit_own_ticket']})"
+      class="form-group col-xs-12">
+      <div class="input-group">
+        <span
+          class="padding-0px margin-right-10px
+            ticket-border-color-{{ticket.status}}
+            border-radius-4px"
+          class="ticket-background-{{ticket.status}}"
+          ng-disabled="disabledItem({disabled_labels: ['edit_own_ticket']})">
+          <button
+            ng-disabled="disabledItem({disabled_labels: ['edit_own_ticket']})"
+            class="btn default date-reset height-32px
+              ticket-background-{{ticket.status}}
+              ticket-border-color-{{ticket.status}}
+              color-fff border-radius-4px
+              cancel-default-behaviour"
+            type="button"
+            ng-click="ticket.attachments = oldTicket.attachments">
+            <i class="fa fa-refresh"></i>
+          </button>
+        </span>
+        <label class="label-config-1">Tệp đính kèm</label>
+
+      </div>
+      <div>
+        <label
+          class="btn btn-default btn-sm border-radius-4px
+            margin-top-15px">
+          Thêm
+          <input
+            class="hidden"
+            type="file"
+            model="ticket.attachments"
+            file-upload data-multiple="true"/>
+        </label>
+      </div>
+      <div ng-repeat="file in ticket.attachments">
+        <a
+          ng-href="{{ '/attachments/tickets/' + ticket.id + '/' + file}}"
+          download target="_self">
+          {{file}}
+        </a>
+        <a
+          href="#"
+          ng-click="ticket.attachments.splice($index, 1)"
+          class="text-red"
+          title="Xóa">
+          <i class="fa fa-times" aria-hidden="true"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+  <input
+    class="btn blue btn-sm padding-7px-20px-7px-20px-important
+      border-radius-4px"
+    type="submit"
+    value="Lưu">
+</form>
+<!-- </div>
+ -->

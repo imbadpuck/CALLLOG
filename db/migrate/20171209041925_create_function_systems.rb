@@ -5,6 +5,7 @@ class CreateFunctionSystems < ActiveRecord::Migration[5.1]
       t.string :label
       t.string :description
       t.integer :status, default: 0
+      t.json    :extra_content
 
       t.integer  :parent_id, null: true, index: true
       t.integer  :lft, null: false, index: true

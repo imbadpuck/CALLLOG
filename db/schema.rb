@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 20171209041936) do
     t.string "label"
     t.string "description"
     t.integer "status", default: 0
+    t.json "extra_content"
     t.integer "parent_id"
     t.integer "lft", null: false
     t.integer "rgt", null: false
@@ -106,13 +107,13 @@ ActiveRecord::Schema.define(version: 20171209041936) do
     t.text "content"
     t.integer "status"
     t.integer "priority"
-    t.datetime "deadline"
     t.datetime "resolved_at"
     t.datetime "closed_at"
     t.string "attachments", default: "[]"
-    t.date "begin_date", default: "2017-12-19"
-    t.date "end_date"
+    t.date "begin_date", default: "2017-12-20"
+    t.datetime "deadline"
     t.integer "comment_count", default: 0
+    t.integer "rating", default: 0
     t.integer "parent_id"
     t.integer "lft", null: false
     t.integer "rgt", null: false

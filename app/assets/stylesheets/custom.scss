@@ -80,19 +80,35 @@
   padding: 4px 8px;
 }
 .ticket-background-new_ticket, .ticket-background-all {
-  background-color: #5bc0de;
+  background-color: #5bc0de!important;
 }
 .ticket-background-inprogress {
-  background-color: #1abc9c;
+  background-color: #1abc9c!important;
 }
 .ticket-background-resolved, .ticket-background-feedback {
-  background-color: #f0ad4e;
+  background-color: #f0ad4e!important;
 }
 .ticket-background-closed {
-  background-color: #777;
+  background-color: #777!important;
 }
 .ticket-background-out_of_date, .ticket-background-cancelled {
-  background-color: #ed6b75;
+  background-color: #ed6b75!important;
+}
+
+.ticket-border-color-new_ticket, .ticket-border-color-all {
+  border-color: #5bc0de!important;
+}
+.ticket-border-color-inprogress {
+  border-color: #1abc9c!important;
+}
+.ticket-border-color-resolved, .ticket-border-color-feedback {
+  border-color: #f0ad4e!important;
+}
+.ticket-border-color-closed {
+  border-color: #777!important;
+}
+.ticket-border-color-out_of_date, .ticket-border-color-cancelled {
+  border-color: #ed6b75!important;
 }
 .ticket-name {
   margin: auto;
@@ -917,4 +933,35 @@ a[href="http://www.amcharts.com/javascript-charts/"] {
 
 .margin-20px-0-20px-0 {
   margin: 20px 0 10px 0!important;
+}
+
+.color-fff {
+  color: #fff!important;
+}
+
+.border-radius-0-4-4-0 {
+  border-radius: 0 4px 4px 0!important;
+}
+
+.margin-top-15px {
+  margin-top: 15px;
+}
+
+.label-config-1 {
+  height: 34px;
+  margin-bottom: 0;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.margin-right-10px {
+  margin-right: 10px;
+}
+
+.height-790px {
+  height: 790px;
+}
+
+.height-650px {
+  height: 650px;
 }
