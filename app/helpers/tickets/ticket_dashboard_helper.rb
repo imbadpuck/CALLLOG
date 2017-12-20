@@ -1,4 +1,4 @@
-module TicketDashboardHelper
+module Tickets::TicketDashboardHelper
   include RequestValidation
 
   def generate_dashboard_query
@@ -56,6 +56,7 @@ module TicketDashboardHelper
     end
 
     if params[:dashboard_label] == "team_dashboard"
+
       @group = Group.find_by_id(params[:group_id])
 
       group_users = @group.group_users.where(user_id: @current_user.id)

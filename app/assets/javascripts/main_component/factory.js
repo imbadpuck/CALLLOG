@@ -168,5 +168,14 @@ angular.module("app.factory", [])
       });
       return $http.post('/api/v1/tickets', formData, {headers: {'Content-Type': undefined}});
     },
+    editTicket: function(ticket, files) {
+      cloneTicket = JSON.stringify(ticket);
+      var formData = new FormData();
+      formData.append('ticket', cloneTicket);
+      $.each(files, function(i, file){
+        formData.append('attachments[]', file);
+      });
+      return $http.put('/api/v1/tickets/' + ticket.id, formData, {headers: {'Content-Type': undefined}});
+    }
   }
 }]);

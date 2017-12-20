@@ -8,7 +8,7 @@ Rails.application.routes.draw do
         get :get_related_users, on: :collection
       end
 
-      resources :tickets, only: [:index, :create] do
+      resources :tickets, only: [:index, :create, :update] do
         get :dashboard        , on: :collection
         get :search           , on: :collection
         get :get_single_ticket, on: :collection

@@ -175,7 +175,7 @@ namespace :sample do
     )
 
     FunctionSystem.create(
-      :label       => 'comment_in_ticket_in_group',
+      :label       => 'comment_in_ticket_in_working_group',
       :name        => 'Bình luận trong công việc của nhóm',
       :description => 'Bình luận trong công việc của nhóm',
       :parent_id   => comment_in_all_ticket.id
@@ -186,6 +186,91 @@ namespace :sample do
       :name        => 'Bình luận trong công việc mình được giao',
       :description => 'Bình luận trong công việc mình được giao',
       :parent_id   => comment_in_all_ticket.id
+    )
+
+    edit_own_ticket = FunctionSystem.create(
+      :label         => 'edit_own_ticket',
+      :name          => 'Chỉnh sửa công việc của mình',
+      :description   => 'Chỉnh sửa công việc của mình',
+      :extra_content => {
+        allowed_attributes: {
+          title: {},
+          content: {},
+          status: {
+            avaiable_changes: {
+              new_ticket: [{name: 'Hủy bỏ', value: 6, label: 'cancelled'}],
+              inprogress: [{name: 'Hủy bỏ', value: 6, label: 'cancelled'}],
+              resolved: [{name: 'Đã đánh giá', value: 3, label: 'feedback'},
+                         {name: 'Hủy bỏ'     , value: 6, label: 'cancelled'},
+                         {name: 'Đã đóng'    , value: 5, label: 'closed'}],
+              feedback: [{name: 'Hủy bỏ' , value: 6, label: 'cancelled'},
+                         {name: 'Đã đóng', value: 5, label: 'closed'}]
+            }
+          },
+          priority: {},
+          deadline: {},
+          attachments: {},
+          begin_date: {},
+          rating: {},
+          assigned_users: {},
+          related_users: {},
+          group_id: {},
+        }
+      }
+    )
+
+    edit_all_ticket = FunctionSystem.create(
+      :label       => 'edit_all_ticket',
+      :name        => 'Chỉnh sửa tất cả công việc',
+      :description => 'Chỉnh sửa tất cả công việc',
+      :extra_content => {
+        allowed_attributes: {
+          status: {
+            avaiable_changes: {
+              new_ticket: [{name: 'Đang giải quyết', value: 1, label: 'inprogress'},
+                           {name: 'Hủy bỏ'         , value: 6, label: 'cancelled'},],
+              inprogress: [{name: 'Đã giải quyết', value: 2, label: 'resolved'},
+                           {name: 'Hủy bỏ'       , value: 6, label: 'cancelled'},],
+              resolved: [{name: 'Đã đánh giá', value: 3, label: 'feedback'},
+                        {name: 'Hủy bỏ'     , value: 6, label: 'cancelled'},
+                        {name: 'Đã đóng'    , value: 5, label: 'closed'}],
+              feedback: [{name: 'Đang giải quyết', value: 1, label: 'inprogress'},
+                        {name: 'Hủy bỏ'         , value: 6, label: 'cancelled'},
+                        {name: 'Đã đóng'        , value: 5, label: 'closed'}]
+            }
+          },
+          priority: {},
+          deadline: {},
+          begin_date: {},
+          assigned_users: {},
+          related_users: {},
+          group_id: {}
+        }
+      }
+    )
+
+    edit_ticket_in_working_group = FunctionSystem.create(
+      :label       => 'edit_ticket_in_working_group',
+      :name        => 'Chỉnh sửa công việc trong nhóm làm việc',
+      :description => 'Chỉnh sửa công việc trong nhóm làm việc',
+      :extra_content => {
+        allowed_attributes: {
+          status: {
+            avaiable_changes: {
+              new_ticket: [{name: 'Đang giải quyết', value: 1, label: 'inprogress'}],
+              inprogress: [{name: 'Đã giải quyết', value: 2, label: 'resolved'}],
+              resolved: [{name: 'Đã đánh giá', value: 3, label: 'feedback'}],
+              feedback: [{name: 'Đang giải quyết', value: 1, label: 'inprogress'}]
+            }
+          },
+          priority: {},
+          deadline: {},
+          begin_date: {},
+          assigned_users: {},
+          related_users: {},
+          group_id: {}
+        }
+      }
     )
   end
 
@@ -211,15 +296,15 @@ namespace :sample do
         :group_id           => company_group.id
       )
       worker.add(
-        :function_system_id => func[:related_request_dashboard].id,
-        :group_id           => company_group.id
-      )
-      worker.add(
         :function_system_id => func[:own_request_dashboard].id,
         :group_id           => company_group.id
       )
       worker.add(
         :function_system_id => func[:comment_in_own_ticket].id,
+        :group_id           => company_group.id
+      )
+      worker.add(
+        :function_system_id => func[:edit_own_ticket].id,
         :group_id           => company_group.id
       )
 
@@ -252,6 +337,11 @@ namespace :sample do
         :group_id           => admin_group.id
       )
 
+      worker.add(
+        :function_system_id => func[:edit_all_ticket].id,
+        :group_id           => admin_group.id
+      )
+
       it_hanoi            = Group.find_by(label: 'it_hanoi')
       it_hanoi_leader     = it_hanoi.users.where("group_users.role_level = #{GroupUser.role_levels[:leader]}")
       it_hanoi_sub_leader = it_hanoi.users.where("group_users.role_level = #{GroupUser.role_levels[:sub_leader]}")
@@ -265,7 +355,11 @@ namespace :sample do
           :user_id           => l.id
         )
         worker.add(
-          :function_system_id => func[:comment_in_ticket_in_group].id,
+          :function_system_id => func[:comment_in_ticket_in_working_group].id,
+          :user_id           => l.id
+        )
+        worker.add(
+          :function_system_id => func[:edit_ticket_in_working_group].id,
           :user_id           => l.id
         )
       end
@@ -487,7 +581,7 @@ namespace :sample do
         ticket = Ticket.create(
           title: Faker::StarWars.quote,
           creator_id: users[rand(1..(users.length - 1))].id,
-          status: rand(0..5),
+          status: rand(0..6),
           content: Faker::HitchhikersGuideToTheGalaxy.quote,
           priority: rand(0..3)
         )
