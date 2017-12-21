@@ -94,7 +94,7 @@ module Tickets::TicketDashboardHelper
                   @out_of_date := @out_of_date + 1,
                 if (tickets.status = '#{Ticket.statuses[:closed]}',
                   @closed      := @closed + 1,
-                if (tickets.status = '#{Ticket.statuses[:closed]}',
+                if (tickets.status = '#{Ticket.statuses[:feedback]}',
                   @feedback    := @feedback + 1,
                 if (tickets.status = '#{Ticket.statuses[:cancelled]}',
                   @cancelled   := @cancelled + 1, 0))))))),

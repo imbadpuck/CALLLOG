@@ -12,10 +12,6 @@ app.controller('EditTicketController', ['$scope', 'toastr', '$state', 'Ticket_AP
   $scope.assigned_user_preload = [];
   $scope.related_user_preload  = [];
 
-  $(".cancel-default-behaviour").click(function(event) {
-    event.preventDefault();
-  });
-
   $scope.addAssignedUser = function() {
     $scope.ticket.assigned_users.push(null);
   }
@@ -121,24 +117,37 @@ app.controller('EditTicketController', ['$scope', 'toastr', '$state', 'Ticket_AP
     })[0];
 
     var checkExist = setInterval(function() {
-      $('#tree_groups_edit_ticket').jstree({
-        core: {
-          data: $scope.tree_groups.children
-        }
-      });
+      if ($('#tree_groups_edit_ticket').length > 0) {
+        $('#tree_groups_edit_ticket').jstree({
+          core: {
+            data: $scope.tree_groups.children
+          }
+        });
 
-      $('#tree_groups_edit_ticket').on("select_node.jstree", function (e, data) {
-        if (data.node.original.id != $scope.ticket.group_id) {
-          $scope.ticket.group_id       = data.node.original.id;
-          $scope.ticket.group_name     = data.node.original.name;
-          $scope.ticket.assigned_users = [null];
-          $scope.assigned_user_preload = [];
-        }
-        $scope.$apply();
-      });
-      clearInterval(checkExist);
+        $('#tree_groups_edit_ticket').on("select_node.jstree", function (e, data) {
+          if (data.node.original.id != $scope.ticket.group_id) {
+            $scope.ticket.group_id       = data.node.original.id;
+            $scope.ticket.group_name     = data.node.original.name;
+            $scope.ticket.assigned_users = [null];
+            $scope.assigned_user_preload = [];
+          }
+          $scope.$apply();
+        });
+        clearInterval(checkExist);
+      }
     }, 100);
   }
+
+  var checkExist = setInterval(function() {
+    if ($(".cancel-default-behaviour").length > 0) {
+
+      $(".cancel-default-behaviour").click(function(event) {
+        event.preventDefault();
+      });
+
+      clearInterval(checkExist);
+    }
+  }, 100);
 
   var checkExist = setInterval(function() {
     var startDate = null;
@@ -233,10 +242,7 @@ app.controller('EditTicketController', ['$scope', 'toastr', '$state', 'Ticket_AP
     Ticket_API.editTicket($scope.ticket, files).success(function(response) {
       NProgress.done();
       if(response.code == $rootScope.CODE_STATUS.success) {
-        $state.go(
-          'main.ticket_dashboard.list',
-          {dashboard_label: 'own_request_dashboard', status: 'all'
-        });
+        $state.reload($state.current);
         toastr.success(response.message);
       } else {
         toastr.error(response.message);

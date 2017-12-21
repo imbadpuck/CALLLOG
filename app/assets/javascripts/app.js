@@ -145,6 +145,7 @@ var app = angular.module("CalllogApp",
   } else {
     $state.go("signin");
   }
+
   $rootScope.server_url   = 'http://localhost:3000'
 
   $rootScope.CODE_STATUS  = CODE_STATUS;
