@@ -50,7 +50,7 @@ module Tickets::TicketHelper
   end
 
   def get_ticket
-    @ticket = Ticket.select('tickets.*', 'groups.name as group_name')
+    @ticket = Ticket.select('tickets.*', 'groups.name as group_name', 'groups.id as group_id')
                     .joins("left join ticket_assignments on tickets.id = ticket_assignments.ticket_id")
                     .joins("left join users on users.id = ticket_assignments.user_id")
                     .joins("left join groups on groups.id = ticket_assignments.group_id")
