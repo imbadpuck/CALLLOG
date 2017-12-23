@@ -27,7 +27,7 @@ module CommentCreateHelper
         raise APIError::Common::BadRequest
       end
     when 'comment_in_ticket_in_working_group'
-      unless session['info']['groups'].map{|g| g.id}.include?(@ticket.group_id)
+      unless session['info']['groups'].map{|g| g['id']}.include?(params[:group_id])
         raise APIError::Common::BadRequest
       end
     when 'comment_in_assigned_ticket'
