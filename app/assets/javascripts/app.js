@@ -44,6 +44,11 @@ var app = angular.module("CalllogApp",
           return response.data.data;
         });
       }],
+      notifications: ['Notification_API', function(Notification_API) {
+        return Notification_API.getNotifications().then(function(response) {
+          return response.data.data;
+        });
+      }],
     },
     templateUrl: "/templates/main.html",
     controller: 'MainController',

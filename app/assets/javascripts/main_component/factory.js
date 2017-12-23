@@ -84,6 +84,22 @@ angular.module("app.factory", [])
     },
   }
 }])
+.factory('Notification_API', ['$http', function($http){
+  return {
+    getNotifications: function() {
+      return $http({
+        method: "GET",
+        url: "/api/v1/notifications/",
+      });
+    },
+    updateStatus: function(notification_id) {
+      return $http({
+        method: "PUT",
+        url: "/api/v1/notifications/" + notification_id,
+      });
+    }
+  }
+}])
 .factory("Ticket_API", ["$http", "$rootScope", "$window", function ($http, $rootScope, $window) {
 
   return {
@@ -153,6 +169,7 @@ angular.module("app.factory", [])
       var formData = new FormData();
       formData.append('new_comment', JSON.stringify(params.new_comment));
       formData.append('comment_function_label', params.comment_function_label);
+      formData.append('group_id', params.group_id);
       $.each(params.files, function(i, file){
         formData.append('attachments[]', file);
       });

@@ -22,8 +22,8 @@ app.controller('TicketController', ['$scope', '$rootScope', '$state', 'toastr',
     $scope.comment_function_label = 'comment_in_assigned_ticket';
   } else if ($rootScope.enableFunction('comment_in_all_ticket')) {
     $scope.comment_function_label = 'comment_in_all_ticket';
-  } else if ($rootScope.enableFunction('comment_in_ticket_in_group')) {
-    $scope.comment_function_label = 'comment_in_ticket_in_group';
+  } else if ($rootScope.enableFunction('comment_in_ticket_in_working_group')) {
+    $scope.comment_function_label = 'comment_in_ticket_in_working_group';
   } else {
     $scope.comment_function_label = '';
   }
@@ -34,7 +34,7 @@ app.controller('TicketController', ['$scope', '$rootScope', '$state', 'toastr',
     attachments: []
   }
 
-    $scope.edit_ticket_status = {
+  $scope.edit_ticket_status = {
     new_ticket:  {
       name: 'Mới',
       available_status: []
@@ -162,8 +162,8 @@ app.controller('TicketController', ['$scope', '$rootScope', '$state', 'toastr',
         }
       }
     }
-    for (var i = 0; i < $rootScope.groupsInvolved.length; i++) {
-      if ($rootScope.groupsInvolved[i].id == $state.params.group_id &&
+    for (var g = 0; g < $rootScope.groupsInvolved.length; g++) {
+      if ($rootScope.groupsInvolved[g].id == $state.params.group_id &&
           $rootScope.enableFunction('edit_ticket_in_working_group')) {
 
         var available_status_array = [
@@ -270,7 +270,8 @@ app.controller('TicketController', ['$scope', '$rootScope', '$state', 'toastr',
     Ticket_API.createComment({
       new_comment: $scope.new_comment,
       comment_function_label: $scope.comment_function_label,
-      files: files
+      files: files,
+      group_id: $state.params.group_id
     }).success(function (response) {
       NProgress.done();
       if (response.code == $rootScope.CODE_STATUS.success) {
@@ -284,6 +285,8 @@ app.controller('TicketController', ['$scope', '$rootScope', '$state', 'toastr',
   }
 
   $scope.disabledItem = function(data) {
+    if (_.isNull($rootScope.currentUser) ||
+        _.isEmpty($rootScope.currentUser)) return;
     var active_labels      = data.active_labels;
     var disabled_labels    = data.disabled_labels;
     var active_edit_labels = [];

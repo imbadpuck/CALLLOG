@@ -1,5 +1,6 @@
 module CommentCreateHelper
   include RequestValidation
+  include NotificationHelper
 
   def create_comment_pre_validation
     params[:new_comment] = JSON.parse(params[:new_comment])
@@ -26,11 +27,11 @@ module CommentCreateHelper
         raise APIError::Common::BadRequest
       end
     when 'comment_in_ticket_in_working_group'
-      unless session['info']['groups'].map{|g| g.id}.include?(@ticket.group_id)
+      unless session['info']['groups'].map{|g| g['id']}.include?(params[:group_id])
         raise APIError::Common::BadRequest
       end
     when 'comment_in_assigned_ticket'
-      unless @ticket.assgined_users.map{|u| u.id}.include?(@current_user.id)
+      unless @ticket.assigned_users.map{|u| u.id}.include?(@current_user.id)
         raise APIError::Common::BadRequest
       end
     end
@@ -60,6 +61,8 @@ module CommentCreateHelper
           user: @current_user.attributes.extract!('id', 'code', 'name', 'email')
         })
       }
+
+      create_notification('comment_in_ticket', @ticket)
     else
       @status = {
         :code    => Settings.code.failure,

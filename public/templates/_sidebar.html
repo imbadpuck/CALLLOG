@@ -46,8 +46,8 @@
 
     <li
       class="nav-item"
-      ng-class="{'active': state.current.name == 'main.ticket_dashboard.list' &&
-        dashboard_label == 'own_request_dashboard'}"
+      ng-class="{'active': state.current.name == 'main.ticket_dashboard.list'
+        && state.params.dashboard_label == 'own_request_dashboard'}"
       ng-show="enableFunction('own_request_dashboard')">
       <a
         ui-sref-if="enableFunction('own_request_dashboard')"
@@ -62,8 +62,8 @@
 
     <li
       class="nav-item"
-      ng-class="{'active': state.current.name == 'main.ticket_dashboard.list' &&
-        dashboard_label == 'related_request_dashboard'}"
+      ng-class="{'active': state.current.name == 'main.ticket_dashboard.list'
+        && state.params.dashboard_label == 'related_request_dashboard'}"
       ng-show="enableFunction('related_request_dashboard')">
       <a
         ui-sref-if="enableFunction('related_request_dashboard')"
@@ -94,6 +94,8 @@
 
     <li
       class="nav-item"
+      ng-class="{'active': state.current.name.match('main.ticket_dashboard.list')
+        && state.params.dashboard_label == 'team_dashboard'}"
       ng-show="enableFunction('team_dashboard')">
       <a
         href="javascript:;"

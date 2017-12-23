@@ -208,18 +208,18 @@ app.controller('EditTicketController', ['$scope', 'toastr', '$state', 'Ticket_AP
   $scope.editTicket = function() {
     for (var i = 0; i < $scope.ticket.assigned_users.length; i++) {
       if (_.isNull($scope.ticket.assigned_users[i])) {
-        if ($scope.ticket.assigned_users.length == 1) {
-          $scope.ticket.assigned_users = [null];
-          break;
-        }
+        // if ($scope.ticket.assigned_users.length == 1) {
+        //   $scope.ticket.assigned_users = [null];
+        //   break;
+        // }
         $scope.ticket.assigned_users.splice(i, 1);
       }
     }
     for (var i = 0; i < $scope.ticket.related_users.length; i++) {
-      if ($scope.ticket.related_users.length == 1) {
-        $scope.ticket.related_users = [null];
-        break;
-      }
+      // if ($scope.ticket.related_users.length == 1) {
+      //   $scope.ticket.related_users = [null];
+      //   break;
+      // }
       if (_.isNull($scope.ticket.related_users[i])) {
         $scope.ticket.related_users.splice(i, 1);
       }
