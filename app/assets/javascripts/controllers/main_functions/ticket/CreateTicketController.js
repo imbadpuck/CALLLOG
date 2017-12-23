@@ -163,18 +163,18 @@ app.controller('CreateTicketController', ['$scope', 'toastr', '$state', 'Ticket_
   $scope.createTicket = function() {
     for (var i = 0; i < $scope.new_ticket.assigned_users.length; i++) {
       if (_.isNull($scope.new_ticket.assigned_users[i])) {
-        if ($scope.new_ticket.assigned_users.length == 1) {
-          $scope.new_ticket.assigned_users = [null];
-          break;
-        }
+        // if ($scope.new_ticket.assigned_users.length == 1) {
+        //   $scope.new_ticket.assigned_users = [null];
+        //   break;
+        // }
         $scope.new_ticket.assigned_users.splice(i, 1);
       }
     }
     for (var i = 0; i < $scope.new_ticket.related_users.length; i++) {
-      if ($scope.new_ticket.related_users.length == 1) {
-        $scope.new_ticket.related_users = [null];
-        break;
-      }
+      // if ($scope.new_ticket.related_users.length == 1) {
+      //   $scope.new_ticket.related_users = [null];
+      //   break;
+      // }
       if (_.isNull($scope.new_ticket.related_users[i])) {
         $scope.new_ticket.related_users.splice(i, 1);
       }

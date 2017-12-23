@@ -309,7 +309,7 @@
                         <td>{{['Nam', 'Nữ', 'Khác'][user.gender]}}</td>
                         <td>
                           <ui-select
-                            ng-model="user.role_level"
+                            ng-model="user.regency"
                             theme="select2"
                             append-to-body="true"
                             search-enabled="false"
@@ -319,7 +319,7 @@
                               allow-clear="true">
                               {{$select.selected.title}}
                             </ui-select-match>
-                            <ui-select-choices repeat="item.value as item in
+                            <ui-select-choices repeat="item.title as item in
                               user_regency_in_group">
                               <span ng-bind-html="item.title"></span>
                             </ui-select-choices>

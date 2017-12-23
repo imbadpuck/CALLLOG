@@ -20,6 +20,62 @@
   </a>
   <div class="top-menu">
     <ul class="nav navbar-nav pull-right">
+      <li
+        ng-controller="NotificationController"
+        class="dropdown dropdown-extended dropdown-notification dropdown-light">
+        <a
+          href="javascript:;"
+          class="dropdown-toggle"
+          data-toggle="dropdown"
+          data-hover="dropdown"
+          data-close-others="true"
+          aria-expanded="true">
+          <i class="icon-bell"></i>
+          <span
+            class="badge badge-danger ng-binding"
+            ng-if="notifications.total_unseen >= 0">
+              {{notifications.total_unseen}}
+          </span>
+        </a>
+        <ul class="dropdown-menu">
+          <li class="external">
+            <h3 class="ng-binding">
+              <span
+                class="bold ng-binding"
+                id="notification_content">
+              </span> {{notifications.total_unseen}} thông báo mới
+            </h3>
+          </li>
+          <li
+            class="border-bottom-1px-solid-dddfe2">
+            <div class="slimScrollDiv">
+              <ul class="dropdown-menu-list scroller">
+                <li
+                  class="border-bottom-1px-solid-dddfe2"
+                  ng-repeat="notification in notifications.notifications track by $index">
+                  <a href="javascript:;"
+                    ui-sref="{{notification.content.ui_sref}}"
+                    class="dropdown-items color-black"
+                    ng-click="updateStatus($index)"
+                    ng-style="{ 'background-color' : (notification.status == 'seen') ? 'white' : '#edf2fa'}">
+                    <span class="photo">
+                     <img
+                      width="29px"
+                      alt=""
+                      class="img-circle"
+                      src="/images/avatar.png" />
+                    </span>
+                    <span class="subject">
+                      <span class="time">{{last_active(notification.created_at)}}</span>
+                    </span>
+                    <span class="message">{{notification.title}}</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </li>
       <li class="dropdown dropdown-user">
         <a
           href="#"

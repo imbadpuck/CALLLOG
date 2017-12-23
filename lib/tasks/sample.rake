@@ -362,6 +362,16 @@ namespace :sample do
           :function_system_id => func[:edit_ticket_in_working_group].id,
           :user_id           => l.id
         )
+        worker.add(
+          :function_system_id => func[:all_working_group_dashboard].id,
+          :group_id           => l.id
+        )
+      end
+      it_hanoi_sub_leader.each do |s_l|
+        worker.add(
+          :function_system_id => func[:team_dashboard].id,
+          :user_id           => s_l.id
+        )
       end
 
       worker.add(
@@ -378,6 +388,45 @@ namespace :sample do
       )
 
       it_danang = Group.find_by(label: 'it_danang')
+      it_danang_leader     = it_danang.users.where("group_users.role_level = #{GroupUser.role_levels[:leader]}")
+      it_danang_sub_leader = it_danang.users.where("group_users.role_level = #{GroupUser.role_levels[:sub_leader]}")
+      it_danang_leader.each do |l|
+        worker.add(
+          :function_system_id => func[:assign_ticket_to_user_in_own_group].id,
+          :user_id           => l.id
+        )
+        worker.add(
+          :function_system_id => func[:team_dashboard].id,
+          :user_id           => l.id
+        )
+        worker.add(
+          :function_system_id => func[:comment_in_ticket_in_working_group].id,
+          :user_id           => l.id
+        )
+        worker.add(
+          :function_system_id => func[:edit_ticket_in_working_group].id,
+          :user_id           => l.id
+        )
+      end
+      it_danang_sub_leader.each do |s_l|
+        worker.add(
+          :function_system_id => func[:assign_ticket_to_user_in_own_group].id,
+          :user_id           => s_l.id
+        )
+        worker.add(
+          :function_system_id => func[:team_dashboard].id,
+          :user_id           => s_l.id
+        )
+        worker.add(
+          :function_system_id => func[:comment_in_ticket_in_working_group].id,
+          :user_id           => s_l.id
+        )
+        worker.add(
+          :function_system_id => func[:edit_ticket_in_working_group].id,
+          :user_id           => s_l.id
+        )
+      end
+
       worker.add(
         :function_system_id => func[:related_request_dashboard].id,
         :group_id           => it_danang.id
@@ -577,31 +626,76 @@ namespace :sample do
     it_hanoi  = Group.eager_load(:users).find_by(label: 'it_hanoi')
 
     TicketAssignment.bulk_insert do |worker|
-      100.times {
-        ticket = Ticket.create(
-          title: Faker::StarWars.quote,
-          creator_id: users[rand(1..(users.length - 1))].id,
-          status: rand(0..6),
-          content: Faker::HitchhikersGuideToTheGalaxy.quote,
-          priority: rand(0..3)
-        )
+      Notification.bulk_insert do |n_worker|
+        100.times {
 
-        assigned_group = [it_danang, it_hanoi][rand(0..1)]
+          assigned_group = [it_danang, it_hanoi][rand(0..1)]
+          creator        = users[rand(1..(users.length - 1))]
+          assigned_users = []
+          related_users  = []
 
-        worker.add(
-          user_type: 0,
-          group_id: assigned_group.id,
-          user_id: assigned_group.users[rand(0..(assigned_group.users.length - 1))].id,
-          ticket_id: ticket.id
-        )
+          rand(0..3).times {
+            assigned_users << assigned_group.users[rand(0..(assigned_group.users.length - 1))]
+          }
+          rand(0..3).times {
+            related_users << users[rand(0..(users.length - 1))]
+          }
 
-        worker.add(
-          user_type: 1,
-          group_id: assigned_group.id,
-          user_id: users[rand(0..(users.length - 1))].id,
-          ticket_id: ticket.id
-        )
-      }
+          ticket = Ticket.create(
+            title: Faker::StarWars.quote,
+            creator_id: creator.id,
+            status: rand(0..6),
+            content: Faker::HitchhikersGuideToTheGalaxy.quote,
+            priority: rand(0..3)
+          )
+
+          if ticket.status == 'new_ticket'
+            assigned_users.each do |u|
+              worker.add(
+                user_type: 0,
+                group_id: assigned_group.id,
+                user_id: u.id,
+                ticket_id: ticket.id
+              )
+
+              n_worker.add(
+                title: "Bạn đã được gán vào công việc ##{ticket.id}",
+                content: {ui_sref:
+                  "main.ticket_dashboard.show({" +
+                    "dashboard_label: 'assigned_request_dashboard'," +
+                    "status: #{ticket.status}," +
+                    "ticket_id: #{ticket.id}" +
+                  "})"
+                },
+                receiver_id: u.id,
+                ticket: ticket.id
+              )
+            end
+          end
+
+          related_users.each do |u|
+             worker.add(
+              user_type: 1,
+              group_id: assigned_group.id,
+              user_id: u.id,
+              ticket_id: ticket.id
+            )
+
+            n_worker.add(
+              title: "Bạn được cho là liên quan đến công việc ##{ticket.id}",
+              content: {ui_sref:
+                "main.ticket_dashboard.show({" +
+                  "dashboard_label: 'related_request_dashboard'," +
+                  "status: #{ticket.status}," +
+                  "ticket_id: #{ticket.id}" +
+                "})"
+              },
+              receiver_id: u.id,
+              ticket: ticket.id
+            )
+          end
+        }
+      end
     end
 
   end

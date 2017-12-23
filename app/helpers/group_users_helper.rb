@@ -77,7 +77,8 @@ module GroupUsersHelper
         worker.add(
           :group_id   => group.id,
           :user_id    => user[:id],
-          :role_level => user[:role_level]
+          :role_level => user[:role_level],
+          :regency    => user[:regency]
         )
       end
     end

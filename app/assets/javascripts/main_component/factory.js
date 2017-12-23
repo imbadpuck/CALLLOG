@@ -84,6 +84,22 @@ angular.module("app.factory", [])
     },
   }
 }])
+.factory('Notification_API', ['$http', function($http){
+  return {
+    getNotifications: function() {
+      return $http({
+        method: "GET",
+        url: "/api/v1/notifications/",
+      });
+    },
+    updateStatus: function(notification_id) {
+      return $http({
+        method: "PUT",
+        url: "/api/v1/notifications/" + notification_id,
+      });
+    }
+  }
+}])
 .factory("Ticket_API", ["$http", "$rootScope", "$window", function ($http, $rootScope, $window) {
 
   return {

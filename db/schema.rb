@@ -81,13 +81,15 @@ ActiveRecord::Schema.define(version: 20171209041936) do
 
   create_table "notifications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "title"
-    t.text "content"
+    t.json "content"
     t.integer "notify_type"
-    t.datetime "send_time"
+    t.integer "status", default: 0
     t.bigint "receiver_id"
+    t.bigint "ticket_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["receiver_id"], name: "index_notifications_on_receiver_id"
+    t.index ["ticket_id"], name: "index_notifications_on_ticket_id"
   end
 
   create_table "ticket_assignments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -110,7 +112,7 @@ ActiveRecord::Schema.define(version: 20171209041936) do
     t.datetime "resolved_at"
     t.datetime "closed_at"
     t.string "attachments", default: "[]"
-    t.date "begin_date", default: "2017-12-20"
+    t.date "begin_date", default: "2017-12-23"
     t.datetime "deadline"
     t.integer "comment_count", default: 0
     t.integer "rating", default: 0
@@ -161,6 +163,7 @@ ActiveRecord::Schema.define(version: 20171209041936) do
   add_foreign_key "comments", "users"
   add_foreign_key "group_users", "groups"
   add_foreign_key "group_users", "users"
+  add_foreign_key "notifications", "tickets"
   add_foreign_key "notifications", "users", column: "receiver_id"
   add_foreign_key "ticket_assignments", "groups"
   add_foreign_key "ticket_assignments", "tickets"
