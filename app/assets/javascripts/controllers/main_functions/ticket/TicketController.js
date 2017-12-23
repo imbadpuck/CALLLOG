@@ -270,7 +270,8 @@ app.controller('TicketController', ['$scope', '$rootScope', '$state', 'toastr',
     Ticket_API.createComment({
       new_comment: $scope.new_comment,
       comment_function_label: $scope.comment_function_label,
-      files: files
+      files: files,
+      group_id: $state.params.group_id
     }).success(function (response) {
       NProgress.done();
       if (response.code == $rootScope.CODE_STATUS.success) {
@@ -284,6 +285,8 @@ app.controller('TicketController', ['$scope', '$rootScope', '$state', 'toastr',
   }
 
   $scope.disabledItem = function(data) {
+    if (_.isNull($rootScope.currentUser) ||
+        _.isEmpty($rootScope.currentUser)) return;
     var active_labels      = data.active_labels;
     var disabled_labels    = data.disabled_labels;
     var active_edit_labels = [];

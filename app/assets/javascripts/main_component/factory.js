@@ -169,6 +169,7 @@ angular.module("app.factory", [])
       var formData = new FormData();
       formData.append('new_comment', JSON.stringify(params.new_comment));
       formData.append('comment_function_label', params.comment_function_label);
+      formData.append('group_id', params.group_id);
       $.each(params.files, function(i, file){
         formData.append('attachments[]', file);
       });
