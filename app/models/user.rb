@@ -1,12 +1,14 @@
 class User < ApplicationRecord
-  has_many :group_users     , :dependent => :delete_all
-  has_many :groups          , :through => :group_users
+  has_many :group_users       , :dependent => :delete_all
+  has_many :notifications     , :class_name => "Notification",
+    :foreign_key => "receiver_id", :dependent => :delete_all
+  has_many :groups            , :through => :group_users
   has_many :ticket_assignments, :dependent => :delete_all
-  has_many :ticket          , :through => :ticket_assignments
-  has_many :user_functions  , :dependent => :delete_all
-  has_many :function_systems, :through => :user_functions
-  has_many :comments     , :dependent => :delete_all
-  has_many :notifications, :dependent => :delete_all
+  has_many :ticket            , :through => :ticket_assignments
+  has_many :user_functions    , :dependent => :delete_all
+  has_many :function_systems  , :through => :user_functions
+  has_many :comments          , :dependent => :delete_all
+  has_many :notifications     , :dependent => :delete_all
 
   enum status: [:active, :inactive]
 

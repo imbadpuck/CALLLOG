@@ -203,7 +203,7 @@ app.controller('GroupsController', ['$scope', '$state', '$uibModal', '$ngBootbox
             NProgress.done();
             if(response.code == 1) {
               $uibModalInstance.dismiss();
-              $state.reload();
+              $state.reload($state.current);
               toastr.success(response.message);
             } else {
               toastr.error(response.message);
@@ -235,7 +235,7 @@ app.controller('GroupsController', ['$scope', '$state', '$uibModal', '$ngBootbox
             NProgress.done();
             if(response.code == 1) {
               $uibModalInstance.dismiss();
-              $state.reload();
+              $state.reload($state.current);
               toastr.success(response.message);
             } else {
               toastr.error(response.message);
@@ -257,7 +257,7 @@ app.controller('GroupsController', ['$scope', '$state', '$uibModal', '$ngBootbox
         users: $scope.select_users
       }).success(function(response) {
         if (response.code == 1) {
-          $state.reload();
+          $state.reload($state.current);
           toastr.success(response.message);
         } else {
           toastr.error(response.message);

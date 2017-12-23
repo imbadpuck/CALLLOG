@@ -1,5 +1,6 @@
 module Tickets::TicketUpdateHelper
   include RequestValidation
+  include NotificationHelper
 
   def ticket_update_pre_validation
     params[:ticket] = JSON.parse(params[:ticket])
@@ -21,6 +22,8 @@ module Tickets::TicketUpdateHelper
         :code    => Settings.code.success,
         :message => "Thành công"
       }
+
+      create_notification('update_ticket', @updated_ticket)
     else
       @status = {
         :code    => Settings.code.failure,

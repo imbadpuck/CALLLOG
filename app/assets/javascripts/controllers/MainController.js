@@ -1,9 +1,11 @@
 app.controller('MainController', ['$scope', '$rootScope', '$state',
-  '$uibModal', 'Auth', '$compile', 'working_groups',
-  function ($scope, $rootScope, $state, $uibModal, Auth, $compile, working_groups) {
+  '$uibModal', 'Auth', '$compile', 'working_groups', 'notifications',
+  function ($scope, $rootScope, $state, $uibModal,
+    Auth, $compile, working_groups, notifications) {
 
   $scope.state             = $state;
   $rootScope.workingGroups = working_groups.groups;
+  $scope.notifications     = notifications;
 
   var init = function() {
     functions = [
@@ -75,7 +77,7 @@ app.controller('MainController', ['$scope', '$rootScope', '$state',
       templateUrl: '/templates/change_password.html',
       controller: ['$scope', '$uibModalInstance', 'toastr', function ($scope, $uibModalInstance, toastr) {
         NProgress.done();
-        $scope.changePassword = function () {
+        $scope.changePassword = function() {
           NProgress.start();
           Auth.changePassword($scope.oldPassword, $scope.newPassword).success(function (response) {
             NProgress.done();

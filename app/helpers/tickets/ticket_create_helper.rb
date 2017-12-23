@@ -1,4 +1,5 @@
 module Tickets::TicketCreateHelper
+  include NotificationHelper
 
   def ticket_creating
     params[:new_ticket] = JSON.parse(params[:new_ticket])
@@ -108,8 +109,9 @@ module Tickets::TicketCreateHelper
     else
       max_role_level = @group.group_users.maximum(:role_level)
       max_role_level = GroupUser.role_levels[max_role_level]
+
       TicketAssignment.bulk_insert do |worker|
-        @group.group_users.where(role_level: max_role_level).each do |group_user|
+        GroupUser.where(role_level: max_role_level, group_id: @group.id).each do |group_user|
           worker.add(
             :user_id   => group_user.user_id,
             :ticket_id => @new_ticket.id,
@@ -130,5 +132,8 @@ module Tickets::TicketCreateHelper
         )
       end
     end
+
+    create_notification('related_user', @new_ticket)
+    create_notification('assign_user', @new_ticket)
   end
 end

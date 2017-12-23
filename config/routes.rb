@@ -22,6 +22,8 @@ Rails.application.routes.draw do
         get :get_group_not_joined_users, on: :collection
       end
 
+      resources :notifications, only: [:index, :update]
+
       resources :comments, only: [:create]
 
       post "sign_in"              , :to => 'sessions#create'
