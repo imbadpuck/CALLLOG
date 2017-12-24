@@ -9,7 +9,7 @@ class Ticket < ApplicationRecord
 
   enum status: [:new_ticket, :inprogress, :resolved, :feedback, :out_of_date, :closed, :cancelled]
   enum priority: [:low, :medium, :high, :imminent]
-  enum rating: [:satisfied, :unsatisfied]
+  enum rating: {satisfied: 1, unsatisfied: 2}
 
   def related_users
     return  User.joins("left join ticket_assignments on users.id = ticket_assignments.user_id")

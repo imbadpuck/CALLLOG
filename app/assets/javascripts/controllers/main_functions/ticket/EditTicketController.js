@@ -11,19 +11,23 @@ app.controller('EditTicketController', ['$scope', 'toastr', '$state', 'Ticket_AP
 
   $scope.assigned_user_preload = [];
   $scope.related_user_preload  = [];
-  $scope.add_comment_for_update_ticket = false;
+  $scope.new_comment_for_update_ticket = {content: ''};
+  $scope.rating_status         = [
+    {title: 'Hài lòng', value: 1},
+    {title: 'Không hài lòng', value: 2}
+  ];
 
-  $scope.add_comment_for_update_ticketIfTicketPropertiesChanged = function() {
-    if ($scope.ticket.status != $scope.oldTicket.status) {
-      $scope.add_comment_for_update_ticket = true;
-    } else if ($scope.ticket.begin_date != scope.oldTicket.begin_date ||
-               $scope.ticket.deadline != scope.oldTicket.deadline) {
-      $scope.add_comment_for_update_ticket = true;
-    } else if (!_.isEmpty($scope.ticket.rating)) {
-      $scope.add_comment_for_update_ticket = true;
+  $scope.ratingTicketTrans = function() {
+    switch($scope.ticket.rating) {
+      case 1:
+        return 'Hài lòng';
+      case 2:
+        return 'Không hài lòng'
+      case 'satisfied':
+        return 'Hài lòng';
+      case 'unsatisfied':
+        return 'Không hài lòng'
     }
-
-    return $scope.add_comment_for_update_ticket;
   }
 
   $scope.addAssignedUser = function() {
@@ -217,24 +221,8 @@ app.controller('EditTicketController', ['$scope', 'toastr', '$state', 'Ticket_AP
   }, 100);
 
   $scope.editTicket = function() {
-    for (var i = 0; i < $scope.ticket.assigned_users.length; i++) {
-      if (_.isNull($scope.ticket.assigned_users[i])) {
-        // if ($scope.ticket.assigned_users.length == 1) {
-        //   $scope.ticket.assigned_users = [null];
-        //   break;
-        // }
-        $scope.ticket.assigned_users.splice(i, 1);
-      }
-    }
-    for (var i = 0; i < $scope.ticket.related_users.length; i++) {
-      // if ($scope.ticket.related_users.length == 1) {
-      //   $scope.ticket.related_users = [null];
-      //   break;
-      // }
-      if (_.isNull($scope.ticket.related_users[i])) {
-        $scope.ticket.related_users.splice(i, 1);
-      }
-    }
+    if ($scope.ticket.status == 'closed' ||
+      $scope.ticket.status == 'cancelled') return;
 
     if (_.isNull($scope.ticket.title) ||
         _.isNull($scope.ticket.group_id) ||
@@ -245,8 +233,24 @@ app.controller('EditTicketController', ['$scope', 'toastr', '$state', 'Ticket_AP
       return;
     }
 
-    if ($scope.add_comment_for_update_ticket ||
-        _.isEmpty($scope.new_comment_for_update_ticket)) return;
+    if (_.isEmpty($scope.new_comment_for_update_ticket.content)
+        && ($scope.ticket.rating != $scope.oldTicket.rating
+        || $scope.ticket.status != $scope.oldTicket.status)
+        ) {
+      toastr.error("Thiếu lý do sửa nội dung công việc!");
+      return ;
+    }
+
+    for (var i = 0; i < $scope.ticket.assigned_users.length; i++) {
+      if (_.isNull($scope.ticket.assigned_users[i])) {
+        $scope.ticket.assigned_users.splice(i, 1);
+      }
+    }
+    for (var i = 0; i < $scope.ticket.related_users.length; i++) {
+      if (_.isNull($scope.ticket.related_users[i])) {
+        $scope.ticket.related_users.splice(i, 1);
+      }
+    }
 
     NProgress.start();
 
@@ -255,7 +259,7 @@ app.controller('EditTicketController', ['$scope', 'toastr', '$state', 'Ticket_AP
 
     Ticket_API.editTicket(
       $scope.ticket, files,
-      $scope.new_comment_for_update_ticket).success(function(response) {
+      $scope.new_comment_for_update_ticket.content).success(function(response) {
       NProgress.done();
       if(response.code == $rootScope.CODE_STATUS.success) {
         $state.reload($state.current);
