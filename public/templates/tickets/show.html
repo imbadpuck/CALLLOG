@@ -5,7 +5,7 @@
         'col-xs-12 col-lg-2 col-md-2 col-sm-2': disabledItem({disabled_labels: []}),
         'col-xs-12 col-lg-10 col-md-10 col-sm-10': !disabledItem({disabled_labels: []})
       }"
-      class="padding-bottom-15px">
+      class="padding-bottom-15px display-flex-align-items">
       <div class="caption-subject font-blue-madison
         bold uppercase inline">
         Chi tiết công việc&nbsp;
@@ -16,9 +16,7 @@
       <div
         ng-show="disabledItem({disabled_labels: []})"
         class="">
-        <div
-          ng-show="disabledItem({disabled_labels: []})"
-          class="dropdown ticket-select-status">
+        <div class="dropdown ticket-select-status">
           <button
             class="btn dropdown-toggle btn-sm
               ticket-background-{{ticket.status}}
@@ -32,10 +30,7 @@
             <span class="caret"></span>
           </button>
 
-          <ul
-            ng-show="disabledItem({disabled_labels: []})"
-            class="dropdown-menu">
-
+          <ul class="dropdown-menu">
             <li ng-repeat="avaiable_status in
               edit_ticket_status[ticket.status].available_status
               track by $index">

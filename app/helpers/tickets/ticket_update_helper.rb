@@ -13,6 +13,8 @@ module Tickets::TicketUpdateHelper
   def ticket_update
     init_variables_for_updating
 
+    create_comment_for_update_ticket
+
     update_ticket
 
     assign_ticket_for_updating
@@ -32,36 +34,61 @@ module Tickets::TicketUpdateHelper
     end
   end
 
-  # def create_comment_for_updating_ticket
-  #   @new_comment = {tcket}
-  #   if @updated_ticket_hash[:rating] != @updated_ticket.rating
-  #     if @updated_ticket.creator_id != @current_user.id ||
-  #        not Ticket.ratings.values.include?(@updated_ticket_hash[:rating])
-  #       raise APIError::Common::BadRequest
-  #     else
-  #       @new_comment.merge!({rating: @updated_ticket_hash[:rating]})
-  #     end
-  #   end
-  #   if @updated_ticket_hash[:status] != @updated_ticket.status
-  #     if @updated_ticket.creator_id != @current_user.id ||
-  #        not Ticket.ratings.values.include?(@updated_ticket_hash[:rating])
-  #       raise APIError::Common::BadRequest
-  #     else
-  #       @new_comment.merge!({rating: @updated_ticket_hash[:rating]})
-  #     end
-  #   end
-  #   if @updated_ticket_hash[:rating] != Ticket.statuses[@updated_ticket.status]
-  #     @new_comment.merge!({rating: @updated_ticket_hash[:rating]})
-  #   end
-  # end
+  def create_comment_for_update_ticket
+
+    modified            = false
+    new_comment_content = ''
+
+    if Settings.rating[@updated_ticket_hash[:rating]] != Settings.rating[@updated_ticket.rating]
+
+      if @updated_ticket.rating == nil
+        new_comment_content << "Thay đổi đánh giá sang
+          #{Settings.rating[@updated_ticket_hash[:rating]]} &#13;&#10;"
+      elsif @updated_ticket.rating = "satisfied"
+        new_comment_content << "Thay đổi đánh giá từ \"Hài lòng\" sang \"Không hài lòng\""
+      elsif @updated_ticket.rating = "unsatisfied"
+        new_comment_content << "Thay đổi đánh giá từ \"Không hài lòng\" sang \"Hài lòng\""
+      end
+
+      modified = true
+    end
+
+    if @updated_ticket_hash[:priority] != Ticket.priorities[@updated_ticket.priority]
+
+      new_comment_content << "Thay đổi trạng thái từ
+        #{Settings.priority_name[@updated_ticket.priority]} sang
+        #{Settings.priority_name[@updated_ticket_hash[:priority]]}"
+
+      modified = true
+    end
+
+    if @updated_ticket_hash[:status] != Ticket.statuses[@updated_ticket.status]
+
+      new_comment_content << "Thay đổi trạng thái từ " +
+        "\"#{Settings.ticket_status_name[@updated_ticket.status]}\" sang
+        \"#{Settings.ticket_status_name[@updated_ticket_hash[:status]]}\""
+
+      modified = true
+    end
+
+    if modified
+      new_comment_content << " Lý do: #{params[:new_comment]}"
+
+      Comment.create(
+        ticket_id: @updated_ticket.id,
+        user_id: @current_user.id,
+        content: new_comment_content
+      )
+    end
+  end
 
   def init_variables_for_updating
     @updated_ticket_hash = {
-      :title       => params[:ticket][:title],
-      :content     => params[:ticket][:content],
-      :priority    => params[:ticket][:priority],
-      :rating      => params[:ticket][:rating] || nil,
-      :status      => Ticket.statuses[params[:ticket][:status]]
+      :title    => params[:ticket][:title],
+      :content  => params[:ticket][:content],
+      :priority => params[:ticket][:priority],
+      :rating   => params[:ticket][:rating],
+      :status   => Ticket.statuses[params[:ticket][:status]]
     }
 
     if params[:ticket][:status] == Ticket.statuses[:resolved]
