@@ -185,19 +185,16 @@ app.controller('EditTicketController', ['$scope', 'toastr', '$state', 'Ticket_AP
     }
 
     if (!_.isNull($scope.ticket.deadline)) {
-      if (!_.isNull($scope.ticket.deadline)) {
-        endDate           = new Date($scope.ticket.deadline);
-        config['endDate'] = endDate.getFullYear() + '-' +
-          endDate.getMonth() + '-' + endDate.getDay();
-      }
+      var endDate           = new Date($scope.ticket.deadline);
+      config['endDate'] = endDate.getFullYear() + '-' +
+        endDate.getMonth() + '-' + endDate.getDay();
+
     }
 
     if (!_.isNull($scope.ticket.begin_date)) {
-      if (!_.isNull($scope.ticket.begin_date)) {
-        startDate           = new Date($scope.ticket.begin_date);
-        config['startDate'] = startDate.getFullYear() + '-' +
-          startDate.getMonth() + '-' + startDate.getDay();
-      }
+      var startDate           = new Date($scope.ticket.begin_date);
+      config['startDate'] = startDate.getFullYear() + '-' +
+        startDate.getMonth() + '-' + startDate.getDay();
     }
 
     if ($('input[id="edit-ticket-period-of-work"]').length) {
