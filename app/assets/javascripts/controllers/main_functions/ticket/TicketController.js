@@ -11,7 +11,7 @@ app.controller('TicketController', ['$scope', '$rootScope', '$state', 'toastr',
   $scope.ticket['assigned_users'] = _.isEmpty(ticket_data.assigned_users) ? [null] : ticket_data.assigned_users;
   $scope.ticket['related_users']  = _.isEmpty(ticket_data.related_users) ? [null] : ticket_data.related_users;
   $scope.ticket.attachments       = JSON.parse($scope.ticket.attachments);
-  $scope.comments                 = ticket_data.comments;
+  $scope.comments                 = ticket_data.comments || [];
   $scope.new_comment              = {};
   $scope.error                    = {};
   $scope.oldTicket                = JSON.parse(JSON.stringify($scope.ticket));
