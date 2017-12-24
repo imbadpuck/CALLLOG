@@ -32,3 +32,35 @@ regency:
   1: 'Thành viên'
   2: 'Phó nhóm'
   3: 'Trưởng nhóm'
+
+priority_name:
+  low: 'Thấp'
+  medium: 'Trung bình'
+  high: 'Cao'
+  imminent: 'Khẩn cấp'
+  0: 'Thấp'
+  1: 'Trung bình'
+  2: 'Cao'
+  3: 'Khẩn cấp'
+
+ticket_status_name:
+  0: 'Mới'
+  1: 'Đang giải quyết'
+  2: 'Đã giải quyết'
+  3: 'Đã đánh giá'
+  4: 'Quá hạn'
+  5: 'Đã đóng'
+  6: 'Hủy bỏ'
+  new_ticket: 'Mới'
+  inprogress: 'Đang giải quyết'
+  resolved: 'Đã giải quyết'
+  feedback: 'Đã đánh giá'
+  out_of_date: 'Quá hạn'
+  closed: 'Đã đóng'
+  cancelled: 'Hủy bỏ'
+
+rating:
+  satisfied: 'Hài lòng'
+  unsatisfied: 'Không hài lòng'
+  1: 'Hài lòng'
+  2: 'Không hài lòng'
