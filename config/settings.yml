@@ -27,3 +27,8 @@ genders:
   0: "Nam"
   1: "Nữ"
   2: "Khác"
+
+regency:
+  1: 'Thành viên'
+  2: 'Phó nhóm'
+  3: 'Trưởng nhóm'

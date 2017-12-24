@@ -32,11 +32,35 @@ module Tickets::TicketUpdateHelper
     end
   end
 
+  # def create_comment_for_updating_ticket
+  #   @new_comment = {tcket}
+  #   if @updated_ticket_hash[:rating] != @updated_ticket.rating
+  #     if @updated_ticket.creator_id != @current_user.id ||
+  #        not Ticket.ratings.values.include?(@updated_ticket_hash[:rating])
+  #       raise APIError::Common::BadRequest
+  #     else
+  #       @new_comment.merge!({rating: @updated_ticket_hash[:rating]})
+  #     end
+  #   end
+  #   if @updated_ticket_hash[:status] != @updated_ticket.status
+  #     if @updated_ticket.creator_id != @current_user.id ||
+  #        not Ticket.ratings.values.include?(@updated_ticket_hash[:rating])
+  #       raise APIError::Common::BadRequest
+  #     else
+  #       @new_comment.merge!({rating: @updated_ticket_hash[:rating]})
+  #     end
+  #   end
+  #   if @updated_ticket_hash[:rating] != Ticket.statuses[@updated_ticket.status]
+  #     @new_comment.merge!({rating: @updated_ticket_hash[:rating]})
+  #   end
+  # end
+
   def init_variables_for_updating
     @updated_ticket_hash = {
       :title       => params[:ticket][:title],
       :content     => params[:ticket][:content],
       :priority    => params[:ticket][:priority],
+      :rating      => params[:ticket][:rating] || nil,
       :status      => Ticket.statuses[params[:ticket][:status]]
     }
 
@@ -95,6 +119,8 @@ module Tickets::TicketUpdateHelper
   end
 
   def update_ticket
+    # create_comment_for_updating_ticket
+
     @updated_ticket.update_attributes(@updated_ticket_hash)
 
     if params[:attachments].present? and @updated_ticket

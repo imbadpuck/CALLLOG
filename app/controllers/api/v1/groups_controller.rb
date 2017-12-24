@@ -25,6 +25,10 @@ class Api::V1::GroupsController < ApplicationController
     }
   end
 
+  def update
+    render json: @status
+  end
+
   def create
     render json: @status
   end

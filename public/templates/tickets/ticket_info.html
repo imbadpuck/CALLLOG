@@ -1,0 +1,37 @@
+<div class="row row-flex padding-top-15px">
+  <div class="col-xs-1 text-right">
+    <img
+      class="profile img-circle border-gray"
+      src="{{creator.avatar || '/images/avatar.png'}}"
+      width="40px"
+      height="40px">
+  </div>
+  <div class="col-xs-8 bold ticket-name">
+    {{creator.id == currentUser.id ? 'Bạn' : creator.name}} đã tạo mới một công việc
+  </div>
+  <div class="col-xs-2 text-right ticket-comment-last-activity">
+    <span>
+      {{last_active(ticket.updated_at)}}
+    </span>
+  </div>
+  <div class="col-xs-1"></div>
+  <div class="col-xs-1"></div>
+  <div class="col-xs-10">
+    <div class="row row-flex">
+      <div class="col-xs-12">
+        Nội dung: {{ticket.content}}
+      </div>
+      <div class="col-xs-4 col-md-3 padding-top-15px"
+        ng-repeat="attachment in ticket.attachments track by $index">
+        <a
+          ng-href="{{ '/attachments/tickets/' + ticket.id + '/' + attachment}}"
+          download target="_self">
+          <img
+            ng-src="{{ '/attachments/tickets/' + ticket.id + '/' + attachment}}"
+            width="100%">
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-1"></div>
+</div>

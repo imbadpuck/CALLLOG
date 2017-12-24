@@ -1,0 +1,69 @@
+<div class="dropdown ticket-select-status">
+  <button
+    class="btn dropdown-toggle btn-sm blue
+      btn-sm padding-7px-20px-7px-20px-important
+      border-radius-4px-important"
+    type="button"
+    data-toggle="dropdown">
+    <span>
+      Chọn thao tác
+    </span>
+    <span class="caret"></span>
+  </button>
+
+  <ul class="dropdown-menu">
+    <li>
+      <a
+        href="javascript:;"
+        ng-click="newSubGroup(group_selecting)">
+        <span class="mt-icon">
+          <i class="fa fa-plus-square"></i>
+          Thêm nhóm con&nbsp;
+        </span>
+      </a>
+    </li>
+    <li>
+      <a
+        href="javascript:;"
+        ng-click="newMember()">
+        <span class="mt-icon">
+          <i class="fa fa-user-plus"></i>
+          Thêm thành viên
+        </span>
+      </a>
+    </li>
+
+    <li>
+      <a
+        href="javascript:;"
+        ng-click="editGroupContent()">
+        <span class="mt-icon">
+          <i class="fa fa-pencil-square-o"></i>
+          Sửa thông tin nhóm
+        </span>
+      </a>
+    </li>
+
+    <li>
+      <a href="javascript:;">
+        <span class="mt-icon">
+          <i class="fa fa-pencil-square-o"></i>
+          Thêm/Xóa chức năng
+        </span>
+      </a>
+    </li>
+
+    <li>
+      <a
+        href="javascript:;"
+        ng-show="group_selecting.label != 'admin_group' &&
+          group_selecting.label != 'company_group'"
+        ng-click="deleteGroup(group_selecting)">
+        <span class="mt-icon">
+          <i class="fa fa-user-times"></i>
+          Xóa nhóm
+        </span>
+      </a>
+    </li>
+  </ul>
+</div>

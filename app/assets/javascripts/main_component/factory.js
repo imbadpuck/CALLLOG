@@ -40,6 +40,9 @@ angular.module("app.factory", [])
         }
       });
     },
+    editGroup: function(group) {
+      return $http.put('/api/v1/groups/' + group.id, {group: group});
+    },
     createGroup: function(group) {
       return $http.post('/api/v1/groups', {group: group});
     },
@@ -185,10 +188,11 @@ angular.module("app.factory", [])
       });
       return $http.post('/api/v1/tickets', formData, {headers: {'Content-Type': undefined}});
     },
-    editTicket: function(ticket, files) {
+    editTicket: function(ticket, files, new_comment) {
       cloneTicket = JSON.stringify(ticket);
       var formData = new FormData();
       formData.append('ticket', cloneTicket);
+      formData.append('new_comment', new_comment);
       $.each(files, function(i, file){
         formData.append('attachments[]', file);
       });

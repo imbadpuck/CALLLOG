@@ -78,7 +78,7 @@ module GroupUsersHelper
           :group_id   => group.id,
           :user_id    => user[:id],
           :role_level => user[:role_level],
-          :regency    => user[:regency]
+          :regency    => Settings.regency[user[:role_level]]
         )
       end
     end

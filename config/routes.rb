@@ -14,7 +14,7 @@ Rails.application.routes.draw do
         get :get_single_ticket, on: :collection
       end
 
-      resources :groups, only: [:index, :create, :destroy] do
+      resources :groups, only: [:index, :create, :destroy, :update] do
         get :assigned_user_in_group_preload, on: :collection
       end
 
