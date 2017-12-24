@@ -13,6 +13,10 @@ module GroupHelper
       group_creation_pre_validation
 
       group_creation_process
+    when 'update'
+      group_update_pre_validation
+
+      group_update_process
     when 'destroy'
       group_destroy_pre_validation
 
@@ -22,6 +26,10 @@ module GroupHelper
 
       assigned_user_in_own_gr_preload_execution
     end
+  end
+
+  def group_update_pre_validation
+    allow_access?('edit_group')
   end
 
   def user_in_gr_preload_pre_validation
@@ -70,6 +78,28 @@ module GroupHelper
         :message => "Xóa nhóm không thành công"
       }
     end
+  end
+
+  def group_update_process
+    group = Group.find_by(id: params[:id])
+
+    if group.present?
+      group.update_attributes(
+        content: params[:group][:content],
+        name: params[:group][:name],
+        purpose: params[:group][:purpose]
+      )
+
+      @status = {
+        :code    => Settings.code.success,
+        :message => "Sửa nhóm thành công"
+      } and return
+    end
+
+     @status = {
+        :code    => Settings.code.failure,
+        :message => "Sửa nhóm không thành công"
+      }
   end
 
   def group_creation_process

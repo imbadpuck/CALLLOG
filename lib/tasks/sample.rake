@@ -127,6 +127,13 @@ namespace :sample do
     )
 
     FunctionSystem.create(
+      :label       => 'edit_group',
+      :name        => 'Sửa nhóm',
+      :description => 'Sửa nhóm',
+      :parent_id   => manage_group.id
+    )
+
+    FunctionSystem.create(
       :label       => 'get_tree_group',
       :name        => 'Xem danh sách nhóm',
       :description => 'Xem danh sách nhóm',
@@ -339,6 +346,11 @@ namespace :sample do
 
       worker.add(
         :function_system_id => func[:edit_all_ticket].id,
+        :group_id           => admin_group.id
+      )
+
+       worker.add(
+        :function_system_id => func[:add_user_into_group].id,
         :group_id           => admin_group.id
       )
 
@@ -634,7 +646,7 @@ namespace :sample do
           assigned_users = []
           related_users  = []
 
-          rand(0..3).times {
+          rand(1..3).times {
             assigned_users << assigned_group.users[rand(0..(assigned_group.users.length - 1))]
           }
           rand(0..3).times {
@@ -649,7 +661,7 @@ namespace :sample do
             priority: rand(0..3)
           )
 
-          if ticket.status == 'new_ticket'
+          if ticket.status == 'inprogress'
             assigned_users.each do |u|
               worker.add(
                 user_type: 0,
@@ -676,7 +688,7 @@ namespace :sample do
           related_users.each do |u|
              worker.add(
               user_type: 1,
-              group_id: assigned_group.id,
+              group_id: ticket.status == 'inprogress' ? assigned_group.id : nil,
               user_id: u.id,
               ticket_id: ticket.id
             )

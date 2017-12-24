@@ -1,0 +1,40 @@
+<div
+  class="row row-flex padding-top-15px"
+  ng-repeat="comment in comments | limitTo:(1 - comments.length)">
+  <div class="col-xs-2 text-right">
+    <img
+      class="profile img-circle border-gray"
+      src="{{comment.user.avatar || '/images/avatar.png'}}"
+      width="40px"
+      height="40px">
+  </div>
+  <div class="col-xs-7 bold ticket-name">
+    {{comment.user.id == currentUser.id ? 'Bạn' : creator.name}} đã trả lời
+  </div>
+  <div class="col-xs-2 text-right ticket-comment-last-activity">
+    <span>
+      {{last_active(comment.created_at)}}
+    </span>
+  </div>
+  <div class="col-xs-1"></div>
+
+  <div class="col-xs-2"></div>
+  <div class="col-xs-7">
+    <div class="row row-flex">
+      <div class="col-xs-12 padding-bottom-15px">
+        {{comment.content}}
+      </div>
+      <div class="col-xs-4 col-md-3 padding-top-15px"
+        ng-repeat="attachment in comment.attachments track by $index">
+        <a
+          ng-href="{{ '/attachments/comments/' + comment.id + '/' + attachment}}"
+          download target="_self">
+          <img
+            ng-src="{{ '/attachments/comments/' + comment.id + '/' + attachment}}"
+            width="100%">
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-3"></div>
+</div>

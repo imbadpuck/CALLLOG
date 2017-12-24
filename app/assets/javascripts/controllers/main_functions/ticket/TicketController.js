@@ -298,7 +298,7 @@ app.controller('TicketController', ['$scope', '$rootScope', '$state', 'toastr',
       active_edit_labels.push('edit_all_ticket');
     }
     for (var i = 0; i < $rootScope.groupsInvolved.length; i++) {
-      if ($rootScope.groupsInvolved[i].id == $state.params.group_id &&
+      if ($rootScope.groupsInvolved[i].id == $scope.ticket.group_id &&
           $rootScope.enableFunction('edit_ticket_in_working_group')) {
         active_edit_labels.push('edit_ticket_in_working_group');
       }
@@ -308,7 +308,7 @@ app.controller('TicketController', ['$scope', '$rootScope', '$state', 'toastr',
       for (var i = 0; i < active_labels.length; i++) {
         for (var j = 0; j < active_edit_labels.length; j++) {
           if (active_edit_labels[j] == active_labels[i]) {
-            return false;
+            return true;
           }
         }
       }
@@ -318,10 +318,10 @@ app.controller('TicketController', ['$scope', '$rootScope', '$state', 'toastr',
         return disabled_labels.indexOf(e) != -1;
       });
 
-      if (active_edit_labels.length > 0) return false;
+      if (active_edit_labels.length > 0) return true;
     }
 
-    return true;
+    return false;
   }
 
   getAvaiableTicketStatus();
