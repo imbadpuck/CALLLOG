@@ -74,17 +74,24 @@ app.controller('GroupsController', ['$scope', '$state', '$uibModal', '$ngBootbox
 
   $scope.convertToTreeGroup();
 
-  $('#tree_groups').jstree({
-    core: {
-      data: $scope.tree_groups
-    }
-  });
+  var checkExist = setInterval(function() {
+    if ($('#tree_groups').length > 0) {
+      $('#tree_groups').jstree({
+        core: {
+          data: $scope.tree_groups
+        }
+      });
 
-  $('#tree_groups').on("select_node.jstree", function (e, data) {
-    $scope.group_selecting = data.node.original;
-    $scope.tab_content     = 'info';
-    $scope.$apply();
-  });
+      $('#tree_groups').on("select_node.jstree", function (e, data) {
+        $scope.group_selecting = data.node.original;
+        $scope.tab_content     = 'info';
+        $scope.$apply();
+      });
+      clearInterval(checkExist);
+    }
+  }, 100);
+
+
 
   $scope.newGroup = function() {
     $scope.tab_content = 'new_group';
@@ -95,6 +102,16 @@ app.controller('GroupsController', ['$scope', '$state', '$uibModal', '$ngBootbox
     $scope.tab_content = 'new_group';
     $scope.group       = {
       parent_id: group.id
+    };
+  }
+
+  $scope.editGroupContent = function() {
+    $scope.tab_content = 'edit_group';
+    $scope.group       = {
+      id: $scope.group_selecting.id,
+      name: $scope.group_selecting.name,
+      content: $scope.group_selecting.content,
+      purpose: $scope.group_selecting.purpose
     };
   }
 
@@ -167,7 +184,19 @@ app.controller('GroupsController', ['$scope', '$state', '$uibModal', '$ngBootbox
     NProgress.start();
     Group_API.createGroup($scope.group).success(function(response) {
       if (response.code == 1) {
-        $state.reload();
+        $state.reload($state.current);
+        toastr.success(response.message);
+      } else {
+        toastr.error(response.message);
+      }
+    });
+  }
+
+  $scope.editGroup = function() {
+    NProgress.start();
+    Group_API.editGroup($scope.group).success(function(response) {
+      if (response.code == 1) {
+        $state.reload($state.current);
         toastr.success(response.message);
       } else {
         toastr.error(response.message);

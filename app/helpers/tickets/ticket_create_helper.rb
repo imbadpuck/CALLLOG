@@ -127,7 +127,7 @@ module Tickets::TicketCreateHelper
         worker.add(
           :user_id   => user_id,
           :ticket_id => @new_ticket.id,
-          :group_id  => @group.id,
+          # :group_id  => @group.id,
           :user_type => TicketAssignment.user_types[:people_involved]
         )
       end

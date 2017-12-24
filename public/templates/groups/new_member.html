@@ -1,0 +1,237 @@
+<div class="row row-flex">
+  <div
+    class="col-xs-6 caption-subject font-blue-madison
+      bold uppercase padding-bottom-15px display-align-items-2">
+    <label
+      class="col-xs-12 caption-subject font-blue-madison
+        bold uppercase">
+      Thêm thành viên ({{group_selecting.name}})
+    </label>
+    <div
+      ng-include="'templates/groups/group_options'"
+      class="col-xs-6">
+    </div>
+  </div>
+
+  <div class="group-content col-xs-12">
+    <form
+      ng-submit="form.$valid && filterUsers()"
+      name="form"
+      novalidate>
+      <div class="row row-flex">
+        <div
+          class="col-xs-12 form-group"
+          ng-show="filtered">
+          <label class="bold font-blue">Đã chọn</label>
+          <div
+            class="m-grid-col-xs-12 text-center"
+            ng-show="!select_users.length">
+            Chưa chọn thành viên nào
+          </div>
+
+          <table
+            class="table table-striped dataTable no-footer overflow-scroll dtr-inline"
+            ng-show="select_users.length"
+            fixed-header>
+            <thead>
+              <tr>
+                <th>Họ tên/Số điện thoại/Email</th>
+                <th>Loại tài khoản</th>
+                <th>Giới tính</th>
+                <th>Chức vụ trong nhóm</th>
+                <th>
+                  <a ng-click="unselectAllUsers()">Xóa hết</a>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                ng-repeat="user in select_users |
+                limitTo:unselect_users_per_page:(select_user_page-1)*unselect_users_per_page">
+                <td>
+                  <span title="{{user.name}}" tooltip>{{user.name | maxlength : 30}}</span>
+                  <br ng-show="user.phone">
+                  <span title="{{user.phone}}" tooltip>{{user.phone | maxlength : 30}}</span>
+                  <br ng-show="user.email">
+                  <span title="{{user.email}}" tooltip>{{user.email | maxlength : 30}}</span>
+                </td>
+                <td>{{userTypeTrans(user.type)}}</td>
+                <td>{{['Nam', 'Nữ', 'Khác'][user.gender]}}</td>
+                <td>
+                  <ui-select
+                    ng-model="user.role_level"
+                    theme="select2"
+                    append-to-body="true"
+                    search-enabled="false"
+                    class="background-color-fff-important max-width-200px">
+                    <ui-select-match
+                      placeholder="Chọn chức vụ"
+                      allow-clear="true">
+                      {{$select.selected.title}}
+                    </ui-select-match>
+                    <ui-select-choices repeat="item.value as item in
+                      user_regency_in_group">
+                      <span ng-bind-html="item.title"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                  <div
+                    ng-show="!user.role_level"
+                    class="text-error">
+                    <div>Chức vụ trống</div>
+                  </div>
+                </td>
+                <td>
+                  <label class="mt-checkbox">
+                    <input type="checkbox" ng-click="unselectUser(user)" checked>
+                    <span></span>
+                  </label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div
+            class="margin-right-15px"
+            ng-show="select_users.length">
+            <ul
+              uib-pagination
+              boundary-links="true"
+              total-items="select_users.length"
+              ng-model="select_user_page"
+              class="pagination-sm"
+              max-size="5"
+              items-per-page="unselect_users_per_page"
+              previous-text="&lsaquo;"
+              next-text="&rsaquo;"
+              first-text="&laquo;"
+              last-text="&raquo;">
+            </ul>
+            <div class="pull-right">Tổng số: {{select_users.length}}</div>
+          </div>
+        </div>
+
+
+        <div class="col-xs-12 form-group">
+          <label class="bold font-blue">Tìm kiếm người dùng khả dụng</label>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-4 form-group">
+          <input
+            type="text"
+            name="user_name"
+            placeholder="Họ tên/Email/Số điện thoại"
+            class="form-control input-sm"
+            ng-model="filter_users.keyword"
+            ng-model-options="{debounce: 800}"
+            ng-change="filterUsers()">
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-4 form-group">
+          <ui-select
+            ng-model="filter_users.type"
+            theme="select2"
+            append-to-body="true"
+            search-enabled="false"
+            ng-change="filterUsers()">
+            <ui-select-match placeholder="Loại tài khoản" allow-clear="true">
+              {{$select.selected.title}}
+            </ui-select-match>
+            <ui-select-choices repeat="item.value as item in user_types">
+              <span ng-bind-html="item.title"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-4 form-group">
+          <ui-select
+            ng-model="filter_users.gender"
+            theme="select2"
+            append-to-body="true"
+            search-enabled="false"
+            ng-change="filterUsers()">
+            <ui-select-match
+              placeholder="Giới tính"
+              allow-clear="true">
+              {{$select.selected.t}}
+            </ui-select-match>
+            <ui-select-choices repeat="item.v as item in
+              [{v: 0, t: 'Nam'}, {v: 1, t: 'Nữ'}, {v: 2, t: 'Khác'}]">
+              <span ng-bind-html="item.t"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+
+
+        <div class="col-xs-12" ng-show="filtered">
+          <div
+            class="m-grid-col-xs-12 text-center"
+            ng-show="!unselect_users.length">
+            Không có người dùng khả dụng.
+          </div>
+
+          <table
+            class="table table-striped dataTable no-footer overflow-scroll dtr-inline"
+            ng-show="unselect_users.length"
+            fixed-header>
+            <thead>
+              <tr>
+                <th>Họ tên/Số điện thoại/Email</th>
+                <th>Loại tài khoản</th>
+                <th>Giới tính</th>
+                <th>
+                  <a ng-click="selectAllUsers()">Chọn hết</a>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="user in unselect_users">
+                <td>
+                  <span title="{{user.name}}" tooltip>{{user.name | maxlength : 30}}</span>
+                  <br ng-show="user.phone">
+                  <span title="{{user.phone}}" tooltip>{{user.phone | maxlength : 30}}</span>
+                  <br ng-show="user.email">
+                  <span title="{{user.email}}" tooltip>{{user.email | maxlength : 30}}</span>
+                </td>
+                <td>{{userTypeTrans(user.type)}}</td>
+                <td>{{['Nam', 'Nữ', 'Khác'][user.gender]}}</td>
+                <td>
+                  <label class="mt-checkbox">
+                    <input type="checkbox" ng-click="selectUser(user)">
+                    <span></span>
+                  </label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div
+            class="margin-right-15px"
+            ng-show="unselect_users.length">
+            <ul
+              uib-pagination
+              boundary-links="true"
+              total-items="unselect_users_total"
+              ng-change="filterUsers()"
+              ng-model="filter_users.page"
+              class="pagination-sm"
+              max-size="5"
+              items-per-page="unselect_users_per_page"
+              previous-text="&lsaquo;"
+              next-text="&rsaquo;"
+              first-text="&laquo;"
+              last-text="&raquo;">
+            </ul>
+            <div class="pull-right">Tổng số: {{unselect_users_total}}</div>
+          </div>
+        </div>
+
+      </div>
+    </form>
+
+    <div class="text-center">
+      <button
+        class="btn blue btn-sm padding-7px-20px-7px-20px-important
+          border-radius-4px-important"
+        ng-click="addUsersToGroup()">
+        Lưu
+      </button>
+    </div>
+  </div>
+</div>

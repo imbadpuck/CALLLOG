@@ -112,7 +112,7 @@ ActiveRecord::Schema.define(version: 20171209041936) do
     t.datetime "resolved_at"
     t.datetime "closed_at"
     t.string "attachments", default: "[]"
-    t.date "begin_date", default: "2017-12-23"
+    t.date "begin_date", default: "2017-12-24"
     t.datetime "deadline"
     t.integer "comment_count", default: 0
     t.integer "rating", default: 0

@@ -2,8 +2,8 @@
   <div class="row row-flex padding-top-30px">
     <div
       ng-class="{
-        'col-xs-12 col-lg-2 col-md-2 col-sm-2': !disabledItem({disabled_labels: []}),
-        'col-xs-12 col-lg-10 col-md-10 col-sm-10': disabledItem({disabled_labels: []})
+        'col-xs-12 col-lg-2 col-md-2 col-sm-2': disabledItem({disabled_labels: []}),
+        'col-xs-12 col-lg-10 col-md-10 col-sm-10': !disabledItem({disabled_labels: []})
       }"
       class="padding-bottom-15px">
       <div class="caption-subject font-blue-madison
@@ -14,10 +14,10 @@
 
     <div class="col-xs-12 col-lg-8 col-md-8 col-sm-8">
       <div
-        ng-show="!disabledItem({disabled_labels: []})"
+        ng-show="disabledItem({disabled_labels: []})"
         class="">
         <div
-          ng-show="!disabledItem({disabled_labels: []})"
+          ng-show="disabledItem({disabled_labels: []})"
           class="dropdown ticket-select-status">
           <button
             class="btn dropdown-toggle btn-sm
@@ -33,7 +33,7 @@
           </button>
 
           <ul
-            ng-show="!disabledItem({disabled_labels: []})"
+            ng-show="disabledItem({disabled_labels: []})"
             class="dropdown-menu">
 
             <li ng-repeat="avaiable_status in
@@ -68,7 +68,7 @@
 
     <div class="col-xs-12 col-lg-2 col-md-2 col-sm-2 text-center">
       <div
-        ng-show="!disabledItem({disabled_labels: []})"
+        ng-show="disabledItem({disabled_labels: []})"
         class="btn blue btn-sm padding-7px-20px-7px-20px-important
           border-radius-4px-important"
         ng-click="toggleEditTicketTemplate()">
@@ -79,7 +79,7 @@
   </div>
 
   <div
-    ng-show="!disabledItem({disabled_labels: []})"
+    ng-show="disabledItem({disabled_labels: []})"
     ng-controller="EditTicketController"
     id="edit-ticket"
     class="collapse padding-30px"
@@ -93,132 +93,12 @@
     </div>
   </div>
 
-  <div class="row row-flex padding-top-15px">
-    <div class="col-xs-1 text-right">
-      <img
-        class="profile img-circle border-gray"
-        src="{{creator.avatar || '/images/avatar.png'}}"
-        width="40px"
-        height="40px">
-    </div>
-    <div class="col-xs-8 bold ticket-name">
-      {{creator.id == currentUser.id ? 'Bạn' : creator.name}} đã tạo mới một công việc
-    </div>
-    <div class="col-xs-2 text-right ticket-comment-last-activity">
-      <span>
-        {{last_active(ticket.updated_at)}}
-      </span>
-    </div>
-    <div class="col-xs-1"></div>
-    <div class="col-xs-1"></div>
-    <div class="col-xs-10">
-      <div class="row row-flex">
-        <div class="col-xs-12">
-          Nội dung: {{ticket.content}}
-        </div>
-        <div class="col-xs-4 col-md-3 padding-top-15px"
-          ng-repeat="attachment in ticket.attachments track by $index">
-          <a
-            ng-href="{{ '/attachments/tickets/' + ticket.id + '/' + attachment}}"
-            download target="_self">
-            <img
-              ng-src="{{ '/attachments/tickets/' + ticket.id + '/' + attachment}}"
-              width="100%">
-          </a>
-        </div>
-      </div>
-    </div>
-    <div class="col-xs-1"></div>
+  <div ng-include="'templates/ticket/ticket_info'">
   </div>
 
-  <div
-    class="row row-flex padding-top-15px"
-    ng-repeat="comment in comments | limitTo:(1 - comments.length)">
-    <div class="col-xs-2 text-right">
-      <img
-        class="profile img-circle border-gray"
-        src="{{comment.user.avatar || '/images/avatar.png'}}"
-        width="40px"
-        height="40px">
-    </div>
-    <div class="col-xs-7 bold ticket-name">
-      {{comment.user.id == currentUser.id ? 'Bạn' : creator.name}} đã trả lời
-    </div>
-    <div class="col-xs-2 text-right ticket-comment-last-activity">
-      <span>
-        {{last_active(comment.created_at)}}
-      </span>
-    </div>
-    <div class="col-xs-1"></div>
-
-    <div class="col-xs-2"></div>
-    <div class="col-xs-7">
-      <div class="row row-flex">
-        <div class="col-xs-12 padding-bottom-15px">
-          {{comment.content}}
-        </div>
-        <div class="col-xs-4 col-md-3 padding-top-15px"
-          ng-repeat="attachment in comment.attachments track by $index">
-          <a
-            ng-href="{{ '/attachments/comments/' + comment.id + '/' + attachment}}"
-            download target="_self">
-            <img
-              ng-src="{{ '/attachments/comments/' + comment.id + '/' + attachment}}"
-              width="100%">
-          </a>
-        </div>
-      </div>
-    </div>
-    <div class="col-xs-3"></div>
+  <div ng-include="'templates/ticket/ticket_comments'">
   </div>
 
-  <div
-    ng-show="enableFunction(comment_function_label)"
-    class="row row-flex padding-top-15px">
-    <div class="form-group col-xs-10 col-xs-offset-1">
-      <textarea
-        rows="2"
-        class="form-control border-radius-4px margin-top-15px"
-        placeholder="Viết phản hồi..."
-        ng-model="new_comment.content"
-        name="body">
-      </textarea>
-
-      <div class="text-error" ng-show="error.content">
-        <div>Không được để trống</div>
-      </div>
-    </div>
-
-    <div class="form-group col-xs-10 col-xs-offset-1">
-      <label>Tệp đính kèm</label>
-      <div>
-        <label
-          class="btn btn-default btn-sm
-            border-radius-4px-important">
-          Thêm <input
-            class="hidden"
-            type="file"
-            model="new_comment.attachments"
-            file-upload-model
-            data-multiple="true"/>
-        </label>
-        <input
-          type="button"
-          value="Gửi phản hồi"
-          class="btn blue btn-sm padding-7px-20px-7px-20px-important
-            border-radius-4px-important pull-right"
-          ng-click="createComment()">
-      </div>
-      <div ng-repeat="file in new_comment.attachments">
-        {{file.name | fileName}}
-        <a
-          href="#"
-          ng-click="new_comment.attachments.splice($index, 1)"
-          class="text-red"
-          title="Xóa">
-          <i class="fa fa-times" aria-hidden="true"></i>
-        </a>
-      </div>
-    </div>
+  <div ng-include="'templates/ticket/ticket_new_comment'">
   </div>
 </div>

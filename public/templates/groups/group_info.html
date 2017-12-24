@@ -1,0 +1,30 @@
+<div class="row row-flex">
+  <div class="col-xs-5 col-md-4 bold">
+    Tên nhóm:&nbsp;
+  </div>
+  <div class="col-xs-5 col-md-8 toast-message">
+    {{group_selecting.name}}
+  </div>
+
+  <div class="col-xs-5 col-md-4 bold">
+    Loại nhóm:&nbsp;
+  </div>
+
+  <div class="col-xs-5 col-md-8 toast-message">
+    {{groupTypeTrans(group_selecting.purpose)}}
+  </div>
+
+  <div class="col-xs-5 col-md-4 bold">
+    Ngày tạo:&nbsp;
+  </div>
+  <div class="col-xs-5 col-md-8 toast-message">
+    {{group_selecting.created_at}}
+  </div>
+
+  <div class="col-xs-5 col-md-4 bold">
+    Mô tả:&nbsp;
+  </div>
+  <div class="col-xs-5 col-md-8 toast-message">
+    {{group_selecting.content || "Không có"}}
+  </div>
+</div>

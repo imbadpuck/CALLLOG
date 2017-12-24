@@ -1,0 +1,78 @@
+<div class="row row-flex" >
+  <div
+    class="col-xs-6 caption-subject font-blue-madison
+      bold uppercase padding-bottom-15px display-align-items-2">
+    <label
+      class="col-xs-12 caption-subject font-blue-madison
+        bold uppercase">
+      Sửa nhóm
+    </label>
+    <div
+      ng-include="'templates/groups/group_options'"
+      class="col-xs-6">
+    </div>
+  </div>
+
+  <div class="group-content col-xs-12">
+    <form
+      ng-submit="form.$valid && editGroup()"
+      name="form"
+      novalidate>
+      <div class="row row-flex">
+
+        <div class="col-xs-6 form-group">
+          <label class="required">Tên nhóm</label>
+          <input
+            type="text"
+            name="group_name"
+            required
+            class="form-control"
+            ng-model="group.name">
+          <div
+            ng-messages="form.group_name.$error"
+            ng-show="form.$submitted"
+            class="text-error">
+            <div ng-message="required">{{common_text.validate.require}}</div>
+          </div>
+        </div>
+
+        <div class="col-xs-6 form-group">
+          <label class="required">Loại nhóm</label>
+          <ui-select  ng-model="group.purpose"
+                      name="gender"
+                      theme="select2"
+                      append-to-body="true"
+                      search-enabled="false"
+                      class="height-34px">
+            <ui-select-match placeholder="Chọn loại nhóm">
+              {{$select.selected.title || groupTypeTrans(group.purpose)}}
+            </ui-select-match>
+            <ui-select-choices repeat="item.value as item in group_types">
+              <span ng-bind-html="item.title"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+
+        <div class="col-xs-12 form-group">
+          <label>Mô tả</label>
+          <textarea
+            type="text"
+            name="group_content"
+            class="form-control"
+            rows="3"
+            ng-model="group.content">
+          </textarea>
+        </div>
+
+        <div class="col-xs-12">
+          <button
+            type="submit"
+            class="btn blue btn-sm padding-7px-20px-7px-20px-important
+              border-radius-4px-important">
+              Lưu
+            </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

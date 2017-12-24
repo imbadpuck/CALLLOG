@@ -11,6 +11,20 @@ app.controller('EditTicketController', ['$scope', 'toastr', '$state', 'Ticket_AP
 
   $scope.assigned_user_preload = [];
   $scope.related_user_preload  = [];
+  $scope.add_comment_for_update_ticket = false;
+
+  $scope.add_comment_for_update_ticketIfTicketPropertiesChanged = function() {
+    if ($scope.ticket.status != $scope.oldTicket.status) {
+      $scope.add_comment_for_update_ticket = true;
+    } else if ($scope.ticket.begin_date != scope.oldTicket.begin_date ||
+               $scope.ticket.deadline != scope.oldTicket.deadline) {
+      $scope.add_comment_for_update_ticket = true;
+    } else if (!_.isEmpty($scope.ticket.rating)) {
+      $scope.add_comment_for_update_ticket = true;
+    }
+
+    return $scope.add_comment_for_update_ticket;
+  }
 
   $scope.addAssignedUser = function() {
     $scope.ticket.assigned_users.push(null);
@@ -234,12 +248,17 @@ app.controller('EditTicketController', ['$scope', 'toastr', '$state', 'Ticket_AP
       return;
     }
 
+    if ($scope.add_comment_for_update_ticket ||
+        _.isEmpty($scope.new_comment_for_update_ticket)) return;
+
     NProgress.start();
 
     var files = $scope.ticket.attachments;
     delete $scope.ticket.attachments;
 
-    Ticket_API.editTicket($scope.ticket, files).success(function(response) {
+    Ticket_API.editTicket(
+      $scope.ticket, files,
+      $scope.new_comment_for_update_ticket).success(function(response) {
       NProgress.done();
       if(response.code == $rootScope.CODE_STATUS.success) {
         $state.reload($state.current);
