@@ -7,7 +7,8 @@
   <div class="portlet-body">
     <div class="row row-flex height-650px">
       <div
-        class="col-xs-12 {{tab_content == 'new_member' ? 'col-md-3' : 'col-md-6'}}"
+        class="col-xs-12
+        {{tab_content == 'new_member' || tab_content == 'edit_function' ? 'col-md-3' : 'col-md-6'}}"
         ng-include="'templates/groups/group_tree'">
       </div>
 
@@ -71,6 +72,12 @@
         class="col-xs-12 border-left-gray col-md-9"
         ng-if="tab_content == 'new_member'"
         ng-include="'templates/groups/new_member'">
+      </div>
+
+      <div
+        class="col-xs-12 border-left-gray col-md-9"
+        ng-if="tab_content == 'edit_function'"
+        ng-include="'templates/groups/edit_function'">
       </div>
 
       <div

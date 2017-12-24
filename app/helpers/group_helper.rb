@@ -143,7 +143,7 @@ module GroupHelper
     when 'get_tree_group'
       @groups = Group.find_by(label: 'company_group').self_and_descendants.to_a
       @users  = User.select(
-                  "user_id", "users.name", "users.email", "users.birthdate",
+                  "users.id as user_id", "users.name", "users.email", "users.birthdate",
                   "users.phone", "users.gender", "group_users.group_id",
                   "group_users.created_at as participate_date",
                   "group_users.regency")
