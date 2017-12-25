@@ -23,7 +23,6 @@ module FunctionSystemHelper
     else
       @functions =  FunctionSystem.all.paginate(page: params[:page], per_page: Settings.per_page)
     end
-
   end
 
   def function_index_pre_validation
@@ -41,13 +40,14 @@ module FunctionSystemHelper
                                  .where("user_functions.group_id = #{params[:id]}")
                                  .distinct.to_a
     end
+
+    # function_system_uniq
   end
 
   def function_system_uniq
     @functions.each_with_index do |f, index|
       @functions.each.with_index(index + 1) do |f_2, index_2|
         if f_2.id == f.id
-
           @functions.delete_at(index_2)
         end
       end

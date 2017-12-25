@@ -85,6 +85,7 @@ module Tickets::TicketHelper
       @query             = %Q|
         .joins("left join users on users.id = tickets.creator_id")
         .where(creator_id: #{@current_user.id})
+        .order("tickets.priority desc")
       |
     when 'related_request_dashboard'
       @select_attributes = %Q|'tickets.*', 'users.name as creator_name', 'users.email as creator_email'|
@@ -95,6 +96,7 @@ module Tickets::TicketHelper
                 and
                 ticket_assignments.user_type = #{TicketAssignment.user_types[:people_involved]}")
         .distinct("tickets.id")
+        .order("tickets.priority desc")
       |
     when 'assigned_request_dashboard'
       @select_attributes = %Q|'tickets.*', 'users.name as creator_name', 'users.email as creator_email'|
@@ -105,6 +107,7 @@ module Tickets::TicketHelper
                 and
                 ticket_assignments.user_type = #{TicketAssignment.user_types[:performer]}")
         .distinct("tickets.id")
+        .order("tickets.priority desc")
       |
     when 'team_dashboard'
       @select_attributes = %Q|'tickets.*', 'users.name as creator_name', 'users.email as creator_email'|
@@ -113,6 +116,7 @@ module Tickets::TicketHelper
         .joins(:ticket_assignments)
         .where("ticket_assignments.group_id = #{params[:group_id]}")
         .distinct("tickets.id")
+        .order("tickets.priority desc")
       |
     when 'all_working_group_dashboard'
       @select_attributes = %Q|'tickets.*', 'users.name as creator_name', 'users.email as creator_email'|
@@ -121,6 +125,7 @@ module Tickets::TicketHelper
         .joins(:ticket_assignments)
         .where("ticket_assignments.group_id = #{params[:group_id]}")
         .distinct("tickets.id")
+        .order("tickets.priority desc")
       |
     end
   end

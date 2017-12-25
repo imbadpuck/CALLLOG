@@ -1,4 +1,5 @@
 module RawSql
+    # convert result
   def self.convert_result_to_hash(result)
     result_array  = result.to_a
     result_fields = result.fields

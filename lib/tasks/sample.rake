@@ -33,12 +33,12 @@ namespace :sample do
   task create_functions: :environment do
     puts "Create Function"
 
-    FunctionSystem.create(
-      :label       => 'function_root',
-      :name        => 'Có thể sử dụng toàn bộ các chức năng',
-      :description => 'Có thể sử dụng toàn bộ các chức năng',
-    )
-
+    FunctionSystem.create(   
+       :label       => 'function_root',    
+       :name        => 'Có thể sử dụng toàn bộ các chức năng',   
+       :description => 'Có thể sử dụng toàn bộ các chức năng',   
+     )
+    
     FunctionSystem.create(
       :label       => 'user_index',
       :name        => 'Xem danh sách người dùng',

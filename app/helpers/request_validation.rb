@@ -1,4 +1,5 @@
 module RequestValidation
+
   def allow_access?(label)
     raise APIError::Common::BadRequest.new unless enable_function(label)
   end

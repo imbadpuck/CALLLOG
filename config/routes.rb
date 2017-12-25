@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
-      resources :function_systems, only: [:index] do
+      resources :users, only: [:index, :create, :update] do
         get :get_new_functions, on: :collection
       end
 

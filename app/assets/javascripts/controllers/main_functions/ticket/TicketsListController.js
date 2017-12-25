@@ -39,6 +39,19 @@ app.controller('TicketsListController', ['$scope', '$rootScope', '$state', '$uib
     });
   }
 
+  $scope.getPriorityTitle = function(ticket_priority) {
+    switch(ticket_priority) {
+      case 'low':
+        return 'Thấp';
+      case 'medium':
+        return 'Trung Bình';
+      case 'high':
+        return 'Cao';
+      case 'imminent':
+        return 'Khẩn Cấp';
+    }
+  }
+
   $scope.last_active = function(date_time) {
     var last_update  = new Date(date_time);
     var current_date = new Date();

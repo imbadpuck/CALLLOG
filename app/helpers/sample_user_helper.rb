@@ -1,4 +1,5 @@
 module SampleUserHelper
+    # get sample users method
   def get_sample_users
     leader_group                = Group.find_by(label: 'leader_group')
     sub_leader_group            = Group.find_by(label: 'sub_leader_group')
