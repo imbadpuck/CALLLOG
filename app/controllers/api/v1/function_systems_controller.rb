@@ -18,10 +18,10 @@ class Api::V1::FunctionSystemsController < ApplicationController
       :code    => Settings.code.success,
       :message => '',
       :data    => {
-        :functions     => @functions,
+        :functions     => @new_functions,
         :page          => params[:page],
         :per_page      => Settings.per_page,
-        :total_entries => @functions.total_entries
+        :total_entries => @new_functions.total_entries
       }
     }
   end

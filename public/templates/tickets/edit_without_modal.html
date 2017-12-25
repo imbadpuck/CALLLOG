@@ -280,7 +280,7 @@
           </button>
         </span>
       </div>
-      <button
+      <div
         ng-show="disabledItem({disabled_labels: ['edit_own_ticket']})"
         ng-disabled="!disabledItem({disabled_labels: ['edit_own_ticket']})||
           ticket.status == 'closed' || ticket.status == 'cancelled'"
@@ -290,7 +290,7 @@
         ng-click="addAssignedUser()">
         Thêm nhân viên
         <i class="fa fa-plus"></i>
-      </button>
+      </div>
     </div>
 
     <div
@@ -351,14 +351,14 @@
           </button>
         </span>
       </div>
-      <button
+      <div
         class="btn green margin-20px-0-20px-0
           padding-7px-20px-7px-20px-important
           border-radius-4px"
         ng-click="addRelatedUser()">
         Thêm người liên quan
         <i class="fa fa-plus"></i>
-      </button>
+      </div>
     </div>
 
     <div class="form-group col-xs-12 margin-top-15px">

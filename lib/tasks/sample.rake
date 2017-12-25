@@ -34,12 +34,6 @@ namespace :sample do
     puts "Create Function"
 
     FunctionSystem.create(
-      :label       => 'function_root',
-      :name        => 'Có thể sử dụng toàn bộ các chức năng',
-      :description => 'Có thể sử dụng toàn bộ các chức năng',
-    )
-
-    FunctionSystem.create(
       :label       => 'user_index',
       :name        => 'Xem danh sách người dùng',
       :description => 'Xem danh sách người dùng',
@@ -77,21 +71,21 @@ namespace :sample do
 
     FunctionSystem.create(
       :label       => 'team_dashboard',
-      :name        => 'Xem công việc cả nhóm',
-      :description => 'Xem công việc cả nhóm',
+      :name        => 'Xem công việc nhóm đang quản lý',
+      :description => 'Xem công việc nhóm đang quản lý',
       :parent_id   => all_working_group_dashboard.id
     )
 
     FunctionSystem.create(
       :label       => 'group_index',
-      :name        => 'Xem các nhóm làm việc',
-      :description => 'Xem các nhóm làm việc',
+      :name        => 'Xam danh sách nhóm',
+      :description => 'Xam danh sách nhóm',
     )
 
     FunctionSystem.create(
       :label       => 'working_group_index',
-      :name        => 'Xem các nhóm làm việc',
-      :description => 'Xem các nhóm làm việc',
+      :name        => 'Xem danh sách các nhóm làm việc',
+      :description => 'Xem danh sách các nhóm làm việc',
     )
 
     FunctionSystem.create(
