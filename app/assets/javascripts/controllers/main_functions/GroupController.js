@@ -121,11 +121,11 @@ app.controller('GroupsController', ['$scope', '$state', '$uibModal', '$ngBootbox
     $scope.own_function.push(e_function);
   }
 
-  $scope.getNewFunction = function() {
+  $scope.getNewFunction = function(new_function_page) {
     $scope.new_function = [];
     Function_API.getNewFunctions({
       label: $scope.group_selecting.type,
-      page: $scope.new_function_page || 1,
+      page: new_function_page,
       id: $scope.group_selecting.type == 'user' ? $scope.group_selecting.user_id : $scope.group_selecting.id}
     ).success(function(response) {
       $scope.new_function          = response.data.functions;

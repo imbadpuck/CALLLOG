@@ -107,15 +107,15 @@
         </table>
         <div
           class="margin-right-15px"
-          ng-show="new_function.length">
+          ng-show="new_function.length > 0">
           <ul
             uib-pagination
-            ng-model="new_function_page"
+            ng-change="getNewFunction(new_function_page)"
             boundary-links="true"
             total-items="new_function_total"
-            ng-change="getNewFunction()"
+            ng-model="new_function_page"
             class="pagination-sm"
-            max-size="5"
+            max-size="10"
             items-per-page="new_function_per_page"
             previous-text="&lsaquo;"
             next-text="&rsaquo;"

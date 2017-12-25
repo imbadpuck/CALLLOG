@@ -195,7 +195,6 @@ module Tickets::TicketUpdateHelper
         worker.add(
           :user_id   => user_id,
           :ticket_id => @updated_ticket.id,
-          :group_id  => @group.id,
           :user_type => TicketAssignment.user_types[:people_involved]
         )
       end

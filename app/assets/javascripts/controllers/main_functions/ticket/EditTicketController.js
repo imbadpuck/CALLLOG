@@ -220,9 +220,9 @@ app.controller('EditTicketController', ['$scope', 'toastr', '$state', 'Ticket_AP
     }
   }, 100);
 
-  $scope.editTicket = function() {
+  var preValidationBeforeUpdate = function() {
     if ($scope.ticket.status == 'closed' ||
-      $scope.ticket.status == 'cancelled') return;
+      $scope.ticket.status == 'cancelled') return false;
 
     if (_.isNull($scope.ticket.title) ||
         _.isNull($scope.ticket.group_id) ||
@@ -230,7 +230,7 @@ app.controller('EditTicketController', ['$scope', 'toastr', '$state', 'Ticket_AP
         _.isNull($scope.ticket.content)) {
 
       toastr.error("Xin vui lòng điền đầy đủ thông tin");
-      return;
+      return false;
     }
 
     if (_.isEmpty($scope.new_comment_for_update_ticket.content)
@@ -238,19 +238,43 @@ app.controller('EditTicketController', ['$scope', 'toastr', '$state', 'Ticket_AP
         || $scope.ticket.status != $scope.oldTicket.status)
         ) {
       toastr.error("Thiếu lý do sửa nội dung công việc!");
-      return ;
+      return false;
     }
 
+    return true;
+  }
+
+  var changeTicketDataBeforeUpdate = function() {
     for (var i = 0; i < $scope.ticket.assigned_users.length; i++) {
       if (_.isNull($scope.ticket.assigned_users[i])) {
         $scope.ticket.assigned_users.splice(i, 1);
+      }
+      if (typeof $scope.ticket.assigned_users[i] == 'object') {
+        if ($scope.ticket.assigned_users[i].hasOwnProperty('id')) {
+          $scope.ticket.assigned_users[i] = $scope.ticket.assigned_users[i].id;
+        } else {
+          $scope.ticket.assigned_users.splice(i, 1);
+        }
       }
     }
     for (var i = 0; i < $scope.ticket.related_users.length; i++) {
       if (_.isNull($scope.ticket.related_users[i])) {
         $scope.ticket.related_users.splice(i, 1);
       }
+      if (typeof $scope.ticket.related_users[i] == 'object') {
+        if ($scope.ticket.related_users[i].hasOwnProperty('id')) {
+          $scope.ticket.related_users[i] = $scope.ticket.related_users[i].id;
+        } else {
+          $scope.ticket.related_users.splice(i, 1);
+        }
+      }
     }
+  }
+
+  $scope.editTicket = function() {
+    if (!preValidationBeforeUpdate()) return;
+
+    changeTicketDataBeforeUpdate();
 
     NProgress.start();
 
