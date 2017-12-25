@@ -1,7 +1,10 @@
 app.controller('GroupsController', ['$scope', '$state', '$uibModal', '$ngBootbox',
-    'toastr', 'Group_API', 'groups_data', '$rootScope',
+    'toastr', 'Group_API', 'groups_data', '$rootScope', 'Function_API',
   function ($scope, $state, $uibModal, $ngBootbox, toastr,
-    Group_API, groups_data, $rootScope) {
+    Group_API, groups_data, $rootScope, Function_API) {
+
+  $scope.own_function = [];
+  $scope.new_function = [];
 
   $scope.groupTypeTrans = function(type) {
     for (var i = 0; i < $rootScope.group_types.length; i++) {
@@ -91,7 +94,66 @@ app.controller('GroupsController', ['$scope', '$state', '$uibModal', '$ngBootbox
     }
   }, 100);
 
+  $scope.editFunction = function() {
+    $scope.tab_content  = 'edit_function';
+    $scope.own_function = [];
+    Function_API.getFunctions({
+      label: $scope.group_selecting.type,
+      id: $scope.group_selecting.type == 'user' ? $scope.group_selecting.user_id : $scope.group_selecting.id}
+    ).success(function(response) {
+      $scope.own_function = response.data;
+    })
+  }
 
+  $scope.unselectFunction = function(index) {
+    var e_function = $scope.own_function[index];
+    $scope.new_function.push(e_function);
+    $scope.own_function.splice(index, 1);
+  }
+
+  $scope.selectFunction = function(index) {
+    var e_function = $scope.new_function[index];
+    for (var i = 0; i < $scope.own_function.length; i++) {
+      if ($scope.own_function[i].id == e_function.id) return;
+    }
+
+    $scope.new_function.splice(index, 1);
+    $scope.own_function.push(e_function);
+  }
+
+  $scope.getNewFunction = function() {
+    $scope.new_function = [];
+    Function_API.getNewFunctions({
+      label: $scope.group_selecting.type,
+      page: $scope.new_function_page || 1,
+      id: $scope.group_selecting.type == 'user' ? $scope.group_selecting.user_id : $scope.group_selecting.id}
+    ).success(function(response) {
+      $scope.new_function          = response.data.functions;
+      $scope.new_function_page     = response.data.page;
+      $scope.new_function_per_page = response.data.per_page;
+      $scope.new_function_total    = response.data.total_entries;
+    })
+  }
+
+  $scope.updateFunction = function() {
+    var function_ids = [];
+    for (var i = 0; i < $scope.own_function.length; i++) {
+      function_ids.push($scope.own_function[i].id)
+    }
+
+    Function_API.updateFunction({
+      label: $scope.group_selecting.type,
+      functions: function_ids,
+      id: $scope.group_selecting.type == 'user' ? $scope.group_selecting.user_id : $scope.group_selecting.id}
+    ).success(function(response) {
+      if (response.code == $rootScope.CODE_STATUS.success) {
+        toastr.success(response.message)
+        $state.reload($state.current);
+      } else {
+        toastr.error(response.message)
+      }
+    });
+  }
 
   $scope.newGroup = function() {
     $scope.tab_content = 'new_group';

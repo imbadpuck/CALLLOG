@@ -199,4 +199,37 @@ angular.module("app.factory", [])
       return $http.put('/api/v1/tickets/' + ticket.id, formData, {headers: {'Content-Type': undefined}});
     }
   }
+}])
+.factory('Function_API', ['$http', function($http){
+  return {
+    getFunctions: function(params) {
+      return $http({
+        method: 'GET',
+        url: '/api/v1/function_systems',
+        params: {
+          label: params.label,
+          id: params.id
+        }
+      });
+    },
+    getNewFunctions: function(params) {
+      return $http({
+        method: 'GET',
+        url: '/api/v1/function_systems/get_new_functions',
+        params: {
+          page: params.page,
+          label: params.label,
+          id: params.id
+        }
+      });
+    },
+    updateFunction: function(params) {
+      var formData = new FormData();
+      formData.append('label', params.label);
+      $.each(params.functions, function(i, f){
+        formData.append('functions[]', f);
+      });
+      return $http.put('/api/v1/user_functions/' + params.id, formData, {headers: {'Content-Type': undefined}});
+    }
+  };
 }]);
