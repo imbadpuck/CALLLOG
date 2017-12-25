@@ -1,0 +1,52 @@
+<div class="container show-body" '>
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-6">
+            <div class="well well-sm">
+                <div class="row">
+                    <div class="col-sm-6 col-md-4">
+                        <!-- each user has  folder which contain avatar -->
+                            <a
+                              ng-href="{{ '/attachments/avatars/' + user.id + '/' + user.avatar.slice(1, -1)}} "
+                              download target="_self">
+                              <img
+                                ng-src="{{ '/attachments/avatars/' + user.id + '/' + user.avatar.slice(1, -1)}} "
+                                width="100%">
+                            </a>
+                    </div>
+                    <div class="col-sm-6 col-md-8">
+                        <h4>
+                            {{user.name}}</h4>
+
+                        <small><cite title="San Francisco, USA">    {{user.username}} <i class="glyphicon glyphicon-map-marker">
+                        </i></cite></small>
+                        <p>
+                            <i class="glyphicon glyphicon-barcode"></i>     {{user.code}}
+                            <br />
+<!--                             <i class="glyphicon glyphicon-eye-open"></i>     {{user.id}}
+                            <br /> -->
+                            <i class="glyphicon glyphicon-question-sign"></i>   {{user.status ? 'Hoạt động' : 'Không hoạt động'}}
+                            <br />
+                            <i class="glyphicon glyphicon-gift"></i>    {{user.birthdate}}
+                            <br />
+                            <i class="glyphicon glyphicon-info-sign"></i>   {{user.type}}
+                            <br />
+                            <i class="glyphicon glyphicon-heart-empty"></i>     {{user.gender}}
+                            <br />
+                            <i class="glyphicon glyphicon-phone"></i>   {{user.phone}}
+                            <br />
+                            <i class="glyphicon glyphicon-envelope"></i>    {{user.email}}
+                            
+
+
+                        <!-- Split button -->
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary" ng-click="editUserPage(user)">
+                                Edit</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

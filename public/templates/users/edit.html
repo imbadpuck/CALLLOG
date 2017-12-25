@@ -1,0 +1,100 @@
+
+
+
+<form ng-submit="editUser(newUser)" accept-charset="UTF-8"
+  name="form"
+  novalidate>
+  <div class="modal-body"">
+
+    <div class="form-group">
+    <label for="user_username">Username</label>
+    <input id="user_username" ng-model="newUser.username"     type="text" class="form-control" />
+    </div>
+
+    <div class="form-group">
+    <label for="user_name">Name</label>
+    <input id="user_name" ng-model="newUser.name"   type="text" class="form-control" />
+    </div>
+
+    <div class="form-group">
+    <label for="user_code">Code</label>
+    <input id="user_code" ng-model="newUser.code"     type="text" class="form-control" />
+    </div>
+
+    <div class="form-group">
+    <label for="user_status">Status</label>
+    <select ng-model="newUser.status"  id="user_status" class="form-control" >
+      <option value="active" >Hoạt động</option>
+      <option value="inactive">Không hoạt động</option>
+    </select>
+    </div>
+
+    <div class="form-group">
+    <label for="user_birthdate">Date of Birth</label>
+    <input id="user_birthdate" ng-model="newUser.birthdate"   type="date" class="form-control" >
+    </div>
+
+    <div class="form-group">
+    <label for="user_type">Type</label>
+    <select ng-model="newUser.type"   id="user_type" class="form-control" >
+      <option value="Employee" >Employee</option>
+      <option value="Admin">Admin</option>
+    </select>
+    </div>
+
+    <div class="form-group">
+    <label for="user_gender">Gender</label>
+    <select  ng-model="newUser.gender"  id="user_gender" class="form-control" >
+      <option value="male" >Nam</option>
+      <option value="female">Nữ</option>
+      <option value="undefine">Không xác định</option>
+    </select>
+    </div>
+
+    <div class="form-group">
+    <label for="user_phone">Phone</label>
+    <input id="user_phone" ng-model="newUser.phone"    type="text" class="form-control" />
+    </div>
+
+    <div class="form-group">
+    <label for="user_email">Email</label>
+    <input id="user_email" ng-model="newUser.email"   type="email" class="form-control" />
+    </div>
+
+
+     <div class="form-group">
+      <label class="required">Mật khẩu </label>
+      <input ng-model="newUser.password" name="password" ng-bind="user.password" type="password"
+             class="form-control input-sm" minlength="8" required>
+      <div ng-messages="changePasswordForm.newPassword.$error"
+           ng-show="changePasswordForm.$submitted" class="text-error">
+        <div ng-message="required">{{common_text.validate.require}}</div>
+        <div ng-message="minlength">{{common_text.validate.password}}</div>
+      </div>
+    </div>
+
+     <div class="form-group">
+      <label class="required">Xác nhận mật khẩu </label>
+      <input ng-model="newUser.PasswordConfirm" name="PasswordConfirm"  type="password"
+             equal-to="newUser.password" class="form-control input-sm" minlength="8" required>
+      <div ng-messages="changePasswordForm.newPasswordConfirm.$error"
+           ng-show="changePasswordForm.$submitted" class="text-error">
+        <div ng-message="required">{{common_text.validate.require}}</div>
+        <div ng-message="minlength">{{common_text.validate.password}}</div>
+        <div ng-message="equalTo">{{common_text.validate.password_confirm}}</div>
+      </div>
+    </div>
+
+         <div class="form-group">
+        <label for="user_avatar">Avatar</label>
+        <input id="user_avatar" type="file" model="newUser.avatar" class="form-control" file-upload-model/>
+      </div>
+    <input class="btn btn-primary" name="commit" type="submit" 
+           value="Lưu" />
+  </div>      
+  </div>
+
+
+
+
+</form>

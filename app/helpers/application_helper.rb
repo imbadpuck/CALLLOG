@@ -82,6 +82,24 @@ module ApplicationHelper
     end
   end
 
+  def save_avatar_with_token dir, file
+    file_name = ' ';
+    begin
+      
+        FileUtils.mkdir_p(dir) unless File.directory?(dir)
+        extn      = File.extname file.original_filename
+        name      = File.basename(file.original_filename, extn).gsub(/[^A-z0-9]/, "_")
+        full_name = name + "_" + SecureRandom.hex(5) + extn
+        path      = File.join(dir, full_name)
+        file_name = full_name
+        File.open(path, "wb") { |f| f.write file.read }
+
+      return file_name
+    rescue
+      return []
+    end
+  end
+
   def check_access_role(method_name)
     method_name.slice!("check_")
     method_name = method_name.split("_and_")

@@ -1,0 +1,140 @@
+<div class="row row-flex">
+  <div
+    class="col-xs-6 caption-subject font-blue-madison
+      bold uppercase padding-bottom-15px display-align-items-2">
+    <label
+      class="col-xs-12 caption-subject font-blue-madison
+        bold uppercase">
+      Thêm/Xóa chức năng ({{group_selecting.name}})
+    </label>
+    <div
+      ng-include="'templates/groups/group_options'"
+      class="col-xs-6">
+    </div>
+  </div>
+
+  <div class="group-content col-xs-12">
+    <div class="row row-flex">
+      <div
+        class="col-xs-12 form-group">
+        <label class="bold font-blue">Đã chọn</label>
+        <div
+          class="m-grid-col-xs-12 text-center"
+          ng-show="own_function.length == 0">
+          Chưa chọn chức năng nào
+        </div>
+
+        <table
+          class="table table-striped dataTable no-footer overflow-scroll dtr-inline"
+          ng-show="own_function.length > 0"
+          fixed-header>
+          <thead>
+            <tr>
+              <th>Tên chức năng</th>
+              <th>Mô tả chức năng</th>
+              <th>Xóa</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              ng-repeat="function in own_function track by $index">
+              <td>{{function.name}}</td>
+              <td>{{function.description}}</td>
+              <td>
+                <label class="mt-checkbox">
+                  <input type="checkbox" ng-click="unselectFunction($index)" checked>
+                  <span></span>
+                </label>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div
+          class="margin-right-15px"
+          ng-show="own_function.length">
+         <!--  <ul
+            uib-pagination
+            boundary-links="true"
+            total-items="own_function.length"
+            ng-model="own_function_page"
+            class="pagination-sm"
+            max-size="5"
+            items-per-page="own_function_per_page"
+            previous-text="&lsaquo;"
+            next-text="&rsaquo;"
+            first-text="&laquo;"
+            last-text="&raquo;">
+          </ul> -->
+          <div class="pull-right">Tổng số: {{own_function.length}}</div>
+        </div>
+      </div>
+
+
+      <div class="col-xs-12 form-group">
+        <label class="bold font-blue">Chức năng khả dụng</label>
+      </div>
+
+      <div class="col-xs-12">
+        <div
+          class="m-grid-col-xs-12 text-center"
+          ng-show="new_function.length == 0">
+          Không có người dùng khả dụng.
+        </div>
+
+        <table
+          class="table table-striped dataTable no-footer overflow-scroll dtr-inline"
+          ng-show="new_function.length > 0"
+          fixed-header>
+          <thead>
+            <tr>
+              <th>Tên chức năng</th>
+              <th>Mô tả chức năng</th>
+              <th>Thêm</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="function in new_function">
+              <td>{{function.name}}</td>
+              <td>{{function.description}}</td>
+              <td>
+                <label class="mt-checkbox">
+                  <input type="checkbox" ng-click="selectFunction($index)">
+                  <span></span>
+                </label>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div
+          class="margin-right-15px"
+          ng-show="new_function.length">
+          <ul
+            uib-pagination
+            ng-model="new_function_page"
+            boundary-links="true"
+            total-items="new_function_total"
+            ng-change="getNewFunction()"
+            class="pagination-sm"
+            max-size="5"
+            items-per-page="new_function_per_page"
+            previous-text="&lsaquo;"
+            next-text="&rsaquo;"
+            first-text="&laquo;"
+            last-text="&raquo;">
+          </ul>
+          <div class="pull-right">Tổng số: {{new_function_total}}</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="text-center">
+      <button
+        class="btn blue btn-sm padding-7px-20px-7px-20px-important
+          border-radius-4px-important"
+        ng-click="updateFunction()">
+        Lưu
+      </button>
+    </div>
+  </div>
+</div>

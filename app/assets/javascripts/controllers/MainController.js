@@ -1,7 +1,7 @@
 app.controller('MainController', ['$scope', '$rootScope', '$state',
-  '$uibModal', 'Auth', '$compile', 'working_groups', 'notifications',
+  '$uibModal', 'Auth', '$compile', 'working_groups', 'notifications','toastr','CODE_STATUS',
   function ($scope, $rootScope, $state, $uibModal,
-    Auth, $compile, working_groups, notifications) {
+    Auth, $compile, working_groups, notifications,toastr,CODE_STATUS) {
 
   $scope.state             = $state;
   $rootScope.workingGroups = working_groups.groups;
@@ -95,6 +95,70 @@ app.controller('MainController', ['$scope', '$rootScope', '$state',
       }]
     });
   }
+
+  $scope.showUser = function(params) {
+    var modalInstance = $uibModal.open({
+      scope: $scope,
+      templateUrl: '/templates/users/show.html',
+      controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+
+        $scope.user = params;
+
+        $scope.close = function () {
+          $uibModalInstance.dismiss();
+        }
+      }]
+    });
+  }
+
+  $scope.editUserPage = function(params) {
+    var modalInstance = $uibModal.open({
+      scope: $scope,
+      templateUrl: '/templates/users/edit.html',
+      controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+        $scope.clone =params
+        $scope.clone.birthdate = new Date($scope.clone.birthdate)
+        $scope.newUser = $scope.clone
+
+        $scope.close = function () {
+          $uibModalInstance.dismiss();
+        }
+      }]
+    });
+  }
+
+  $scope.editUser = function(newUser) {
+        $scope.editUser = newUser
+    
+        if ($scope.editUser.status == 'active')
+                $scope.editUser.status = 0
+        else
+                $scope.editUser.status = 1
+
+        if(angular.isString($scope.editUser.gender)){
+                if ($scope.editUser.gender == 'male')
+                      $scope.editUser.gender = 0
+                else if ($scope.editUser.gender == 'female')
+                       $scope.editUser.gender = 1
+                else 
+                        $scope.editUser.gender = 2          
+        }
+    NProgress.start();
+    var file = $scope.editUser.avatar;
+    delete $scope.editUser.avatar;
+    Auth.editUser($scope.editUser,file).success(function(response) {
+      NProgress.done();
+      if(response.code == 1) {
+
+        console.log(response)
+        $rootScope.currentUser   = response.data
+
+        $state.go("main");
+      } else {
+        toastr.error(response.data.message)
+      }
+    });
+  }  
 
   $scope.signOut = function() {
     Auth.signOut();

@@ -4,6 +4,12 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
+      resources :users, only: [:index, :create, :update] do
+        get :get_new_functions, on: :collection
+      end
+
+      resources :user_functions, only: [:update]
+
       resources :users, only: [:index] do
         get :get_related_users, on: :collection
       end

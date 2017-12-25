@@ -86,14 +86,14 @@
           <img
             alt=""
             class="img-circle"
-            src="/images/avatar.png" />
+            ng-src="{{ '/attachments/avatars/' + currentUser.id + '/' + currentUser.avatar.slice(1, -1)}} " />
           <span class="username username-hide-on-mobile"> {{currentUser.name}} </span>
           <i class="fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu dropdown-menu-default">
           <li>
-            <a href="#" ng-click="changePassword()">
-              <i class="icon-lock"></i> Đổi mật khẩu
+            <a href="#" ng-click="showUser(currentUser)">
+              <i class="icon-lock"></i> Thông tin cá nhân
             </a>
           </li>
           <li class="divider"> </li>
