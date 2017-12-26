@@ -17,6 +17,20 @@ angular.module("app.factory", [])
         old_password: oldPassword,
         new_password: newPassword,
       });
+    },
+    editUser: function(newUser, file) {
+      cloneUser = JSON.stringify(newUser);
+      var formData = new FormData();
+      formData.append('user', cloneUser);
+      formData.append('avatar',file);
+      return $http.put('/api/v1/users/' + newUser.id, formData,{headers: {'Content-Type': undefined}} );
+    },
+    addUser: function(newUser, file) {
+      cloneUser = JSON.stringify(newUser);
+      var formData = new FormData();
+      formData.append('user', cloneUser);
+      formData.append('avatar',file);
+      return $http.post('/api/v1/users/' , formData,{headers: {'Content-Type': undefined}} );
     }
   }
 }])

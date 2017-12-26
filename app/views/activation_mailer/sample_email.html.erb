@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+      /* Email styles need to be inline */
+    </style>
+  </head>
+    <h1>Xin chào <%= @user.name %></h1>
+    <p>
+      	Chào mừng bạn đến với CALLLOG_UET. 
+      	Đây là tài khoản của bạn: <%= @user.username %>
+      	Đây là mật khẩu              : <%= @user.password %>
+      	Bạn hãy truy cập vào ứng dụng tại: http://localhost:3000
+    </p>
+  <body>
+    <%= yield %>
+  </body>
+</html>
